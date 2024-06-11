@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { BASE_URL_API } from '../../config';
-export default function login({username, password}){
+export default function login({data}){
     const url = `${BASE_URL_API}/login`;
 
    
