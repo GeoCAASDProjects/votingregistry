@@ -1,15 +1,13 @@
-import Versions from './components/Versions'
-import electronLogo from './assets/electron.svg'
-import { CircularProgress } from '@mui/material'
+ 
 import * as Yup from 'yup';
 
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import Button from './components/button/Button'
 import { useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
+ 
 import { login } from './util/http/auth';
-import { LoginData } from './util/types';
-
+import { LoginData, LoginError, LoginResponse } from './util/types';
+ 
 function App(): JSX.Element {
   const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
 
@@ -19,25 +17,19 @@ function App(): JSX.Element {
   });
 
 
-  const { mutate, isPending: loginPending, isError: loginIsError, error: loginError } = useMutation({
-    mutationFn: login,
-    onSuccess: async (e) => {
-      alert("Logged in");
-
-    },
-    onError: () => {
-      alert("Error")
-    }
-  });
+ 
 
   const [newState, setNewState] = useState(false)
-  const handleSubmit= async (values:LoginData, {setSubmitting, setErrors})=> {
+  const handleSubmit= async (values:LoginData, {setSubmitting, setErrors}: any)=> {
  
    
     setNewState(true)
     setSubmitting(false);
-    mutate(values);
     
+   const response = await login(values);
+    
+    alert("Sigan viendo")
+    alert(JSON.stringify(response));
   }
   const initialValues: LoginData={
     email: '',
