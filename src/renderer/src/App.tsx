@@ -8,7 +8,7 @@ import Button from './components/button/Button'
 import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { login } from './util/http/auth';
-import { LoginData, LoginError, LoginResponse } from './util/types';
+import { LoginData } from './util/types';
 
 function App(): JSX.Element {
   const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
@@ -18,8 +18,6 @@ function App(): JSX.Element {
     password: Yup.string().required('Requerido')
   });
 
-
- // const mutation = useMutation<LoginResponse, LoginData, LoginError>(login)
 
   const { mutate, isPending: loginPending, isError: loginIsError, error: loginError } = useMutation({
     mutationFn: login,
@@ -33,7 +31,6 @@ function App(): JSX.Element {
   });
 
   const [newState, setNewState] = useState(false)
- 
   const handleSubmit= async (values:LoginData, {setSubmitting, setErrors})=> {
  
    
@@ -42,9 +39,9 @@ function App(): JSX.Element {
     mutate(values);
     
   }
-  const initialValues: LoginData ={
-    email: "", 
-    password: "" 
+  const initialValues: LoginData={
+    email: '',
+    password: ''
   }
   return (
     <>
@@ -52,8 +49,7 @@ function App(): JSX.Element {
       <div style={{ alignItems: "center", alignContent: "center", justifyContent: "center", textAlign: "center", width: "40vw", padding: 20 }}>
         <h1>Login</h1>
         <Formik 
-        initialValues={{    email: "", 
-          password: "" }} 
+        initialValues={initialValues} 
         validationSchema={LoginSchema} 
         onSubmit={handleSubmit}
         >
