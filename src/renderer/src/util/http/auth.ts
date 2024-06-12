@@ -4,25 +4,32 @@ import { LoginData, LoginError, LoginResponse } from '../types';
 
  
 export async function login(data: LoginData): Promise <LoginResponse | LoginError>{
-    
-    try{
-    const url = `${BASE_URL_API}/login`;
-    alert(url);
-   
-    const response = await axios.post<LoginResponse>(url, {
-        email: data.email,
-        password: data.password,
-    });
- 
-    console.log(response);
-    return response.data;
-} catch(error:any){
-   console.error(error);
-   alert(JSON.stringify(error));
-   return {
-    message: error.response?.data?.message || "An error occurred"
-   }
-}
+    try {
+        const url = `${BASE_URL_API}/login`;
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email: data.email,
+                password: data.password,
+            }),
+        });
+
+        if (!response.ok) {
+            const errorMessage = await response.text();
+            throw new Error(errorMessage || 'Network response was not ok');
+        }
+
+        const responseData: LoginResponse = await response.json();
+        return responseData;
+    } catch (error:any) {
+        console.error(error);
+        return {
+            message: error.message || "An error occurred"
+        };
+    }
 
     // return token
 
