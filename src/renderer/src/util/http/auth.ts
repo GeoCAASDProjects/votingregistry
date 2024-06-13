@@ -33,5 +33,19 @@ export async function login(data: LoginData): Promise <LoginResponse | LoginErro
 
     // return token
 
+}
 
+export const api = axios.create({
+    baseURL: BASE_URL_API,
+    withCredentials: true, // Include cookies in requests
+  });
+  
+export async function get_current_user(){
+    try{
+      const response=  await api.get('/sanctum/csrf-cookie');
+        return response;
+    } catch(error){
+        console.error("Error fetching current user", error)
+        throw error;
+    }
 }
