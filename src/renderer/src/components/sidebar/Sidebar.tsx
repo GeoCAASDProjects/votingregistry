@@ -13,28 +13,32 @@ export default function Sidebar({ currentEnclosure }): JSX.Element {
             display: "flex", 
             position: "absolute", 
             top: 0, 
-          
+            left: open ? "0vw" : "-40vw",
             transition: ".4s ease-in-out",
      
             }}>
-
+  <button className={classes["sidebar-toggle"]} onClick={()=>setOpen(prevValue=>!prevValue)}>
+                    <MenuIcon/>
+                </button>
             <div style={{ position: "relative" }}>
+                
                 <div
 
                     style={
                         {
-                           width: "45vw",
+                           
+                           width: "40vw",
                             height: "100vh",
                             background: "#0F0F40",
                             color: "white",
-                            overflowY: "scroll",
-                             overflow: "scroll"
+                        
                             /*  borderRadius: "0 8px 8px 0",*/
                         }}>
+
                     <div style={{ padding: 10 }}>
 
                         <>
-             
+              
                         <h2>Contenedor</h2>
                         <SearchBar/>
                      
@@ -78,7 +82,7 @@ export default function Sidebar({ currentEnclosure }): JSX.Element {
                 </div>
               
             </div>
-
+          
         </div>
     )
 }
