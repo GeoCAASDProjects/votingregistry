@@ -30,19 +30,9 @@ export default function Home(): JSX.Element {
    
   
     }
-    useEffect(()=>{
-        alert(currentEnclosure?.id)
-    },[currentEnclosure])
+   
     
-    useEffect(()=>{
-        if(enclosureData && !enclosurePending){
-            alert(enclosureData);
-            console.log(enclosureData)
-        }
-        if(enclosureIsError){
-            alert(enclosureError)
-        }
-    }, [enclosureData, enclosurePending, enclosureIsError])
+ 
     return (
         <>
             <div style={{ flex: 1, height: "100%" }}>

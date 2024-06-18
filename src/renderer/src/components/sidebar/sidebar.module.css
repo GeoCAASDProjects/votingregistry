@@ -20,3 +20,11 @@
       .table td{
  
       }
+      
+      .sidebar-toggle {
+        position: absolute;
+        right: -60px;
+        height: 60px;
+        width: 60px;
+        z-index: 1;
+      }
