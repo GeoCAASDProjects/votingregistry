@@ -13,3 +13,17 @@ export interface LoginData {
  export interface LoginError {
     message: string;
   }
+
+  interface FetchEnclosuresParams {
+    signal: AbortSignal;
+    
+}
+export interface Enclosure {
+    name: string,
+    address: string,
+    longitude: number,
+    latitude: number,
+    created_at:Date,
+    updated_at: Date,
+    id: number
+}
