@@ -4,6 +4,7 @@
     padding: 20px;
     display:flex;
     align-items: center;
+    align-content: center;
     justify-content: space-between;
      background-color: black;
 }
@@ -16,6 +17,7 @@
 .icons{
     display:flex;
     align-items: center;
+    align-content: center;
     gap: 20px;
  
   }
@@ -41,6 +43,7 @@
 .user{
     display: flex;
     align-items: "center";
+    position: relative
 
 }
 

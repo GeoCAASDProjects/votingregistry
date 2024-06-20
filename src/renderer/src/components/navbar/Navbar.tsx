@@ -17,19 +17,32 @@ export default function Navbar(): JSX.Element {
     </div>
 
     <div className={classes["icons"]}>
-        <Search  className={classes['icon']}/>
+    { /*   <Search  className={classes['icon']}/>*/}
         <AppBar className={classes['icon']}/>
       
         <div className={classes["notification"]}>
           <Notifications/>
             <span>1</span>
         </div>
-        <div className={classes["user"]}>
-       
-        </div>
+
+     <div style={{display:"flex", gap:"4px"}}>
+
+     <span>
+
+{!!user ? `${user?.name} ${user?.last_name}` : "Usuario"}
+</span>
+<div className={classes["user"]}>
+<img src="https://thispersondoesnotexist.com/" alt=""/>
+<div style={{position:"absolute", background:"red", zIndex: 99999, top: 30, boxSizing:"border-box", overflow:"auto"}}>
+  <p>Optdddddddddddddddddddion</p>
+  <p>Edit</p>
+  <p>Logout</p>
+
+</div>
+</div>
+     </div>
+
      
-        <span>{!!user ? `${user?.name} ${user?.last_name}` : "Usuario"}</span>
-        <img src="/logout.svg" alt="" className="icon"/>
     </div>
     </div>}
    </>

@@ -5,7 +5,7 @@ import "leaflet/dist/leaflet.css";
 import { useEffect, useRef, useState } from 'react';
 
 type Position = [number, number];
-export default function SimpleMap({enclosures, onMarkerClick}): JSX.Element{
+export default function SimpleMap({enclosures, onMarkerClick, currentEnclosure}): JSX.Element{
     const latitude:number = 16;
     const longitude:number = -69;
     const mapRef = useRef(null)
@@ -50,6 +50,27 @@ export default function SimpleMap({enclosures, onMarkerClick}): JSX.Element{
       return null;
     }
  
+    const ClickOnMarker =(data)=>{
+      onMarkerClick(data.id);
+      setPosition([data.latitude, data.longitude])
+    }
+    const purpleIcon = new L.Icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-violet.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41],
+    });
+    
+    const blueIcon = new L.Icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41],
+    });
     return ( 
       <div style={{ width: '100%', height: '100%' }}>
         <MapContainer center={position} zoom={13} ref={mapRef} style={{ width: '100%', height: '100%' }}>
@@ -73,7 +94,7 @@ export default function SimpleMap({enclosures, onMarkerClick}): JSX.Element{
           </Marker>
         )}
         {
-          !!enclosures && enclosures.data.map((enclosure)=><Marker eventHandlers={{click:()=>onMarkerClick(enclosure.id)}} position={[enclosure.latitude, enclosure.longitude]}/>)
+          !!enclosures && enclosures.data.map((enclosure)=><Marker icon={currentEnclosure==enclosure.id ? purpleIcon : blueIcon} eventHandlers={{click:()=>ClickOnMarker(enclosure)}} position={[enclosure.latitude, enclosure.longitude]}/>)
         }
       </MapContainer>
       </div>
@@ -91,7 +112,7 @@ interface UpdateMapCenterProps{
    
     if(position){
       map.setView(position, map.getZoom());
-      alert(position);
+      
     }
   }, [map, position]);
 

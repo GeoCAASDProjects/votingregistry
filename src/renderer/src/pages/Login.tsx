@@ -9,7 +9,7 @@ import Button from '@renderer/components/button/Button';
 import { login } from '@renderer/util/http/auth';
 import { useAuth } from '@renderer/util/context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-
+import classes from './login.module.css'
 function Login(): JSX.Element {
     const navigate = useNavigate();
     const authCtx = useAuth();
@@ -41,7 +41,7 @@ function Login(): JSX.Element {
     return (
         <>
 
-            <div style={{ display:"flex", flexDirection:"column", alignItems: "center", alignContent: "center", justifyContent: "center", textAlign: "center", padding: 20, width: "100%", height:"100%" }}>
+            <div  className={classes["login-form"]} style={{ display:"flex", flexDirection:"column", alignItems: "center", alignContent: "center", justifyContent: "center", textAlign: "center", padding: 20, width: "100%", height:"100%" }}>
                 
                 
                 <h1>Login</h1>

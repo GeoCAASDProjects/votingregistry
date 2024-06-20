@@ -1,6 +1,6 @@
 .button-container {
     padding: 10px;
-    font-size: 16px;
+    font-size: inherit;
     border-radius: 8px;
     background-color:white;
     border: none;
@@ -10,9 +10,19 @@
     align-content: center;
     font-weight: bold;
   
+  
   }
   .button-container div{
     font-weight: inherit;
     display: flex;
-    gap: 4px
+    gap: 4px;
+    align-content:center;
+    align-items:center
   }
+
+
+  .button-container:hover{
+    cursor: pointer;
+    opacity: 0.9
+  }
+ 

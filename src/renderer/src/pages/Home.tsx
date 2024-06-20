@@ -5,6 +5,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
 export default function Home(): JSX.Element {
+    const [open, setOpen] = useState(true);
 
     const [currentEnclosure, setCurrentEnclosure] = useState(null);
     const { data: enclosureData, isPending: enclosurePending, isError: enclosureIsError, error: enclosureError } = useQuery({
@@ -25,19 +26,26 @@ export default function Home(): JSX.Element {
         }
       });
     
+    function toggleSidebar(){
+        setOpen(currentVal=>!currentVal);
+    }
    async function sendDataToSidebar(id){
+    if(!open){
+        toggleSidebar();
+    }
      const response = await singleEnclosureMutate(id);
    
   
     }
-   
+   function clearEnclosure(){
+    setCurrentEnclosure(null);
+   }
     
- 
     return (
         <>
             <div style={{ flex: 1, height: "100%" }}>
-                <Sidebar currentEnclosure={currentEnclosure}/>
-                <SimpleMap onMarkerClick={sendDataToSidebar} enclosures={(!enclosurePending && enclosureData) ?? null}/>
+                <Sidebar currentEnclosure={currentEnclosure} singleEnclosurePending={singleEnclosurePending} clearEnclosure={clearEnclosure} isOpen={open} toggleSidebar={toggleSidebar}/>
+                <SimpleMap currentEnclosure={currentEnclosure?.id ?? null}  onMarkerClick={sendDataToSidebar} enclosures={(!enclosurePending && enclosureData) ?? null}/>
             </div>
 
         </>
