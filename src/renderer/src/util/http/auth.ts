@@ -72,3 +72,30 @@ export async function get_current_user() {
     };
 
 }
+
+
+
+export async function logout(){
+
+  
+    try {
+        const url = `${BASE_URL_API}/logout`;
+        alert(url)
+        const response = await axios.post(url);
+
+
+        return response.data;
+
+    } catch (error: any) {
+        alert(error)
+        console.error(error);
+        return {
+            message: error.message || "An error occurred"
+        };
+    }
+
+
+
+
+
+}

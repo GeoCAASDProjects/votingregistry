@@ -53,3 +53,14 @@
     border-radius: 50%;
     object-fit: cover;
 }
+
+.icon-container{
+    align-content: center;
+    align-items: center;
+    border-radius: 50%;
+    padding: 10;
+
+}
+.icon-container:hover{
+    cursor: pointer
+}

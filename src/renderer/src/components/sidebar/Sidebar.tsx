@@ -18,6 +18,8 @@ export default function Sidebar({ isOpen, toggleSidebar, currentEnclosure, clear
         sideBarButton = <Close />
     }
 
+
+
     return (
         <div className={classes["container"]} style={{
 

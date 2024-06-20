@@ -1,51 +1,71 @@
 import { useState } from 'react'
 import classes from "./navbar.module.css"
-import { Notifications, Search } from '@mui/icons-material'
+import { ArrowDownward, ExpandMore, Notifications, Search } from '@mui/icons-material'
 import { AppBar } from '@mui/material'
 import { useAuth } from '@renderer/util/context/AuthContext'
+import OptionsMenu from '../optionsMenu/OptionsMenu'
 export default function Navbar(): JSX.Element {
 
   const authCtx = useAuth();
   const user = authCtx.user;
   console.log(user);
-  return(
-   <>
-{localStorage.getItem('token')  &&  <div className={classes["navbar"]}>
-    <div className={classes["logo"]}>
-        <img src="logo.svg" alt=""/>
-        <span>Registro de Votos</span>
-    </div>
 
-    <div className={classes["icons"]}>
-    { /*   <Search  className={classes['icon']}/>*/}
-        <AppBar className={classes['icon']}/>
-      
-        <div className={classes["notification"]}>
-          <Notifications/>
-            <span>1</span>
+  const [menuVisibile, setMenuVisible]= useState(true);
+
+  function toggleMenu() {
+    setMenuVisible((prevValue) => !prevValue);
+    
+  }
+  function logout(){
+    localStorage.removeItem("token");
+  }
+  return (
+    <>
+      {localStorage.getItem('token') && <div className={classes["navbar"]}>
+        <div className={classes["logo"]}>
+          <img src="logo.svg" alt="" />
+          <span>Registro de Votos</span>
         </div>
 
-     <div style={{display:"flex", gap:"4px"}}>
+        <div className={classes["icons"]}>
+          { /*   <Search  className={classes['icon']}/>*/}
+          <AppBar className={classes['icon']} />
 
-     <span>
+          <div className={classes["notification"]}>
+            <Notifications />
+            <span>1</span>
+          </div>
 
-{!!user ? `${user?.name} ${user?.last_name}` : "Usuario"}
-</span>
-<div className={classes["user"]}>
-<img src="https://thispersondoesnotexist.com/" alt=""/>
-<div style={{position:"absolute", background:"red", zIndex: 99999, top: 30, boxSizing:"border-box", overflow:"auto"}}>
-  <p>Optdddddddddddddddddddion</p>
-  <p>Edit</p>
-  <p>Logout</p>
+          <div style={{ display: "flex", gap: "4px" }}>
 
-</div>
-</div>
-     </div>
+            <span>
 
-     
-    </div>
-    </div>}
-   </>
+              {!!user ? `${user?.name} ${user?.last_name}` : "Usuario"}
+            </span>
+            <div className={classes["user"]}  style={{ display: "flex", justifyContent: "flex-end", position: "relative" }}>
+              <img src="https://thispersondoesnotexist.com/" alt="" />
+              <div style={{ alignContent: "center", alignItems: "center" }} onClick={toggleMenu}>
+                
+                <ExpandMore />
+              </div>
+              <OptionsMenu toggleMenu={toggleMenu} menuVisible={menuVisibile}
+                options={[
+
+                  { label: "Opciones", icon: "Settings" },
+                  { label: "Salir", icon: "Logout"}
+                ]}
+              >
+              
+              </OptionsMenu>
+
+           
+            </div>
+          </div>
+
+
+        </div>
+      </div>}
+    </>
   )
 }
 

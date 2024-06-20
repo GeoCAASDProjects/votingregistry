@@ -3,11 +3,11 @@ import classes from "./home.module.css";
 import L from 'leaflet';
 import "leaflet/dist/leaflet.css";
 import { useEffect, useRef, useState } from 'react';
+import SearchBar from '../searchBar/SearchBar';
 
 type Position = [number, number];
 export default function SimpleMap({enclosures, actionState, onMarkerClick, currentEnclosure}): JSX.Element{
-    const latitude:number = 16;
-    const longitude:number = -69;
+   
     const mapRef = useRef(null)
 
    
@@ -73,6 +73,11 @@ export default function SimpleMap({enclosures, actionState, onMarkerClick, curre
     });
     return ( 
       <div style={{ width: '100%', height: '100%' }}>
+      {actionState=="location" && <div  style={{position: "absolute", display:"flex", justifyContent:"center", alignItems:"center", alignContent:"center", width: "100%", zIndex: 999, top: actionState=="location" ? 0 :-30, opacity: actionState=="location" ? 1:0, transition:".4s ease-in-out"}}>
+        <SearchBar style={{margin:0, width: "50%"}}/>
+        </div>
+        }
+       
         <MapContainer center={position} zoom={13} ref={mapRef} style={{ width: '100%', height: '100%' }}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -95,7 +100,7 @@ export default function SimpleMap({enclosures, actionState, onMarkerClick, curre
         )}
         {
           !!enclosures && enclosures.data.map((enclosure)=>
-        {actionState !="location" &&  <Marker icon={currentEnclosure==enclosure.id ? purpleIcon : blueIcon} eventHandlers={{click:()=>ClickOnMarker(enclosure)}} position={[enclosure.latitude, enclosure.longitude]}/>}
+        { return !actionState && <Marker icon={currentEnclosure==enclosure.id ? purpleIcon : blueIcon} eventHandlers={{click:()=>ClickOnMarker(enclosure)}} position={[enclosure.latitude, enclosure.longitude]}/>}
         )
         }
       </MapContainer>

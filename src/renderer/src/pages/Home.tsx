@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 
 export default function Home(): JSX.Element {
     const [actionState, setActionState] = useState("");
-    const [open, setOpen] = useState(true);
+    const [open, setOpen] = useState(false);
 
     const [currentEnclosure, setCurrentEnclosure] = useState(null);
     const { data: enclosureData, isPending: enclosurePending, isError: enclosureIsError, error: enclosureError } = useQuery({
@@ -49,7 +49,7 @@ export default function Home(): JSX.Element {
    function createForm(){
     
     setOpen(true);
-    setActionState("")
+    setActionState("");
    }
     
     return (
