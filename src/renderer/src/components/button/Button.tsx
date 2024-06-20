@@ -8,12 +8,14 @@ interface ButtonProps{
     isLoading: boolean;
     type: string;
     style: object;
-    iconName: string
+    iconName: string;
+    onClick: () =>{ 
+    }
 }
 
-const Button:FC<ButtonProps> = ({title, isLoading, type, style, iconName}) =>{
+const Button:FC<ButtonProps> = ({title, isLoading, type, style, iconName, onClick}) =>{
     return(
-        <button type="submit" style={style} className={classes["button-container"]}>
+        <button type="submit" style={style} className={classes["button-container"]} onClick={onClick}>
         <div >
         <DynamicIcon iconName={iconName}/>
         {title}

@@ -5,6 +5,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
 export default function Home(): JSX.Element {
+    const [actionState, setActionState] = useState("");
     const [open, setOpen] = useState(true);
 
     const [currentEnclosure, setCurrentEnclosure] = useState(null);
@@ -40,12 +41,31 @@ export default function Home(): JSX.Element {
    function clearEnclosure(){
     setCurrentEnclosure(null);
    }
+   function selectLocation(){
+    setOpen(false);
+    setActionState("location")
+   }
+    
+   function createForm(){
+    
+    setOpen(true);
+    setActionState("")
+   }
     
     return (
         <>
             <div style={{ flex: 1, height: "100%" }}>
-                <Sidebar currentEnclosure={currentEnclosure} singleEnclosurePending={singleEnclosurePending} clearEnclosure={clearEnclosure} isOpen={open} toggleSidebar={toggleSidebar}/>
-                <SimpleMap currentEnclosure={currentEnclosure?.id ?? null}  onMarkerClick={sendDataToSidebar} enclosures={(!enclosurePending && enclosureData) ?? null}/>
+                <Sidebar 
+                selectLocation={selectLocation} 
+                actionState={actionState}
+                currentEnclosure={currentEnclosure} 
+                singleEnclosurePending={singleEnclosurePending} 
+                clearEnclosure={clearEnclosure} 
+                isOpen={open} 
+                toggleSidebar={toggleSidebar}
+                createForm ={createForm}
+                />
+                <SimpleMap currentEnclosure={currentEnclosure?.id ?? null}   actionState={actionState} onMarkerClick={sendDataToSidebar} enclosures={(!enclosurePending && enclosureData) ?? null}/>
             </div>
 
         </>

@@ -57,3 +57,26 @@ code {
 }
 
 
+::-webkit-scrollbar {
+  width: 12px; /* width of the entire scrollbar */
+  
+}
+
+::-webkit-scrollbar-track {
+  background:  #f1f1f1; 
+  border-radius: 10px; /* roundness of the track */
+ 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background:  #888;
+  border-radius: 10px; /* roundness of the handle */
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  cursor: pointer;
+  background:#555; 
+  cursor:pointer
+}

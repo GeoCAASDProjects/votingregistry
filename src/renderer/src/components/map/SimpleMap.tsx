@@ -5,7 +5,7 @@ import "leaflet/dist/leaflet.css";
 import { useEffect, useRef, useState } from 'react';
 
 type Position = [number, number];
-export default function SimpleMap({enclosures, onMarkerClick, currentEnclosure}): JSX.Element{
+export default function SimpleMap({enclosures, actionState, onMarkerClick, currentEnclosure}): JSX.Element{
     const latitude:number = 16;
     const longitude:number = -69;
     const mapRef = useRef(null)
@@ -94,7 +94,9 @@ export default function SimpleMap({enclosures, onMarkerClick, currentEnclosure})
           </Marker>
         )}
         {
-          !!enclosures && enclosures.data.map((enclosure)=><Marker icon={currentEnclosure==enclosure.id ? purpleIcon : blueIcon} eventHandlers={{click:()=>ClickOnMarker(enclosure)}} position={[enclosure.latitude, enclosure.longitude]}/>)
+          !!enclosures && enclosures.data.map((enclosure)=>
+        {actionState !="location" &&  <Marker icon={currentEnclosure==enclosure.id ? purpleIcon : blueIcon} eventHandlers={{click:()=>ClickOnMarker(enclosure)}} position={[enclosure.latitude, enclosure.longitude]}/>}
+        )
         }
       </MapContainer>
       </div>
