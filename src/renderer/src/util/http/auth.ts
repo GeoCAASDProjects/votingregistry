@@ -60,9 +60,9 @@ export async function get_current_user() {
                 
             }
         });
-        console.log("The fucking information is accurately fetched, FUCK YOU")
+    
         console.log(response.data);
-        console.log("NOW WE GOTTA WAIT FOR THE FUCKING GLOBAL STATE TO DECIDE THE FUCKING DATA FUCKING EXISTS")
+ 
         return response.data;
     } catch (error) {
   
@@ -80,14 +80,14 @@ export async function logout(){
   
     try {
         const url = `${BASE_URL_API}/logout`;
-        alert(url)
+     
         const response = await axios.post(url);
 
 
         return response.data;
 
     } catch (error: any) {
-        alert(error)
+        
         console.error(error);
         return {
             message: error.message || "An error occurred"

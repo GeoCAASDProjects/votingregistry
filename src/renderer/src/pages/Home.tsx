@@ -8,6 +8,15 @@ export default function Home(): JSX.Element {
     const [actionState, setActionState] = useState("");
     const [open, setOpen] = useState(false);
 
+    type EnclosureData={
+        id: number;
+        created_at: Date|null;
+        updated_at: Date|null;
+        longitude: number|null;
+        latitude: number|null;
+        address: string;
+        schools: any
+    }
     const [currentEnclosure, setCurrentEnclosure] = useState(null);
     const { data: enclosureData, isPending: enclosurePending, isError: enclosureIsError, error: enclosureError } = useQuery({
         queryKey: ["enclosures"],
@@ -16,13 +25,19 @@ export default function Home(): JSX.Element {
         gcTime: 30000,
     });
     
-    const { mutate:singleEnclosureMutate, isPending:singleEnclosurePending, isError:singleEnclosureIsError, error:singleEnclosureError } = useMutation({
+    const { 
+        mutate:singleEnclosureMutate, 
+        data:singleEnclosureData, 
+        isPending:singleEnclosurePending, 
+        isError:singleEnclosureIsError, 
+        error:singleEnclosureError 
+    } = useMutation({
         mutationFn:  fetchEnclosure,
         onSuccess: async (e) => {
-            setCurrentEnclosure(e?.data);
+           console.log(e)
         },
         onError: (e) => {
-            setCurrentEnclosure(null);
+         
           alert("Error")
         }
       });
@@ -58,14 +73,14 @@ export default function Home(): JSX.Element {
                 <Sidebar 
                 selectLocation={selectLocation} 
                 actionState={actionState}
-                currentEnclosure={currentEnclosure} 
+                currentEnclosure={singleEnclosureData?.data} 
                 singleEnclosurePending={singleEnclosurePending} 
                 clearEnclosure={clearEnclosure} 
                 isOpen={open} 
                 toggleSidebar={toggleSidebar}
                 createForm ={createForm}
                 />
-                <SimpleMap currentEnclosure={currentEnclosure?.id ?? null}   actionState={actionState} onMarkerClick={sendDataToSidebar} enclosures={(!enclosurePending && enclosureData) ?? null}/>
+                <SimpleMap currentEnclosure={singleEnclosureData?.data.id ?? null}   actionState={actionState} onMarkerClick={sendDataToSidebar} enclosures={(!enclosurePending && enclosureData) ?? null}/>
             </div>
 
         </>

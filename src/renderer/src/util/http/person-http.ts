@@ -1,7 +1,7 @@
 import { BASE_URL_API } from "@renderer/config";
-
-export async function fetchUsers({signal, searchTerm, max}){
-    let url = `${BASE_URL_API}/users`;
+import axios from "axios";
+export async function fetchPeople({signal, searchTerm, max}){
+    let url = `${BASE_URL_API}/people`;
 
     if(searchTerm) url += `?query=${searchTerm}`;
 
@@ -15,11 +15,7 @@ export async function fetchUsers({signal, searchTerm, max}){
             Authorization: `Bearer ${localStorage.getItem("token")}`
         }
     });
-    if(!response.ok){
-        console.log("Not ok")
-    } else{
-        console.log("Ok")
-    }
+ 
     console.log(response);
     return response.data;
     } catch(error){

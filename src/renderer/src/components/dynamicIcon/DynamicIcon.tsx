@@ -8,13 +8,13 @@ iconName: string,
 }
 function DynamicIcon({ iconName, ...props }:IconI): JSX.Element|null {
   const IconComponent = Icons[iconName];
-  console.log(IconComponent)
+ 
   if (!IconComponent) {
     console.error(`Icon "${iconName}" not found`);
     return null; // You can return a default icon or an empty element here
   }
 
-  return <IconComponent {...props} />;
+  return <IconComponent {...props} fontSize='inherit'/>;
 };
 
 export default DynamicIcon;

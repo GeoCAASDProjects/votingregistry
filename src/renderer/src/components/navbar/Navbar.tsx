@@ -4,11 +4,12 @@ import { ArrowDownward, ExpandMore, Notifications, Search } from '@mui/icons-mat
 import { AppBar } from '@mui/material'
 import { useAuth } from '@renderer/util/context/AuthContext'
 import OptionsMenu from '../optionsMenu/OptionsMenu'
+import { logout } from '@renderer/util/http/auth'
+import { useNavigate } from 'react-router-dom'
 export default function Navbar(): JSX.Element {
-
   const authCtx = useAuth();
   const user = authCtx.user;
-  console.log(user);
+  const navigate = useNavigate();
 
   const [menuVisibile, setMenuVisible]= useState(true);
 
@@ -16,8 +17,15 @@ export default function Navbar(): JSX.Element {
     setMenuVisible((prevValue) => !prevValue);
     
   }
-  function logout(){
+  async function onLogout(){
+    try{
+    const response = await logout();
+   
     localStorage.removeItem("token");
+    navigate("/login");
+    } catch(e){
+     console.log("error")
+    }
   }
   return (
     <>
@@ -52,7 +60,7 @@ export default function Navbar(): JSX.Element {
                 options={[
 
                   { label: "Opciones", icon: "Settings" },
-                  { label: "Salir", icon: "Logout"}
+                  { label: "Salir", icon: "Logout", onClick:onLogout}
                 ]}
               >
               

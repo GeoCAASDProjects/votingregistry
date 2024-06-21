@@ -73,7 +73,7 @@ export default function SimpleMap({enclosures, actionState, onMarkerClick, curre
     });
     return ( 
       <div style={{ width: '100%', height: '100%' }}>
-      {actionState=="location" && <div  style={{position: "absolute", display:"flex", justifyContent:"center", alignItems:"center", alignContent:"center", width: "100%", zIndex: 999, top: actionState=="location" ? 0 :-30, opacity: actionState=="location" ? 1:0, transition:".4s ease-in-out"}}>
+      {<div  style={{position: "absolute", display:"flex", justifyContent:"center", alignItems:"center", alignContent:"center", width: "100%", zIndex: 999, top: actionState=="location" ? 0 :-30, opacity: actionState=="location" ? 1:0, transition:".4s ease-in-out"}}>
         <SearchBar style={{margin:0, width: "50%"}}/>
         </div>
         }
@@ -100,7 +100,7 @@ export default function SimpleMap({enclosures, actionState, onMarkerClick, curre
         )}
         {
           !!enclosures && enclosures.data.map((enclosure)=>
-        { return !actionState && <Marker icon={currentEnclosure==enclosure.id ? purpleIcon : blueIcon} eventHandlers={{click:()=>ClickOnMarker(enclosure)}} position={[enclosure.latitude, enclosure.longitude]}/>}
+        { return !actionState && <Marker key={enclosure.id} icon={currentEnclosure==enclosure.id ? purpleIcon : blueIcon} eventHandlers={{click:()=>ClickOnMarker(enclosure)}} position={[enclosure.latitude, enclosure.longitude]}/>}
         )
         }
       </MapContainer>

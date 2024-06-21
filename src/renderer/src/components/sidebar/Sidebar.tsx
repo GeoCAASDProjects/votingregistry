@@ -90,6 +90,8 @@ export default function Sidebar({ isOpen, toggleSidebar, currentEnclosure, clear
                                     </tbody>
                                 </table>
 
+                               
+                                <Button title="Editar" iconName="Edit" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
                                 <Button title="Descargar" iconName="Download" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
                                 <h3>Colegios</h3>
 

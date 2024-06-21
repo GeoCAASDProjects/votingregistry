@@ -2,8 +2,25 @@ import { useEffect, useRef } from "react";
 import classes from "./optionsMenu.module.css"
 import DynamicIcon from "../dynamicIcon/DynamicIcon";
 
- 
-export default function OptionsMenu({menuVisible, toggleMenu, options, children}): JSX.Element {
+ /*
+interface IOption{
+  label: string;
+  icon: string;
+  onClick: (e)=>{}
+}
+*/
+interface IOptionsMenu{
+  menuVisible: boolean;
+  toggleMenu?: (e)=>void ;
+  options: {
+    label: string,
+    icon: string,
+    onClick?: (e)=>{}
+
+  }[];
+  children?: React.ReactNode
+}
+export default function OptionsMenu({menuVisible, toggleMenu, options, children}:IOptionsMenu): JSX.Element {
 
     let menuRef= useRef(null);
  /* useEffect(()=>{
@@ -36,7 +53,7 @@ export default function OptionsMenu({menuVisible, toggleMenu, options, children}
         {options?.map((option, index) => (
        
           <div onClick={option.onClick}>
-            {option.icon && <DynamicIcon iconName={option.icon} fontSize='inherit'/>}
+            {option.icon && <DynamicIcon iconName={option.icon} />}
             {option.label} 
             </div>
         )

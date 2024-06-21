@@ -3,13 +3,13 @@ import { FC } from "react";
 import classes from './button.module.css'
 import DynamicIcon from "../dynamicIcon/DynamicIcon";
 interface ButtonProps{
-    title: string;
+    title?: string;
    
-    isLoading: boolean;
-    type: string;
+    isLoading?: boolean;
+    type?: string;
     style: object;
     iconName: string;
-    onClick: () =>{ 
+    onClick?: () =>{ 
     }
 }
 
