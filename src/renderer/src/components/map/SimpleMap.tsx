@@ -4,6 +4,8 @@ import L from 'leaflet';
 import "leaflet/dist/leaflet.css";
 import { useEffect, useRef, useState } from 'react';
 import SearchBar from '../searchBar/SearchBar';
+import { Check, Close } from '@mui/icons-material';
+import Button from '../button/Button';
 
 type Position = [number, number];
 export default function SimpleMap({enclosures, actionState, onMarkerClick, currentEnclosure}): JSX.Element{
@@ -75,6 +77,11 @@ export default function SimpleMap({enclosures, actionState, onMarkerClick, curre
       <div style={{ width: '100%', height: '100%' }}>
       {<div  style={{position: "absolute", display:"flex", justifyContent:"center", alignItems:"center", alignContent:"center", width: "100%", zIndex: 999, top: actionState=="location" ? 0 :-30, opacity: actionState=="location" ? 1:0, transition:".4s ease-in-out"}}>
         <SearchBar style={{margin:0, width: "50%"}}/>
+        </div>
+        }
+             {<div  style={{position: "absolute", display:"flex", justifyContent:"center", alignItems:"center", alignContent:"center", width: "100%", zIndex: 999, bottom: actionState=="location" ? 30 :-30, opacity: actionState=="location" ? 1:0, transition:".4s ease-in-out"}}>
+       <Button  style={{padding: 5, borderRadius: "50%", backgroundColor:"purple", color:"white"}}><Check/></Button>
+    
         </div>
         }
        
