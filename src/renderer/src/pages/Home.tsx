@@ -77,7 +77,7 @@ export default function Home(): JSX.Element {
                 <Sidebar 
                 selectLocation={selectLocation} 
                 actionState={actionState}
-                currentEnclosure={singleEnclosurePending && singleEnclosureData?.data} 
+                currentEnclosure={singleEnclosureData?.data} 
                 singleEnclosurePending={singleEnclosurePending && singleEnclosurePending} 
                 clearEnclosure={clearEnclosure} 
                 isOpen={open} 
