@@ -18,12 +18,19 @@ export interface LoginData {
     signal: AbortSignal;
     
 }
+export interface EnclosureData{
+  
+ 
+}
 export interface Enclosure {
+  data: 
+  
+  
+  {id: number,
     name: string,
     address: string,
     longitude: number,
     latitude: number,
     created_at:Date,
-    updated_at: Date,
-    id: number
+    updated_at: Date}[]
 }

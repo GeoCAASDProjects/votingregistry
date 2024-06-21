@@ -24,7 +24,7 @@ export async function fetchEnclosures({signal}): Promise<Enclosure[] | Error>{
     }
 }
 
-export async function fetchEnclosure(id): Promise<Enclosure[] | Error>{
+export async function fetchEnclosure(id){
     let url = `${BASE_URL_API}/enclosure/${id}`;
 
     const config: AxiosRequestConfig ={
