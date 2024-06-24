@@ -38,7 +38,7 @@ export default function Home(): JSX.Element {
     }   = useMutation({
         mutationFn:  fetchEnclosure,
         onSuccess: async (e) => {
-           console.log(e)
+          setCurrentEnclosure(e.data)
         },
         onError: (e) => {
          
@@ -53,6 +53,9 @@ export default function Home(): JSX.Element {
     if(!open){
         toggleSidebar();
     }
+    if(currentEnclosure?.id == id){
+      return;
+    }
      const response = await singleEnclosureMutate(id);
    
   
@@ -63,6 +66,12 @@ export default function Home(): JSX.Element {
    function selectLocation(){
     setOpen(false);
     setActionState("location")
+   }
+
+   function openForm(marker){
+    alert(JSON.stringify(marker))
+    setOpen(true);
+    setActionState("form")
    }
     
    function createForm(){
@@ -77,14 +86,14 @@ export default function Home(): JSX.Element {
                 <Sidebar 
                 selectLocation={selectLocation} 
                 actionState={actionState}
-                currentEnclosure={singleEnclosureData?.data} 
+                currentEnclosure={currentEnclosure} 
                 singleEnclosurePending={singleEnclosurePending && singleEnclosurePending} 
                 clearEnclosure={clearEnclosure} 
                 isOpen={open} 
                 toggleSidebar={toggleSidebar}
                 createForm ={createForm}
                 />
-                <SimpleMap currentEnclosure={singleEnclosureData?.data?.id ?? null}   actionState={actionState} onMarkerClick={sendDataToSidebar} enclosures={(!enclosurePending && enclosureData) ?? null}/>
+                <SimpleMap openForm={openForm} currentEnclosure={currentEnclosure?.id ?? null}   actionState={actionState} onMarkerClick={sendDataToSidebar} enclosures={(!enclosurePending && enclosureData) ?? null}/>
             </div>
 
         </>

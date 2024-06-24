@@ -9,15 +9,17 @@
     align-items: center;
     align-content: center;
     font-weight: bold;
-  
-  
+    
+ 
   }
   .button-container div{
     font-weight: inherit;
     display: flex;
     gap: 4px;
     align-content:center;
-    align-items:center
+    align-items:center;
+   
+  
   }
 
 
@@ -25,4 +27,9 @@
     cursor: pointer;
     opacity: 0.9
   }
+
+  .center{
+    justify-content: center;
+  }
+
  

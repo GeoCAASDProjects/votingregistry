@@ -8,7 +8,7 @@ import { Check, Close } from '@mui/icons-material';
 import Button from '../button/Button';
 
 type Position = [number, number];
-export default function SimpleMap({enclosures, actionState, onMarkerClick, currentEnclosure}): JSX.Element{
+export default function SimpleMap({enclosures, actionState, onMarkerClick, currentEnclosure, openForm}): JSX.Element{
    
     const mapRef = useRef(null)
 
@@ -80,7 +80,7 @@ export default function SimpleMap({enclosures, actionState, onMarkerClick, curre
         </div>
         }
              {<div  style={{position: "absolute", display:"flex", justifyContent:"center", alignItems:"center", alignContent:"center", width: "100%", zIndex: 999, bottom: actionState=="location" ? 30 :-30, opacity: actionState=="location" ? 1:0, transition:".4s ease-in-out"}}>
-       <Button  style={{padding: 5, borderRadius: "50%", backgroundColor:"purple", color:"white"}}><Check/></Button>
+       <Button onClick={()=>openForm(marker)} style={{padding: 5, borderRadius: "50%", backgroundColor:"purple", color:"white"}}><Check/></Button>
     
         </div>
         }

@@ -5,6 +5,7 @@ import SearchBar from "../searchBar/SearchBar";
 import MenuIcon from '@mui/icons-material/Menu';
 import Button from "../button/Button";
 import { CircularProgress } from "@mui/material";
+import EnclosureCreateForm from "../enclosureForm/EnclosureForm";
 
 export default function Sidebar({ isOpen, toggleSidebar, currentEnclosure, clearEnclosure, singleEnclosurePending, selectLocation, actionState, createForm }): JSX.Element {
 
@@ -37,15 +38,13 @@ export default function Sidebar({ isOpen, toggleSidebar, currentEnclosure, clear
                 >
 
                     <div style={{ padding: 10 }}>
+                        
+                    <h2>Contenedor</h2>
+                  {actionState=="form" ? <EnclosureCreateForm/>   :   <>
 
-                        <>
-
-                            <h2>Contenedor</h2>
-
-                            <SearchBar />
+                        <SearchBar />
 
 
-                        </>
                         {singleEnclosurePending &&
                             <div style={{ display: "flex", width: "100%", alignContent: "center", alignItems: "center", justifyContent: "center" }}>
                                 <CircularProgress color="inherit" size={30} />
@@ -53,7 +52,7 @@ export default function Sidebar({ isOpen, toggleSidebar, currentEnclosure, clear
                         }
 
                         {(!singleEnclosurePending && !!currentEnclosure) ?
-
+ 
                             <div>
                                 <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
                                     <Close onClick={clearEnclosure} />
@@ -90,9 +89,10 @@ export default function Sidebar({ isOpen, toggleSidebar, currentEnclosure, clear
                                     </tbody>
                                 </table>
 
-                               
+
                                 <Button title="Editar" iconName="Edit" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
                                 <Button title="Descargar" iconName="Download" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
+
                                 <h3>Colegios</h3>
 
                                 {currentEnclosure?.schools.length > 0 ?
@@ -141,7 +141,10 @@ export default function Sidebar({ isOpen, toggleSidebar, currentEnclosure, clear
 
 
 
-                        }
+                        }                        
+                        </>}
+
+
                     </div>
 
                 </div>
