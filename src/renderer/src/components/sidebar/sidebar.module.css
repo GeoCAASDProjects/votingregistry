@@ -1,27 +1,4 @@
  
-    .table tr:nth-child(even) {
-        background-color: #5A639C;
-        color: white
-      }
-       
-    .table tr:nth-child(odd) {
-        background-color: #E2BBE9;
-        color: black
-      }
-      
-      .table{
-        width: 100%;
-        margin: 20px 0;
-      }
-
-      .table{
-        border: 1px solid white;
-        border-radius: 4px;
-      }
-      .table td{
- 
-      }
-      
       .sidebar-toggle {
         position: absolute;
         

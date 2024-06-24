@@ -7,7 +7,7 @@ interface ButtonProps{
    
     isLoading?: boolean;
     type?: string;
-    style: object;
+    style?: object;
     iconName?: string|null;
     center?: boolean;
     children?: React.ReactNode;
@@ -19,7 +19,7 @@ const Button:FC<ButtonProps> = ({title, isLoading, type, style, center, iconName
     return(
         <button type="submit" style={style} className={classes["button-container"]} onClick={onClick}>
         <div className={center ? classes["center"] : ""}>
-        <DynamicIcon iconName={iconName}/>
+        <DynamicIcon iconName={iconName ?? " "}/>
         {title}
         {children}
         {isLoading && <CircularProgress size="16px" thickness={10} color="inherit"/>}

@@ -1,4 +1,7 @@
+import EnclosureCreateForm from "@renderer/components/enclosureForm/EnclosureForm";
+import EnclosureInfo from "@renderer/components/enclosureInfo/EnclosureInfo";
 import SimpleMap from "@renderer/components/map/SimpleMap";
+import SearchBar from "@renderer/components/searchBar/SearchBar";
 import Sidebar from "@renderer/components/sidebar/Sidebar";
 import { fetchEnclosure, fetchEnclosures } from "@renderer/util/http/enclosure-http";
 import { UseMutationResult, useMutation, useQuery } from "@tanstack/react-query";
@@ -84,15 +87,25 @@ export default function Home(): JSX.Element {
         <>
             <div style={{ flex: 1, height: "100%" }}>
                 <Sidebar 
-                selectLocation={selectLocation} 
+              
                 actionState={actionState}
-                currentEnclosure={currentEnclosure} 
-                singleEnclosurePending={singleEnclosurePending && singleEnclosurePending} 
-                clearEnclosure={clearEnclosure} 
+      
+             
                 isOpen={open} 
                 toggleSidebar={toggleSidebar}
                 createForm ={createForm}
-                />
+                >
+                 {actionState!="form" &&  <SearchBar />}
+              {    actionState=="form"  &&    <EnclosureCreateForm/>}
+
+    
+              {actionState!="form" && <EnclosureInfo  
+              singleEnclosurePending={singleEnclosurePending}
+                currentEnclosure={currentEnclosure} 
+                clearEnclosure={clearEnclosure} 
+                selectLocation={selectLocation} 
+              />}
+                </Sidebar>
                 <SimpleMap openForm={openForm} currentEnclosure={currentEnclosure?.id ?? null}   actionState={actionState} onMarkerClick={sendDataToSidebar} enclosures={(!enclosurePending && enclosureData) ?? null}/>
             </div>
 

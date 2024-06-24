@@ -7,7 +7,7 @@ import Button from "../button/Button";
 import { CircularProgress } from "@mui/material";
 import EnclosureCreateForm from "../enclosureForm/EnclosureForm";
 
-export default function Sidebar({ isOpen, toggleSidebar, currentEnclosure, clearEnclosure, singleEnclosurePending, selectLocation, actionState, createForm }): JSX.Element {
+export default function Sidebar({ isOpen, toggleSidebar, children, actionState, createForm }): JSX.Element {
 
     let sideBarButton;
     if (isOpen) {
@@ -40,7 +40,8 @@ export default function Sidebar({ isOpen, toggleSidebar, currentEnclosure, clear
                     <div style={{ padding: 10 }}>
                         
                     <h2>Contenedor</h2>
-                  {actionState=="form" ? <EnclosureCreateForm/>   :   <>
+                    {children}
+                  {/*actionState=="form" ? <EnclosureCreateForm/>   :   <>
 
                         <SearchBar />
 
@@ -142,7 +143,7 @@ export default function Sidebar({ isOpen, toggleSidebar, currentEnclosure, clear
 
 
                         }                        
-                        </>}
+                        </>*/}
 
 
                     </div>
