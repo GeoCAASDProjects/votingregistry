@@ -19,18 +19,15 @@ export interface LoginData {
     
 }
 export interface EnclosureData{
-  
+  data: Enclosure[]
  
 }
 export interface Enclosure {
-  data: 
-  
-  
-  {id: number,
+  id: number,
     name: string,
     address: string,
     longitude: number,
     latitude: number,
     created_at:Date,
-    updated_at: Date}[]
+    updated_at: Date
 }

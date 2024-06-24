@@ -7,10 +7,10 @@ iconName: string|null,
  
 }
 function DynamicIcon({ iconName, ...props }:IconI): JSX.Element|null {
-  const IconComponent = Icons[iconName];
+  const IconComponent = Icons[iconName ?? " "];
  
   if (!IconComponent) {
-    console.error(`Icon "${iconName}" not found`);
+ 
     return null; // You can return a default icon or an empty element here
   }
 

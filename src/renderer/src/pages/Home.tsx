@@ -3,28 +3,17 @@ import EnclosureInfo from "@renderer/components/enclosureInfo/EnclosureInfo";
 import SimpleMap from "@renderer/components/map/SimpleMap";
 import SearchBar from "@renderer/components/searchBar/SearchBar";
 import Sidebar from "@renderer/components/sidebar/Sidebar";
-import { fetchEnclosure, fetchEnclosures } from "@renderer/util/http/enclosure-http";
-import { UseMutationResult, useMutation, useQuery } from "@tanstack/react-query";
+import { createEnclosure, fetchEnclosure, fetchEnclosures } from "@renderer/util/http/enclosure-http";
+import { Enclosure } from "@renderer/util/types";
+import { UseMutationResult, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
 export default function Home(): JSX.Element {
+  const queryClient = useQueryClient();
     const [actionState, setActionState] = useState("");
     const [open, setOpen] = useState(false);
-
-     interface EnclosureData {
-        name: string;
-        address: string;
-        longitude: number;
-        latitude: number;
-        created_at: Date;
-        updated_at: Date;
-        id: number;
-      }
-      
-     interface Enclosure {
-        data: EnclosureData[];
-      }
-    const [currentEnclosure, setCurrentEnclosure] = useState(null);
+    const [defaultFormValues, setDefaultFormValues] = useState({});
+    const [currentEnclosure, setCurrentEnclosure] = useState<Enclosure|null>(null);
     const { data: enclosureData, isPending: enclosurePending, isError: enclosureIsError, error: enclosureError } = useQuery({
         queryKey: ["enclosures"],
         queryFn: ({signal})=>fetchEnclosures({signal}),
@@ -41,7 +30,31 @@ export default function Home(): JSX.Element {
     }   = useMutation({
         mutationFn:  fetchEnclosure,
         onSuccess: async (e) => {
+          console.log(e.data)
+          console.log("------------------------------------")
           setCurrentEnclosure(e.data)
+        },
+        onError: (e) => {
+         
+          alert("Error")
+        }
+      });
+
+      const { 
+        mutate:singleEnclosureCreateMutate, 
+        data:singleEnclosureCreateData, 
+        isPending:singleEnclosureCreatePending, 
+        isError:singleEnclosureCreateIsError, 
+        error:singleEnclosureCreateError 
+    }   = useMutation({
+        mutationFn:  createEnclosure,
+        onSuccess: async (e) => {
+          console.log("The data")
+          console.log(e.data);
+          queryClient.refetchQueries({queryKey: ["enclosures"]});
+          setActionState("")
+          setCurrentEnclosure(e.data)
+          
         },
         onError: (e) => {
          
@@ -72,9 +85,14 @@ export default function Home(): JSX.Element {
    }
 
    function openForm(marker){
-    alert(JSON.stringify(marker))
+   setDefaultFormValues({lng: marker.lng.toFixed(2), lat: marker.lat.toFixed(2)})
+   if(!open){
     setOpen(true);
+   }
+  if(actionState != "form"){
     setActionState("form")
+  }
+   
    }
     
    function createForm(){
@@ -83,6 +101,18 @@ export default function Home(): JSX.Element {
     setActionState("");
    }
     
+   async function submitData(data){
+ console.log(data)
+    try{
+      const response = singleEnclosureCreateMutate(data);
+      console.log("Answer")
+      console.log(response);
+     
+    } catch(e){
+      console.error(e)
+      alert(e);
+    }
+   }
     return (
         <>
             <div style={{ flex: 1, height: "100%" }}>
@@ -96,7 +126,7 @@ export default function Home(): JSX.Element {
                 createForm ={createForm}
                 >
                  {actionState!="form" &&  <SearchBar />}
-              {    actionState=="form"  &&    <EnclosureCreateForm/>}
+              {    actionState=="form"  &&    <EnclosureCreateForm submitData={submitData} defaultValues={defaultFormValues} isLoading={singleEnclosureCreatePending}/>}
 
     
               {actionState!="form" && <EnclosureInfo  
