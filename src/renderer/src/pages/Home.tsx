@@ -85,8 +85,8 @@ export default function Home(): JSX.Element {
     setActionState("location")
    }
 
-   function openForm(marker){
-   setDefaultFormValues({lng: marker.lng.toFixed(2), lat: marker.lat.toFixed(2)})
+   function openForm(data){
+   setDefaultFormValues({lng: data.lng.toFixed(2), lat: data.lat.toFixed(2), address:data.address})
    if(!open){
     setOpen(true);
    }

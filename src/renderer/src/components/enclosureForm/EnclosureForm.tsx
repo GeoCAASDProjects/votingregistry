@@ -15,7 +15,7 @@ export default function EnclosureCreateForm({submitData, defaultValues, isLoadin
     
     const initialValues = {
         name: '',
-        address: '',
+        address: defaultValues.address ?? "",
         longitude:defaultValues.lng ?? 0,
         latitude: defaultValues.lat ?? 0
     }

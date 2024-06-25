@@ -6,13 +6,14 @@ import { useEffect, useRef, useState } from 'react';
 import SearchBar from '../searchBar/SearchBar';
 import { Check, Close } from '@mui/icons-material';
 import Button from '../button/Button';
+import { getAddress, searchAddress } from '@renderer/util/http/map_token';
 
 type Position = [number, number];
 export default function SimpleMap({enclosures, actionState, onMarkerClick, currentEnclosure, openForm}): JSX.Element{
    
     const mapRef = useRef(null)
 
-   
+   const [address, setAddress] = useState<string|null>(null);
     const [position, setPosition] = useState<Position>([0, 0]);
 
     useEffect(() => {
@@ -44,8 +45,13 @@ export default function SimpleMap({enclosures, actionState, onMarkerClick, curre
     const MapClickHandler = ()=>{
       
       useMapEvents({
-        click: (e) => {
+        click: async (e) => {
           const {lat, lng} = e.latlng;
+          if(actionState=="location"){
+            const address = await getAddress({lat, lng})
+            setAddress(address);
+          }
+        
           setMarker({lat:lat, lng: lng});
         }
       });
@@ -73,14 +79,48 @@ export default function SimpleMap({enclosures, actionState, onMarkerClick, curre
       popupAnchor: [1, -34],
       shadowSize: [41, 41],
     });
+
+    const [searchValue, setSearchValue] = useState<string>('');
+    const [searchList, setSearchList] = useState<Array>([]);
+    useEffect(()=>{
+      setSearchValue(address ?? "")
+    },[address])
+
+    const [searchTimeOut, setSearchTimeOut] = useState<NodeJS.Timeout|null>(null);
+
+    function inputHandler(e){
+      setSearchValue(e.target.value);
+    }
+    
+    
+    useEffect(()=>{
+      if(actionState != "location") return;
+      if(searchValue.length == 0) return;
+      if (searchTimeOut !== null) {
+        clearTimeout(searchTimeOut);
+    }
+    
+
+      const timeoutId = setTimeout(()=>{
+       searchAddress(searchValue)
+         }, 500)
+        
+          setSearchTimeOut(timeoutId);
+
+    
+        
+        return ()=>clearTimeout(timeoutId);
+     
+   }, [searchValue])
+
     return ( 
       <div style={{ width: '100%', height: '100%' }}>
       {<div  style={{position: "absolute", display:"flex", justifyContent:"center", alignItems:"center", alignContent:"center", width: "100%", zIndex: 999, top: actionState=="location" ? 0 :-30, opacity: actionState=="location" ? 1:0, transition:".4s ease-in-out"}}>
-        <SearchBar style={{margin:0, width: "50%"}}/>
+        <SearchBar onChange={inputHandler} value={searchValue} style={{margin:0, width: "50%"}}/>
         </div>
         }
              {<div  style={{position: "absolute", display:"flex", justifyContent:"center", alignItems:"center", alignContent:"center", width: "100%", zIndex: 999, bottom: actionState=="location" ? 30 :-30, opacity: actionState=="location" ? 1:0, transition:".4s ease-in-out"}}>
-       <Button onClick={()=>openForm(marker)} style={{padding: 5, borderRadius: "50%", backgroundColor:"purple", color:"white"}}><Check/></Button>
+       <Button onClick={()=>openForm({...marker, address:address})} style={{padding: 5, borderRadius: "50%", backgroundColor:"purple", color:"white"}}><Check/></Button>
     
         </div>
         }
