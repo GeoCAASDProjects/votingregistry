@@ -8,6 +8,7 @@ import { Enclosure } from "@renderer/util/types";
 import { UseMutationResult, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
+
 export default function Home(): JSX.Element {
   const queryClient = useQueryClient();
     const [actionState, setActionState] = useState("");
