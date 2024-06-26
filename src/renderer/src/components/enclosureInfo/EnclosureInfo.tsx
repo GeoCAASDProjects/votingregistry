@@ -3,7 +3,7 @@ import Button from "../button/Button"
 import { Close } from "@mui/icons-material"
 import classes from './enclosureInfo.module.css'
 
-export default function EnclosureInfo({singleEnclosurePending, currentEnclosure, clearEnclosure, selectLocation}){
+export default function EnclosureInfo({singleEnclosurePending, editForm, currentEnclosure, clearEnclosure, selectLocation}){
     return (
         <>
         {singleEnclosurePending &&
@@ -51,7 +51,7 @@ export default function EnclosureInfo({singleEnclosurePending, currentEnclosure,
                 </table>
 
 
-                <Button title="Editar" iconName="Edit" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
+                <Button title="Editar" iconName="Edit" onClick={editForm} style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
                 <Button title="Descargar" iconName="Download" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
                 <Button title="Borrar" iconName="Delete" style={{ background: "#22224F", width: "100%", color: "#FFFFFF", margin: "5px 0px" }} />
 

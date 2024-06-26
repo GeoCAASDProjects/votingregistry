@@ -3,7 +3,7 @@ import EnclosureInfo from "@renderer/components/enclosureInfo/EnclosureInfo";
 import SimpleMap from "@renderer/components/map/SimpleMap";
 import SearchBar from "@renderer/components/searchBar/SearchBar";
 import Sidebar from "@renderer/components/sidebar/Sidebar";
-import { createEnclosure, fetchEnclosure, fetchEnclosures } from "@renderer/util/http/enclosure-http";
+import { createEnclosure, fetchEnclosure, fetchEnclosures, updateEnclosure } from "@renderer/util/http/enclosure-http";
 import { Enclosure } from "@renderer/util/types";
 import { UseMutationResult, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
@@ -62,7 +62,28 @@ export default function Home(): JSX.Element {
           alert("Error")
         }
       });
-    
+
+         const { 
+        mutate:singleEnclosureUpdateMutate, 
+        data:singleEnclosureUpdateData, 
+        isPending:singleEnclosureUpdatePending, 
+        isError:singleEnclosureUpdateIsError, 
+        error:singleEnclosureUpdateError 
+    }   = useMutation({
+        mutationFn:  updateEnclosure,
+        onSuccess: async (e) => {
+          console.log("The data")
+          console.log(e.data);
+          queryClient.refetchQueries({queryKey: ["enclosures"]});
+          setActionState("")
+          setCurrentEnclosure(e.data)
+          
+        },
+        onError: (e) => {
+         
+          alert("Error")
+        }
+      });
     function toggleSidebar(){
         setOpen(currentVal=>!currentVal);
     }
@@ -86,7 +107,7 @@ export default function Home(): JSX.Element {
    }
 
    function openForm(data){
-   setDefaultFormValues({lng: data.lng.toFixed(2), lat: data.lat.toFixed(2), address:data.address})
+   setDefaultFormValues({longitude: data.lng.toFixed(2), latitude: data.lat.toFixed(2), address:data.address})
    if(!open){
     setOpen(true);
    }
@@ -101,7 +122,14 @@ export default function Home(): JSX.Element {
     setOpen(true);
     setActionState("");
    }
-    
+   function editForm(){
+    setOpen(true);
+    if(actionState != "editForm"){
+      setDefaultFormValues({...currentEnclosure})
+    setActionState("editForm");
+   
+    }
+   }
    async function submitData(data){
  console.log(data)
     try{
@@ -114,6 +142,18 @@ export default function Home(): JSX.Element {
       alert(e);
     }
    }
+   async function updateData(data){
+     
+       try{
+         const response = singleEnclosureUpdateMutate(data);
+         console.log("Answer")
+         console.log(response);
+        
+       } catch(e){
+         console.error(e)
+         alert(e);
+       }
+      }
     return (
         <>
             <div style={{ flex: 1, height: "100%" }}>
@@ -127,10 +167,11 @@ export default function Home(): JSX.Element {
                 createForm ={createForm}
                 >
                  {actionState!="form" &&  <SearchBar />}
-              {    actionState=="form"  &&    <EnclosureCreateForm submitData={submitData} defaultValues={defaultFormValues} isLoading={singleEnclosureCreatePending}/>}
+              {    actionState=="form" || actionState=="editForm"  &&    <EnclosureCreateForm submitData={actionState=="editForm" ? updateData : submitData} defaultValues={defaultFormValues} isLoading={singleEnclosureCreatePending} edit={actionState=="editForm"}/>}
 
     
-              {actionState!="form" && <EnclosureInfo  
+              {actionState=="" && <EnclosureInfo  
+              editForm={editForm}
               singleEnclosurePending={singleEnclosurePending}
                 currentEnclosure={currentEnclosure} 
                 clearEnclosure={clearEnclosure} 

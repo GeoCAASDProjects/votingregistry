@@ -3,7 +3,7 @@ import Button from '../button/Button'
 import * as Yup from 'yup';
 import classes from './enclosureform.module.css'
 import { ErrorMessage, Field, Form, Formik } from 'formik';
-export default function EnclosureCreateForm({submitData, defaultValues, isLoading}) {
+export default function EnclosureCreateForm({submitData, defaultValues, isLoading, edit}) {
 
     const EnclosureSchema = Yup.object().shape({
        name: Yup.string().required('Requerido'),
@@ -14,10 +14,14 @@ export default function EnclosureCreateForm({submitData, defaultValues, isLoadin
 
     
     const initialValues = {
-        name: '',
+        id: defaultValues.id ?? null,
+        name: defaultValues.name ?? "",
         address: defaultValues.address ?? "",
-        longitude:defaultValues.lng ?? 0,
-        latitude: defaultValues.lat ?? 0
+        longitude:defaultValues.longitude ?? 0,
+        latitude: defaultValues.latitude ?? 0
+    }
+    function resetValues(){
+        
     }
 
     return (
@@ -58,12 +62,13 @@ export default function EnclosureCreateForm({submitData, defaultValues, isLoadin
                 
                 <Button type="submit" title="Enviar" iconName="Send" isLoading={isLoading} center/>
                   
-               
+              {/*  <Button onClick={resetValues} title="ResetValues" iconName="RestartAlt" isLoading={isLoading} center/>*/}
         </div>
 
             </Form>
 
         )}
+        
     </Formik> 
        
    

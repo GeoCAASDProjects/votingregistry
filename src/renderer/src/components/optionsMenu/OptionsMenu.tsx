@@ -52,7 +52,7 @@ export default function OptionsMenu({menuVisible, toggleMenu, options, children}
       
         {options?.map((option, index) => (
        
-          <div onClick={option.onClick}>
+          <div onClick={option.onClick} key={index}>
             {option.icon && <DynamicIcon iconName={option.icon} />}
             {option.label} 
             </div>

@@ -72,12 +72,13 @@ export async function createEnclosure(data){
         }
 }
 
-export async function updateEnclosure(id, data){
+export async function updateEnclosure(data){
+    alert("UPDATING!");
     console.log("THE DATA")
     console.log("----------------------------------------------------------------------")
     console.log({...data})
-   
-    let url = `${BASE_URL_API}/enclosure/${id}`;
+  
+    let url = `${BASE_URL_API}/enclosure/${data.id}`;
     const config: AxiosRequestConfig ={
      
         headers: {
@@ -87,7 +88,7 @@ export async function updateEnclosure(id, data){
     }
 
     try{
-        const response = await axios.put(url, data, config);
+        const response = await axios.patch(url, data, config);
       
         console.log(response);
       
