@@ -11,7 +11,7 @@ export default function Navbar(): JSX.Element {
   const user = authCtx.user;
   const navigate = useNavigate();
 
-  const [menuVisibile, setMenuVisible]= useState(true);
+  const [menuVisibile, setMenuVisible]= useState(false);
 
   function toggleMenu() {
     setMenuVisible((prevValue) => !prevValue);

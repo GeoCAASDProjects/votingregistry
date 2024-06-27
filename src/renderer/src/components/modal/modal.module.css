@@ -17,7 +17,7 @@
     background: white;
     padding: 30px 50px;
     border: 1px solid #ccc;
-
+    color: black;
     border-radius: 8px;
     
     z-index: 999999;
@@ -34,6 +34,10 @@
     overflow-y: auto; /* Enables scrolling if the content overflows */
 }
 
+.container p{
+    text-align: left;
+    margin: 15px 0;
+}
 .closeButton {
     position: absolute;
     top: 10px;

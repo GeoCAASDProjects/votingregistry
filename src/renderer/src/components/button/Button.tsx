@@ -11,8 +11,7 @@ interface ButtonProps{
     iconName?: string|null;
     center?: boolean;
     children?: React.ReactNode;
-    onClick?: () =>{ 
-    }
+    onClick?: (data:any) =>void
 }
 
 const Button:FC<ButtonProps> = ({title, isLoading, type, style, center, iconName, onClick, children}) =>{
