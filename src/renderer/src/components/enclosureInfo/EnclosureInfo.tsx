@@ -4,10 +4,12 @@ import { Close, Delete, Edit } from "@mui/icons-material"
 import classes from './enclosureInfo.module.css'
 import { useState } from "react"
 import { deleteSchool, fetchSchools } from "@renderer/util/http/school-http"
-import { useQuery, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import Modal from "../modal/Modal"
 
 export default function EnclosureInfo({ singleEnclosurePending, schoolForm, deleteModal, editForm, currentEnclosure, clearEnclosure, selectLocation }) {
 
+    const [isOpen, setIsOpen] = useState(false);
     const queryClient = useQueryClient();
 
     const [currentSchool, setCurrentSchool] = useState(null);
@@ -20,9 +22,33 @@ export default function EnclosureInfo({ singleEnclosurePending, schoolForm, dele
       
     });
   
-
+/*
+    const {
+        mutate: singleSchoolDeleteMutate,
+        data: singleSchoolDeleteData,
+        isPending: singleSchoolDeletePending,
+        isError: singleSchoolDeleteIsError,
+        error: singleSchoolDeleteError
+      } = useMutation({
+        mutationFn: deleteSchool,
+        onSuccess: async (e) => {
+          console.log("The data")
+          console.log(e.data);
+          queryClient.refetchQueries({ queryKey: [`enclosure/${currentEnclosure?.id}/schools`] });
+        
+    
+        },
+        onError: (e) => {
+    
+          alert("Error")
+        }
+      });*/
+  
     return (
+
         <>
+  
+
             {singleEnclosurePending &&
                 <div style={{ display: "flex", width: "100%", alignContent: "center", alignItems: "center", justifyContent: "center" }}>
                     <CircularProgress color="inherit" size={30} />
@@ -81,23 +107,23 @@ export default function EnclosureInfo({ singleEnclosurePending, schoolForm, dele
                                 <thead>
                                     <th>   <span style={{ fontWeight: "bold" }}>Nombre</span></th>
                                     <th>   <span style={{ fontWeight: "bold" }}>Personas</span></th>
-                                    <th>   <span style={{ fontWeight: "bold" }}>Acciones</span></th>
+                               {    <th>   <span style={{ fontWeight: "bold" }}>Acciones</span></th>}
                                 </thead>
                                 <tbody>
                                     {schoolData?.data.length > 0 && schoolData?.data.map((enclosure) => (
-                                        <tr>
+                                        <tr key={enclosure.id}>
 
 
                                             <td>{enclosure.name}</td>
                                             <td>{enclosure.members.length ?? 0}</td>
-                                            <td>
+                                          {<td>
                                                 <div style={{display:"flex", justifyContent:"space-between", width:"100%"}}>
                                                 
                                                 <Edit/>
-                                                <Delete/>
+                                                <Delete onClick={()=>openDeleteModal(enclosure.id)}/>
                                                 </div>
                                               
-                                            </td>
+                                            </td>}
                                         </tr>
                                     ))}
 

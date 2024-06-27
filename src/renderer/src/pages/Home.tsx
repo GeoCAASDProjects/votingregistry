@@ -1,6 +1,7 @@
 import EnclosureCreateForm from "@renderer/components/enclosureForm/EnclosureForm";
 import EnclosureInfo from "@renderer/components/enclosureInfo/EnclosureInfo";
 import SimpleMap from "@renderer/components/map/SimpleMap";
+import MemberCreateForm from "@renderer/components/memberForm/MemberForm";
 import Modal from "@renderer/components/modal/Modal";
 import SchoolCreateForm from "@renderer/components/schoolForm/SchoolForm";
 import SearchBar from "@renderer/components/searchBar/SearchBar";
@@ -106,8 +107,8 @@ export default function Home(): JSX.Element {
 
     },
     onError: (e) => {
-
-      alert("Error")
+      console.log("The error inside the mutation")
+      console.log(e)
     }
   });
 
@@ -234,7 +235,7 @@ export default function Home(): JSX.Element {
       setIsOpen(false);
     } catch (e) {
       console.error(e)
-      alert(e);
+      
     }
   }
   const [isOpen, setIsOpen] = useState<boolean>(false)
@@ -250,6 +251,8 @@ export default function Home(): JSX.Element {
         {<Modal title="Borrar recinto?" isOpen={isOpen} setIsOpen={setIsOpen} onSubmit={() => deleteData(currentEnclosure?.id)}>
           <p>Deseas borrar el Recinto junto con todos sus colegios y usuarios?</p>
         </Modal>}
+
+        
         <Sidebar
 
           actionState={actionState}
@@ -258,7 +261,7 @@ export default function Home(): JSX.Element {
           isOpen={open}
           toggleSidebar={toggleSidebar}
           createForm={createForm}
-        >
+        >{/*
           {actionState != "form" && <SearchBar />}
           {(actionState == "form" || actionState == "editForm") && <EnclosureCreateForm submitData={actionState == "editForm" ? updateData : submitData} defaultValues={defaultFormValues} isLoading={singleEnclosureCreatePending} edit={actionState == "editForm"} />}
           {(actionState == "schoolForm") && <SchoolCreateForm currentEnclosure={currentEnclosure?.id} submitData={submitSchoolData} isLoading={singleSchoolCreatePending} edit={false} defaultValues={{}} />}
@@ -270,7 +273,9 @@ export default function Home(): JSX.Element {
             clearEnclosure={clearEnclosure}
             selectLocation={selectLocation}
             schoolForm={schoolForm}
-          />}
+          />}*/
+          <MemberCreateForm/>
+          }
         </Sidebar>
         <SimpleMap openForm={openForm} currentEnclosure={currentEnclosure?.id ?? null} actionState={actionState} onMarkerClick={sendDataToSidebar} enclosures={(!enclosurePending && enclosureData) ?? null} />
       </div>

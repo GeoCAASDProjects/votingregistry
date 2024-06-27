@@ -101,6 +101,7 @@ export async function updateEnclosure(data){
 }
 
 export async function deleteEnclosure(id){
+    
     let url = `${BASE_URL_API}/enclosure/${id}`;
     const config: AxiosRequestConfig ={
      
@@ -114,6 +115,8 @@ export async function deleteEnclosure(id){
         return response.data;
     
     }catch(error){
+        console.log("The error inside the delete function")
+        console.log(error)
         throw new Error('Request failed.')
     }
 }
