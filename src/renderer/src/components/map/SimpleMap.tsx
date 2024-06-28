@@ -82,20 +82,35 @@ export default function SimpleMap({ enclosures, actionState, onMarkerClick, curr
     shadowSize: [41, 41],
   });
 
-  const [searchValue, setSearchValue] = useState<string>('');
-  const [searchList, setSearchList] = useState([]);
-  useEffect(() => {
-    setSearchValue(address ?? "")
-  }, [address])
+ // const [searchSelected, setSearchSelected] = useState<boolean>(false);
+  /* const [searchValue, setSearchValue] = useState<string>('');
+   const [searchList, setSearchList] = useState([]);
+   useEffect(() => {
+     setSearchValue(address ?? "")
+   }, [address])
+ 
+   const [searchTimeOut, setSearchTimeOut] = useState<NodeJS.Timeout | null>(null);
+   const [searchSelected, setSearchSelected] = useState<boolean>(false);
+   function inputHandler(e) {
+     setSearchSelected(false);
+     setSearchValue(e.target.value);
+   }
+ */
 
-  const [searchTimeOut, setSearchTimeOut] = useState<NodeJS.Timeout | null>(null);
-  const [searchSelected, setSearchSelected] = useState<boolean>(false);
-  function inputHandler(e) {
-    setSearchSelected(false);
-    setSearchValue(e.target.value);
+  const searchDataFunction = async (query): Promise<object[]> => {
+    const searchData = await searchAddress(query);
+    const searchFeatures = searchData?.features;
+    if (searchFeatures) {
+      const formattedData = searchFeatures.map(location => { return { name: location.place_name, geometry: [location.geometry.coordinates[0], location.geometry.coordinates[1]] } });
+      return formattedData;
+
+    } else {
+      return [];
+
+    }
   }
 
-
+  /*
   useEffect(() => {
     if (actionState != "location") return;
     if (searchValue.length == 0) return;
@@ -126,21 +141,21 @@ export default function SimpleMap({ enclosures, actionState, onMarkerClick, curr
 
     return () => clearTimeout(timeoutId);
 
-  }, [searchValue])
+  }, [searchValue])*/
 
   function selectSearch(data) {
     const geometry = data.geometry;
     const placeName = data.name;
-   
-    setMarker({ lng: geometry[0], lat: geometry[1] }); 
+
+    setMarker({ lng: geometry[0], lat: geometry[1] });
     setPosition([geometry[1], geometry[0]])
-   setAddress(placeName);
-  setSearchSelected(true);
+    setAddress(placeName);
+ //   setSearchSelected(true);
   }
   return (
     <div style={{ width: '100%', height: '100%' }}>
       {<div style={{ position: "absolute", display: actionState == "location" ? "flex" : "none", justifyContent: "center", alignItems: "center", alignContent: "center", width: "100%", zIndex: 999, top: actionState == "location" ? 0 : -200, transition: ".4s ease-in-out" }}>
-        <SearchBar onChange={inputHandler} searchSelected={searchSelected} selectSearch={selectSearch} value={searchValue} style={{ margin: 0, width: "50%" }} searchList={searchList} />
+        <SearchBar searchDataFunction={searchDataFunction} selectSearch={selectSearch} style={{ margin: 0, width: "50%" }} />
       </div>
       }
       {<div style={{ position: "absolute", display: "flex", justifyContent: "center", alignItems: "center", alignContent: "center", width: "100%", zIndex: 999, bottom: actionState == "location" ? 30 : -30, opacity: actionState == "location" ? 1 : 0, transition: ".4s ease-in-out" }}>
