@@ -261,7 +261,7 @@ export default function Home(): JSX.Element {
           isOpen={open}
           toggleSidebar={toggleSidebar}
           createForm={createForm}
-        >{/*
+        >
           {actionState != "form" && <SearchBar />}
           {(actionState == "form" || actionState == "editForm") && <EnclosureCreateForm submitData={actionState == "editForm" ? updateData : submitData} defaultValues={defaultFormValues} isLoading={singleEnclosureCreatePending} edit={actionState == "editForm"} />}
           {(actionState == "schoolForm") && <SchoolCreateForm currentEnclosure={currentEnclosure?.id} submitData={submitSchoolData} isLoading={singleSchoolCreatePending} edit={false} defaultValues={{}} />}
@@ -273,8 +273,9 @@ export default function Home(): JSX.Element {
             clearEnclosure={clearEnclosure}
             selectLocation={selectLocation}
             schoolForm={schoolForm}
-          />}*/
-          <MemberCreateForm/>
+          />}
+          {/*
+          <MemberCreateForm/>*/
           }
         </Sidebar>
         <SimpleMap openForm={openForm} currentEnclosure={currentEnclosure?.id ?? null} actionState={actionState} onMarkerClick={sendDataToSidebar} enclosures={(!enclosurePending && enclosureData) ?? null} />
