@@ -1,0 +1,40 @@
+.member-form{
+    display: flex;
+    flex-direction: column;
+}
+
+.input{
+    display: flex;
+    flex-direction: column;
+ 
+}
+.input input{
+    padding: 10px ;
+    font-size: 16px;
+    border-radius: 8px;
+    background-color: #503a65;
+    color: white;
+    border: none;
+    font-size: 14px;
+    margin: 5px 0px;
+    /*border: 1px solid white;*/
+   
+  }
+   
+
+  .radio{
+    width: 100%;
+    display: flex;
+    gap: 20px
+  }
+  .radio span{
+    display: flex;
+    gap: 5px;
+    align-content: center;
+    align-items: center;
+    
+  }
+  .radio input:hover{
+    cursor: pointer;
+    
+  }
