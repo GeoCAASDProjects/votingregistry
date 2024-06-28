@@ -3,9 +3,11 @@ import axios, { AxiosRequestConfig } from "axios";
 import { Enclosure, EnclosureData } from "../types";
 
 
-export async function fetchEnclosures({signal}): Promise<EnclosureData | Error>{
+export async function fetchEnclosures({signal, query}): Promise<EnclosureData | Error>{
     let url = `${BASE_URL_API}/enclosures`;
-
+    if(query){
+        url+=`?search=${query}`
+    }
     const config: AxiosRequestConfig ={
         headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`

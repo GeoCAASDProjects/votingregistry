@@ -19,9 +19,10 @@ export default function Home(): JSX.Element {
   const [open, setOpen] = useState(false);
   const [defaultFormValues, setDefaultFormValues] = useState({});
   const [currentEnclosure, setCurrentEnclosure] = useState<Enclosure | null>(null);
+  
   const { data: enclosureData, isPending: enclosurePending, isError: enclosureIsError, error: enclosureError } = useQuery({
     queryKey: ["enclosures"],
-    queryFn: ({ signal }) => fetchEnclosures({ signal }),
+    queryFn: ({ signal}, query?) => fetchEnclosures({ signal, query }),
     staleTime: 5000,
     gcTime: 30000,
   });
@@ -244,6 +245,28 @@ export default function Home(): JSX.Element {
     setIsOpen(true);
   }
 
+  
+  const searchDataFunction = async (query: string): Promise<object[]> => {
+   
+    
+    const searchData = await fetchEnclosures({signal: null, query:query});
+    if(searchData instanceof Error){
+     
+      return[];
+    }
+
+    const transformedData = searchData.data.map(location => { return {id:location.id, name: location.name, geometry: [location.longitude, location.latitude] } });
+    
+    return transformedData;
+ 
+
+ 
+  }
+
+  function selectSearch(data) {
+  
+  sendDataToSidebar(data.id);
+  }
 
   return (
     <>
@@ -262,7 +285,7 @@ export default function Home(): JSX.Element {
           toggleSidebar={toggleSidebar}
           createForm={createForm}
         >
-          {actionState != "form" && <SearchBar />}
+          {actionState != "form" && <SearchBar searchDataFunction={searchDataFunction} selectSearch={selectSearch}/>}
           {(actionState == "form" || actionState == "editForm") && <EnclosureCreateForm submitData={actionState == "editForm" ? updateData : submitData} defaultValues={defaultFormValues} isLoading={singleEnclosureCreatePending} edit={actionState == "editForm"} />}
           {(actionState == "schoolForm") && <SchoolCreateForm currentEnclosure={currentEnclosure?.id} submitData={submitSchoolData} isLoading={singleSchoolCreatePending} edit={false} defaultValues={{}} />}
           {actionState == "" && <EnclosureInfo

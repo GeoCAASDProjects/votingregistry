@@ -6,6 +6,7 @@ import { useState } from "react"
 import { deleteSchool, fetchSchools } from "@renderer/util/http/school-http"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import Modal from "../modal/Modal"
+import { Link } from "react-router-dom"
 
 export default function EnclosureInfo({ singleEnclosurePending, schoolForm, deleteModal, editForm, currentEnclosure, clearEnclosure, selectLocation }) {
 
@@ -107,23 +108,23 @@ export default function EnclosureInfo({ singleEnclosurePending, schoolForm, dele
                                 <thead>
                                     <th>   <span style={{ fontWeight: "bold" }}>Nombre</span></th>
                                     <th>   <span style={{ fontWeight: "bold" }}>Personas</span></th>
-                               {    <th>   <span style={{ fontWeight: "bold" }}>Acciones</span></th>}
+                               {/*    <th>   <span style={{ fontWeight: "bold" }}>Acciones</span></th>*/}
                                 </thead>
                                 <tbody>
                                     {schoolData?.data.length > 0 && schoolData?.data.map((enclosure) => (
                                         <tr key={enclosure.id}>
 
 
-                                            <td>{enclosure.name}</td>
+<td>    <Link>{enclosure.name}</Link></td>
                                             <td>{enclosure.members.length ?? 0}</td>
-                                          {<td>
+                                          {/*<td>
                                                 <div style={{display:"flex", justifyContent:"space-between", width:"100%"}}>
                                                 
                                                 <Edit/>
                                                 <Delete onClick={()=>openDeleteModal(enclosure.id)}/>
                                                 </div>
                                               
-                                            </td>}
+                                            </td>*/}
                                         </tr>
                                     ))}
 

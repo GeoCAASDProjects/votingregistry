@@ -11,6 +11,7 @@ interface SelectSearchFunc {
 }
  
 interface ISearchReturnObject{
+    id?:number|null;
     name?: string;
     geometry?: [number, number]
 }
