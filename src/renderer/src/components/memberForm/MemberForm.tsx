@@ -3,13 +3,35 @@ import Button from '../button/Button'
 import * as Yup from 'yup';
 import classes from './memberForm.module.css'
 import { ErrorMessage, Field, Form, Formik } from 'formik';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { createPerson } from '@renderer/util/http/person-http';
 
 interface MemberCreateFormI {
     submitData?: (data: object) => void;
     isLoading?: boolean;
     edit?: boolean;
 }
-export default function MemberCreateForm({ submitData, /*defaultValues,*/ isLoading, edit }: MemberCreateFormI) {
+export default function MemberCreateForm() {
+
+
+    const {
+        mutate: singleMemberCreateMutate,
+        data: singleMemberCreateData,
+        isPending: singleMemberCreatePending,
+        isError: singleMemberCreateIsError,
+        error: singleMemberCreateError
+      } = useMutation({
+        mutationFn: createPerson,
+        onSuccess: async (e) => {
+          console.log("The data")
+          console.log(e.data);
+          
+        },
+        onError: (e) => {
+    
+          alert("Error")
+        }
+      });
 
     const MemberSchema = Yup.object().shape({
         name: Yup.string().required('Requerido'),
@@ -21,8 +43,7 @@ export default function MemberCreateForm({ submitData, /*defaultValues,*/ isLoad
         document: Yup.string().required('Requerido'),
         address: Yup.string().required('Requerido'),
         sector: Yup.string().required('Requerido'),
-        municipality: Yup.string().required('Requerido'),
-        postal_code: Yup.string().required('Requerido'),
+ 
         school_id: Yup.string().required("Requerido")
     });
 
@@ -37,20 +58,23 @@ export default function MemberCreateForm({ submitData, /*defaultValues,*/ isLoad
         document: "",
         address: "",
         sector: "",
-        municipality: "",
-        postal_code: "",
         school_id: ""
     }
     function resetValues() {
 
     }
 
+    async function submitData(e){
+        alert("Hello")
+        alert(e.values);
+       const response = await singleMemberCreateMutate(e.values)
+    }
     return (
 
         <Formik
             initialValues={initialValues}
             validationSchema={MemberSchema}
-            onSubmit={submitData}
+            onSubmit={()=>alert("Form Submitted")}
         >
             {({ isSubmitting }) => (
                 <Form>
@@ -116,22 +140,12 @@ export default function MemberCreateForm({ submitData, /*defaultValues,*/ isLoad
                                 <span style={{ color: "red" }}> <ErrorMessage name="sector" component="div" /></span>
                             </div>
 
-                            <div className={classes['input']}>
-                                <label>Municipio</label>
-                                <Field name="municipality" placeholder="Municipio" />
-                                <span style={{ color: "red" }}> <ErrorMessage name="municipality" component="div" /></span>
-                            </div>
-
-                            <div className={classes['input']}>
-                                <label>Codigo postal</label>
-                                <Field name="postal_code" placeholder="Código Postal" />
-                                <span style={{ color: "red" }}> <ErrorMessage name="postal_code" component="div" /></span>
-                            </div>
+                   
 
                         </div>
 
 
-                        <Button type="submit" title="Enviar" iconName="Send" isLoading={isLoading} center />
+                        <Button type="submit" title="Enviar" iconName="Send" isLoading={singleMemberCreatePending} center />
 
                         {/*  <Button onClick={resetValues} title="ResetValues" iconName="RestartAlt" isLoading={isLoading} center/>*/}
                     </div>

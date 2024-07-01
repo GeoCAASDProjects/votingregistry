@@ -49,3 +49,27 @@ export async function fetchMembers({signal, schoolId}){
       throw new Error('Request failed');
     }
 }
+
+export async function createPerson(data){
+    
+    let url = `${BASE_URL_API}/person`;
+    const config: AxiosRequestConfig ={
+     
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+        },
+     
+    }
+
+    try{
+        const response = await axios.post(url, data, config);
+      
+        console.log(response);
+      
+        return response.data;
+        } catch(error){
+            console.log(error);
+            
+          throw new Error('Request failed');
+        }
+}
