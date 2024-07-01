@@ -1,6 +1,6 @@
 import { CircularProgress } from "@mui/material"
 import Button from "../button/Button"
-import { Close, Delete, Edit } from "@mui/icons-material"
+import { Close, Delete, Edit, Visibility } from "@mui/icons-material"
 import classes from './enclosureInfo.module.css'
 import { useState } from "react"
 import { deleteSchool, fetchSchools } from "@renderer/util/http/school-http"
@@ -8,47 +8,26 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import Modal from "../modal/Modal"
 import { Link } from "react-router-dom"
 
-export default function EnclosureInfo({ singleEnclosurePending, schoolForm, deleteModal, editForm, currentEnclosure, clearEnclosure, selectLocation }) {
+export default function EnclosureInfo({ singleEnclosurePending, schoolForm, deleteModal, editForm, currentEnclosure, clearEnclosure, selectLocation, openSchool}) {
 
     const [isOpen, setIsOpen] = useState(false);
     const queryClient = useQueryClient();
 
     const [currentSchool, setCurrentSchool] = useState(null);
     const { data: schoolData, isPending: schoolDataPending, isError: schoolIsError, error: schoolError } = useQuery({
-      queryKey: [`enclosure/${currentEnclosure?.id}/schools`],
-      queryFn: ({ signal }) => fetchSchools({ signal, enclosureId: currentEnclosure?.id}),
-      staleTime: 5000,
-      gcTime: 30000,
-      enabled: !!currentEnclosure?.id
-      
+        queryKey: [`enclosure/${currentEnclosure?.id}/schools`],
+        queryFn: ({ signal }) => fetchSchools({ signal, enclosureId: currentEnclosure?.id }),
+        staleTime: 5000,
+        gcTime: 30000,
+        enabled: !!currentEnclosure?.id
+
     });
-  
-/*
-    const {
-        mutate: singleSchoolDeleteMutate,
-        data: singleSchoolDeleteData,
-        isPending: singleSchoolDeletePending,
-        isError: singleSchoolDeleteIsError,
-        error: singleSchoolDeleteError
-      } = useMutation({
-        mutationFn: deleteSchool,
-        onSuccess: async (e) => {
-          console.log("The data")
-          console.log(e.data);
-          queryClient.refetchQueries({ queryKey: [`enclosure/${currentEnclosure?.id}/schools`] });
-        
-    
-        },
-        onError: (e) => {
-    
-          alert("Error")
-        }
-      });*/
-  
+
+
     return (
 
         <>
-  
+
 
             {singleEnclosurePending &&
                 <div style={{ display: "flex", width: "100%", alignContent: "center", alignItems: "center", justifyContent: "center" }}>
@@ -100,7 +79,7 @@ export default function EnclosureInfo({ singleEnclosurePending, schoolForm, dele
                     <Button title="Borrar" onClick={deleteModal} iconName="Delete" style={{ background: "#22224F", width: "100%", color: "#FFFFFF", margin: "5px 0px" }} />
 
                     <h3>Colegios</h3>
-                    {(schoolDataPending && !schoolError) && <CircularProgress/>}
+                    {(schoolDataPending && !schoolError) && <CircularProgress />}
                     {!schoolDataPending && schoolData?.data.length > 0 ?
                         <div>
 
@@ -108,23 +87,25 @@ export default function EnclosureInfo({ singleEnclosurePending, schoolForm, dele
                                 <thead>
                                     <th>   <span style={{ fontWeight: "bold" }}>Nombre</span></th>
                                     <th>   <span style={{ fontWeight: "bold" }}>Personas</span></th>
-                               {/*    <th>   <span style={{ fontWeight: "bold" }}>Acciones</span></th>*/}
+                                    {/*    <th>   <span style={{ fontWeight: "bold" }}>Acciones</span></th>*/}
                                 </thead>
                                 <tbody>
                                     {schoolData?.data.length > 0 && schoolData?.data.map((enclosure) => (
                                         <tr key={enclosure.id}>
 
 
-<td>    <Link>{enclosure.name}</Link></td>
+                                            <td>   {enclosure.name}</td>
                                             <td>{enclosure.members.length ?? 0}</td>
-                                          {/*<td>
-                                                <div style={{display:"flex", justifyContent:"space-between", width:"100%"}}>
-                                                
-                                                <Edit/>
-                                                <Delete onClick={()=>openDeleteModal(enclosure.id)}/>
+                                            {<td>
+                                                <div style={{display:"flex", justifyContent:"space-between", width:"100%", alignContent:"center", alignItems:"center"}}>
+                                          
+                                              <Visibility/>
+                                         
+                                            
+                                              
                                                 </div>
                                               
-                                            </td>*/}
+                                            </td>}
                                         </tr>
                                     ))}
 

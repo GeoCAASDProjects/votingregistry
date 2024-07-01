@@ -177,9 +177,22 @@ export default function Home(): JSX.Element {
   function clearEnclosure() {
     setCurrentEnclosure(null);
   }
+  function clearSchool() {
+    setCurrentEnclosure(null);
+    setCurrentSchool(null);
+  }
   function selectLocation() {
     setOpen(false);
     setActionState("location")
+  }
+
+  function openSchool(){
+    if (!open) {
+      setOpen(true);
+    }
+  
+    setActionState("school")
+  
   }
 
   function openForm(data) {
@@ -238,7 +251,7 @@ export default function Home(): JSX.Element {
     }
   }
   async function updateData(data) {
-
+    
     try {
       const response = singleEnclosureUpdateMutate(data);
       console.log("Answer")
@@ -330,8 +343,22 @@ export default function Home(): JSX.Element {
             clearEnclosure={clearEnclosure}
             selectLocation={selectLocation}
             schoolForm={schoolForm}
+            openSchool={openSchool}
           />}
           
+          {actionState == "school" && <SchoolInfo
+           currentSchool={currentSchool}
+            singleSchoolPending={singleSchoolPending}
+          /*
+            deleteModal={deleteModal}
+            editForm={editForm}
+            singleSchoolPending={singleSchoolPending}
+            currentSchool={currentSchool}
+            clearSchool={clearSchool}
+            selectLocation={selectLocation}
+            schoolForm={schoolForm}*/
+            />
+          }
        
         </Sidebar>
         <SimpleMap openForm={openForm} currentEnclosure={currentEnclosure?.id ?? null} actionState={actionState} onMarkerClick={sendDataToSidebar} enclosures={(!enclosurePending && enclosureData) ?? null} />
