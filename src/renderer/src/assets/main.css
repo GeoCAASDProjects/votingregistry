@@ -80,3 +80,12 @@ code {
   background:#555; 
   cursor:pointer
 }
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.active-link {
+  color: red;
+}

@@ -4,10 +4,11 @@ import SimpleMap from "@renderer/components/map/SimpleMap";
 import MemberCreateForm from "@renderer/components/memberForm/MemberForm";
 import Modal from "@renderer/components/modal/Modal";
 import SchoolCreateForm from "@renderer/components/schoolForm/SchoolForm";
+import SchoolInfo from "@renderer/components/schoolInfo/SchoolInfo";
 import SearchBar from "@renderer/components/searchBar/SearchBar";
 import Sidebar from "@renderer/components/sidebar/Sidebar";
 import { createEnclosure, deleteEnclosure, fetchEnclosure, fetchEnclosures, updateEnclosure } from "@renderer/util/http/enclosure-http";
-import { createSchool } from "@renderer/util/http/school-http";
+import { createSchool, fetchSchool } from "@renderer/util/http/school-http";
 import { Enclosure } from "@renderer/util/types";
 import { UseMutationResult, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
@@ -19,6 +20,7 @@ export default function Home(): JSX.Element {
   const [open, setOpen] = useState(false);
   const [defaultFormValues, setDefaultFormValues] = useState({});
   const [currentEnclosure, setCurrentEnclosure] = useState<Enclosure | null>(null);
+  const [currentSchool, setCurrentSchool] = useState(null);
   
   const { data: enclosureData, isPending: enclosurePending, isError: enclosureIsError, error: enclosureError } = useQuery({
     queryKey: ["enclosures"],
@@ -39,6 +41,25 @@ export default function Home(): JSX.Element {
       console.log(e.data)
       console.log("------------------------------------")
       setCurrentEnclosure(e.data)
+    },
+    onError: (e) => {
+
+      alert("Error")
+    }
+  });
+
+  const {
+    mutate: singleSchoolMutate,
+    data: singleSchoolData,
+    isPending: singleSchoolPending,
+    isError: singleSchoolIsError,
+    error: singleSchoolError
+  } = useMutation({
+    mutationFn: fetchSchool,
+    onSuccess: async (e) => {
+      console.log(e.data)
+      console.log("------------------------------------")
+      setCurrentSchool(e.data)
     },
     onError: (e) => {
 
@@ -277,17 +298,30 @@ export default function Home(): JSX.Element {
 
         
         <Sidebar
-
           actionState={actionState}
-
-
           isOpen={open}
           toggleSidebar={toggleSidebar}
           createForm={createForm}
         >
-          {actionState != "form" && <SearchBar searchDataFunction={searchDataFunction} selectSearch={selectSearch}/>}
-          {(actionState == "form" || actionState == "editForm") && <EnclosureCreateForm submitData={actionState == "editForm" ? updateData : submitData} defaultValues={defaultFormValues} isLoading={singleEnclosureCreatePending} edit={actionState == "editForm"} />}
-          {(actionState == "schoolForm") && <SchoolCreateForm currentEnclosure={currentEnclosure?.id} submitData={submitSchoolData} isLoading={singleSchoolCreatePending} edit={false} defaultValues={{}} />}
+        
+          {actionState == "" && <SearchBar searchDataFunction={searchDataFunction} selectSearch={selectSearch}/>}
+
+          {(actionState == "form" || actionState == "editForm") && 
+          <EnclosureCreateForm 
+          submitData={actionState == "editForm" ? updateData : submitData} 
+          defaultValues={defaultFormValues} 
+          isLoading={singleEnclosureCreatePending} 
+          edit={actionState == "editForm"} 
+          />}
+
+          {(actionState == "schoolForm") && <SchoolCreateForm 
+          currentEnclosure={currentEnclosure?.id} 
+          submitData={submitSchoolData} 
+          isLoading={singleSchoolCreatePending} 
+          edit={false} 
+          defaultValues={{}} 
+          />}
+
           {actionState == "" && <EnclosureInfo
             deleteModal={deleteModal}
             editForm={editForm}
@@ -297,9 +331,8 @@ export default function Home(): JSX.Element {
             selectLocation={selectLocation}
             schoolForm={schoolForm}
           />}
-          {/*
-          <MemberCreateForm/>*/
-          }
+          
+       
         </Sidebar>
         <SimpleMap openForm={openForm} currentEnclosure={currentEnclosure?.id ?? null} actionState={actionState} onMarkerClick={sendDataToSidebar} enclosures={(!enclosurePending && enclosureData) ?? null} />
       </div>

@@ -10,6 +10,9 @@ import Home from './pages/Home';
  import classes from "./app.module.css"
 import { useContext, useEffect } from 'react';
 import { useAuth } from './util/context/AuthContext';
+import People from './pages/People';
+import Schools from './pages/Schools';
+import Users from './pages/Users';
 function App(): JSX.Element {
   const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
   const queryClient = new QueryClient();
@@ -39,6 +42,21 @@ function App(): JSX.Element {
         {
           path: "/",
           element: <Home/>
+        
+        },
+        {
+          path: "/people",
+          element: <People/>
+        
+        },
+        {
+          path: "/schools",
+          element: <Schools/>
+        
+        },
+        {
+          path: "/users",
+          element: <Users/>
         
         },
       ]

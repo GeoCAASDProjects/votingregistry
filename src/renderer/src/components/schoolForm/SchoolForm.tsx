@@ -39,7 +39,7 @@ export default function SchoolCreateForm({ submitData, defaultValues, currentEnc
             {({ isSubmitting }) => (
                 <Form>
                     <div className={classes['school-form']}>
-                        <h3>Nueva Escuela</h3>
+                        <h3>Nuevo Colegio</h3>
                         <div style={{ margin: "10px 0" }}>
 
                             <div className={classes['input']}>

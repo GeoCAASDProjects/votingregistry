@@ -65,3 +65,12 @@
 .icon-container:hover{
     cursor: pointer
 }
+.link-list{
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    align-content: center;
+}
+.link-list li:hover{
+    cursor: pointer
+}

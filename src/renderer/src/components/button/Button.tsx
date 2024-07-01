@@ -16,7 +16,7 @@ interface ButtonProps{
 
 const Button:FC<ButtonProps> = ({title, isLoading, type, style, center, iconName, onClick, children}) =>{
     return(
-        <button type="submit" style={style} className={classes["button-container"]} onClick={onClick}>
+        <button type="submit" style={style} className={classes["button-container"]} onClick={onClick} disabled={!!isLoading}>
         <div className={center ? classes["center"] : ""}>
         <DynamicIcon iconName={iconName ?? " "}/>
         {title}
