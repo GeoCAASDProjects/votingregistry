@@ -30,7 +30,7 @@ export async function fetchPeople({signal, searchTerm, max}){
 
 export async function fetchMembers({signal, schoolId}){
     let url = `${BASE_URL_API}/school/${schoolId}/members`;
-  
+   
     const config: AxiosRequestConfig ={
         headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`
@@ -45,7 +45,7 @@ export async function fetchMembers({signal, schoolId}){
     return response.data;
     } catch(error){
         console.log(error);
-        
+    
       throw new Error('Request failed');
     }
 }

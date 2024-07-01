@@ -95,9 +95,10 @@ export default function EnclosureInfo({ singleEnclosurePending, schoolForm, dele
 
 
                                             <td>   {enclosure.name}</td>
-                                            <td>{enclosure.members.length ?? 0}</td>
+                                            <td style={{textAlign:"center"}}>
+                                                {enclosure.members.length ?? 0}</td>
                                             {<td>
-                                                <div style={{display:"flex", justifyContent:"space-between", width:"100%", alignContent:"center", alignItems:"center"}}>
+                                                <div className={classes["actions"]} onClick={()=>openSchool(enclosure.id)}>
                                           
                                               <Visibility/>
                                          

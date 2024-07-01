@@ -9,20 +9,20 @@ import Modal from "../modal/Modal"
 import { Link } from "react-router-dom"
 import { fetchMembers } from "@renderer/util/http/person-http"
 
-export default function SchoolInfo({ singleSchoolPending /*, schoolForm, deleteModal, editForm,*/, currentSchool /*, clearSchool, selectLocation */}) {
+export default function SchoolInfo({ singleSchoolPending, memberForm,  /*deleteModal, editForm,*/ currentSchool , clearSchool /*, selectLocation */}) {
 
     const [isOpen, setIsOpen] = useState(false);
     const queryClient = useQueryClient();
 
     const [currentMember, setCurrentMember] = useState(null);
- /*   const { data: memberData, isPending: memberDataPending, isError: memberIsError, error: memberError } = useQuery({
+   const { data: memberData, isPending: memberDataPending, isError: memberIsError, error: memberError } = useQuery({
       queryKey: [`school/${currentSchool?.id}/members`],
       queryFn: ({ signal }) => fetchMembers({ signal, schoolId: currentSchool?.id}),
       staleTime: 5000,
       gcTime: 30000,
       enabled: !!currentSchool?.id
       
-    });*/
+    });
   
 
     return (
@@ -40,7 +40,7 @@ export default function SchoolInfo({ singleSchoolPending /*, schoolForm, deleteM
 
                 <div>
                     <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
-                        <Close onClick={()=>alert("Clearing School")} />
+                        <Close onClick={clearSchool} />
                     </div>
 
                     <table className={classes['table']}>
@@ -65,8 +65,8 @@ export default function SchoolInfo({ singleSchoolPending /*, schoolForm, deleteM
                     <Button title="Borrar" onClick={()=>alert("Deleting")} iconName="Delete" style={{ background: "#22224F", width: "100%", color: "#FFFFFF", margin: "5px 0px" }} />
 
                     <h3>Miembros</h3>
-                    {/*(memberDataPending && !memberError) && <CircularProgress/>*/}
-                    {/*!memberDataPending && memberData?.data.length > 0 ?
+                    {(memberDataPending && !memberError) && <CircularProgress/>}
+                    {!memberDataPending && memberData?.data.length > 0 ?
                         <div>
 
                             <table className={classes['table']}>
@@ -91,8 +91,8 @@ export default function SchoolInfo({ singleSchoolPending /*, schoolForm, deleteM
                             <p>Este colegio no cuenta con miembros actualmente</p>
                         </div>
 
-                   */ }
-                    <Button onClick={() => alert("Hello")} title="Añadir miembro" iconName="Add" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
+                    }
+                    <Button onClick={memberForm} title="Añadir miembro" iconName="Add" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
                     <Button title="Subir Colegios" iconName="Upload" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
                 </div>
                 :

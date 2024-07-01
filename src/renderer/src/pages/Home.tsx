@@ -21,10 +21,10 @@ export default function Home(): JSX.Element {
   const [defaultFormValues, setDefaultFormValues] = useState({});
   const [currentEnclosure, setCurrentEnclosure] = useState<Enclosure | null>(null);
   const [currentSchool, setCurrentSchool] = useState(null);
-  
+
   const { data: enclosureData, isPending: enclosurePending, isError: enclosureIsError, error: enclosureError } = useQuery({
     queryKey: ["enclosures"],
-    queryFn: ({ signal}, query?) => fetchEnclosures({ signal, query }),
+    queryFn: ({ signal }, query?) => fetchEnclosures({ signal, query }),
     staleTime: 5000,
     gcTime: 30000,
   });
@@ -57,9 +57,8 @@ export default function Home(): JSX.Element {
   } = useMutation({
     mutationFn: fetchSchool,
     onSuccess: async (e) => {
-      console.log(e.data)
-      console.log("------------------------------------")
-      setCurrentSchool(e.data)
+      setCurrentSchool(e.data);
+      setActionState("school");
     },
     onError: (e) => {
 
@@ -146,12 +145,12 @@ export default function Home(): JSX.Element {
     onSuccess: async (e) => {
 
       queryClient.refetchQueries({ queryKey: ["enclosures"] });
-     console.log(e.data)
+      console.log(e.data)
       setActionState("");
       clearEnclosure();
 
       const response = await singleEnclosureMutate(e.data.enclosure_id);
-      
+
     },
     onError: (e) => {
 
@@ -162,8 +161,23 @@ export default function Home(): JSX.Element {
   function toggleSidebar() {
     setOpen(currentVal => !currentVal);
   }
-  
-  async function sendDataToSidebar(id:number) {
+
+
+  function clearEnclosure() {
+    setCurrentEnclosure(null);
+  }
+
+  function clearSchool() {
+    setCurrentSchool(null);
+    setActionState("");
+  }
+
+  function selectLocation() {
+    setOpen(false);
+    setActionState("location")
+  }
+
+  async function sendDataToSidebar(id: number) {
     if (!open) {
       toggleSidebar();
     }
@@ -171,28 +185,18 @@ export default function Home(): JSX.Element {
       return;
     }
     const response = await singleEnclosureMutate(id);
-  
+
 
   }
-  function clearEnclosure() {
-    setCurrentEnclosure(null);
-  }
-  function clearSchool() {
-    setCurrentEnclosure(null);
-    setCurrentSchool(null);
-  }
-  function selectLocation() {
-    setOpen(false);
-    setActionState("location")
-  }
 
-  function openSchool(){
+  async function openSchool(id: number) {
     if (!open) {
       setOpen(true);
     }
-  
-    setActionState("school")
-  
+    alert(id);
+    const response = await singleSchoolMutate(id);
+
+
   }
 
   function openForm(data) {
@@ -226,6 +230,13 @@ export default function Home(): JSX.Element {
 
     }
   }
+  function memberForm(currentEnclosure) {
+    setOpen(true);
+    if (actionState != "memberForm") {
+      setActionState("memberForm");
+
+    }
+  }
   async function submitData(data) {
     console.log(data)
     try {
@@ -251,7 +262,7 @@ export default function Home(): JSX.Element {
     }
   }
   async function updateData(data) {
-    
+
     try {
       const response = singleEnclosureUpdateMutate(data);
       console.log("Answer")
@@ -270,7 +281,7 @@ export default function Home(): JSX.Element {
       setIsOpen(false);
     } catch (e) {
       console.error(e)
-      
+
     }
   }
   const [isOpen, setIsOpen] = useState<boolean>(false)
@@ -279,27 +290,27 @@ export default function Home(): JSX.Element {
     setIsOpen(true);
   }
 
-  
+
   const searchDataFunction = async (query: string): Promise<object[]> => {
-   
-    
-    const searchData = await fetchEnclosures({signal: null, query:query});
-    if(searchData instanceof Error){
-     
-      return[];
+
+
+    const searchData = await fetchEnclosures({ signal: null, query: query });
+    if (searchData instanceof Error) {
+
+      return [];
     }
 
-    const transformedData = searchData.data.map(location => { return {id:location.id, name: location.name, geometry: [location.longitude, location.latitude] } });
-    
-    return transformedData;
- 
+    const transformedData = searchData.data.map(location => { return { id: location.id, name: location.name, geometry: [location.longitude, location.latitude] } });
 
- 
+    return transformedData;
+
+
+
   }
 
   function selectSearch(data) {
-  
-  sendDataToSidebar(data.id);
+
+    sendDataToSidebar(data.id);
   }
 
   return (
@@ -309,30 +320,30 @@ export default function Home(): JSX.Element {
           <p>Deseas borrar el Recinto junto con todos sus colegios y usuarios?</p>
         </Modal>}
 
-        
+
         <Sidebar
           actionState={actionState}
           isOpen={open}
           toggleSidebar={toggleSidebar}
           createForm={createForm}
         >
-        
-          {actionState == "" && <SearchBar searchDataFunction={searchDataFunction} selectSearch={selectSearch}/>}
 
-          {(actionState == "form" || actionState == "editForm") && 
-          <EnclosureCreateForm 
-          submitData={actionState == "editForm" ? updateData : submitData} 
-          defaultValues={defaultFormValues} 
-          isLoading={singleEnclosureCreatePending} 
-          edit={actionState == "editForm"} 
-          />}
+          {actionState == "" && <SearchBar searchDataFunction={searchDataFunction} selectSearch={selectSearch} />}
 
-          {(actionState == "schoolForm") && <SchoolCreateForm 
-          currentEnclosure={currentEnclosure?.id} 
-          submitData={submitSchoolData} 
-          isLoading={singleSchoolCreatePending} 
-          edit={false} 
-          defaultValues={{}} 
+          {(actionState == "form" || actionState == "editForm") &&
+            <EnclosureCreateForm
+              submitData={actionState == "editForm" ? updateData : submitData}
+              defaultValues={defaultFormValues}
+              isLoading={singleEnclosureCreatePending}
+              edit={actionState == "editForm"}
+            />}
+
+          {(actionState == "schoolForm") && <SchoolCreateForm
+            currentEnclosure={currentEnclosure?.id}
+            submitData={submitSchoolData}
+            isLoading={singleSchoolCreatePending}
+            edit={false}
+            defaultValues={{}}
           />}
 
           {actionState == "" && <EnclosureInfo
@@ -345,21 +356,28 @@ export default function Home(): JSX.Element {
             schoolForm={schoolForm}
             openSchool={openSchool}
           />}
-          
+
           {actionState == "school" && <SchoolInfo
-           currentSchool={currentSchool}
+            currentSchool={currentSchool}
             singleSchoolPending={singleSchoolPending}
+            clearSchool={clearSchool}
+            memberForm={memberForm}
           /*
             deleteModal={deleteModal}
             editForm={editForm}
             singleSchoolPending={singleSchoolPending}
             currentSchool={currentSchool}
-            clearSchool={clearSchool}
+            
             selectLocation={selectLocation}
             schoolForm={schoolForm}*/
-            />
+          />
           }
-       
+
+{(actionState == "memberForm") &&
+
+<MemberCreateForm/>
+}
+
         </Sidebar>
         <SimpleMap openForm={openForm} currentEnclosure={currentEnclosure?.id ?? null} actionState={actionState} onMarkerClick={sendDataToSidebar} enclosures={(!enclosurePending && enclosureData) ?? null} />
       </div>
