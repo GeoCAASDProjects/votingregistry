@@ -5,13 +5,14 @@ import classes from './memberForm.module.css'
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { createPerson } from '@renderer/util/http/person-http';
+import { Close } from '@mui/icons-material';
 
 interface MemberCreateFormI {
     submitData?: (data: object) => void;
     isLoading?: boolean;
     edit?: boolean;
 }
-export default function MemberCreateForm() {
+export default function MemberCreateForm({currentSchool, closeMemberForm}) {
 
 
     const {
@@ -20,65 +21,77 @@ export default function MemberCreateForm() {
         isPending: singleMemberCreatePending,
         isError: singleMemberCreateIsError,
         error: singleMemberCreateError
-      } = useMutation({
+    } = useMutation({
         mutationFn: createPerson,
         onSuccess: async (e) => {
-          console.log("The data")
-          console.log(e.data);
-          
+            console.log("The data")
+            console.log(e.data);
+            closeMemberForm();
+
         },
         onError: (e) => {
-    
-          alert("Error")
+
+            alert("Error")
         }
-      });
+    });
 
     const MemberSchema = Yup.object().shape({
         name: Yup.string().required('Requerido'),
         last_name: Yup.string().required('Requerido'),
         birth_date: Yup.date().required('Requerido'),
         sex: Yup.string().required('Requerido'),
+        occupation: Yup.string().required('Requerido'),
         place_of_birth: Yup.string().required('Requerido'),
         nationality: Yup.string().required('Requerido'),
         document: Yup.string().required('Requerido'),
         address: Yup.string().required('Requerido'),
         sector: Yup.string().required('Requerido'),
- 
-        school_id: Yup.string().required("Requerido")
+
+        /* school_id: Yup.string().required("Requerido")*/
     });
 
 
     const initialValues = {
         name: "",
         last_name: "",
-        birth_date: null,
+        birth_date: "",
         sex: "",
+        occupation: "",
         place_of_birth: "",
         nationality: "",
         document: "",
         address: "",
         sector: "",
-        school_id: ""
+        school_id: currentSchool,
+        
+        /*    school_id: ""*/
     }
-    function resetValues() {
+    
 
-    }
-
-    async function submitData(e){
-        alert("Hello")
-        alert(e.values);
-       const response = await singleMemberCreateMutate(e.values)
+    async function submitData(e) {
+        try{
+            const response = await singleMemberCreateMutate(e);
+       
+          
+        } catch(error){
+            alert(error);
+            console.log(error)
+        }
+        
     }
     return (
 
         <Formik
             initialValues={initialValues}
             validationSchema={MemberSchema}
-            onSubmit={()=>alert("Form Submitted")}
+            onSubmit={submitData}
         >
             {({ isSubmitting }) => (
                 <Form>
                     <div className={classes['member-form']}>
+                    <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
+                        <Close onClick={closeMemberForm} />
+                    </div>
                         <h3>Nuevo Miembro</h3>
                         <div style={{ margin: "10px 0" }}>
 
@@ -92,6 +105,18 @@ export default function MemberCreateForm() {
                                 <label>Apellido</label>
                                 <Field name="last_name" placeholder="Apellido" />
                                 <span style={{ color: "red" }}> <ErrorMessage name="last_name" component="div" /></span>
+                            </div>
+
+                            <div className={classes['input']}>
+                                <label>Fecha de nacimiento</label>
+                                <Field type="date" name="birth_date" />
+                                <span style={{ color: "red" }}> <ErrorMessage name="birth_date" component="div" /></span>
+                            </div>
+
+                            <div className={classes['input']}>
+                                <label>Ocupación</label>
+                                <Field name="occupation" placeholder="Ocupacion" />
+                                <span style={{ color: "red" }}> <ErrorMessage name="occupation" component="div" /></span>
                             </div>
 
                             <div className={classes['input']}>
@@ -112,10 +137,12 @@ export default function MemberCreateForm() {
                             </div>
 
                             <div className={classes['input']}>
-                                <label>Fecha de nacimiento</label>
-                                <Field type="date" name="date_of_birth" />
-                                <span style={{ color: "red" }}> <ErrorMessage name="date_of_birth" component="div" /></span>
+                                <label>Lugar de nacimiento</label>
+                                <Field name="place_of_birth" placeholder="Lugar de Nacimiento" />
+                                <span style={{ color: "red" }}> <ErrorMessage name="place_of_birth" component="div" /></span>
                             </div>
+
+
 
                             <div className={classes['input']}>
                                 <label>Nacionalidad</label>
@@ -123,9 +150,10 @@ export default function MemberCreateForm() {
                                 <span style={{ color: "red" }}> <ErrorMessage name="nationality" component="div" /></span>
                             </div>
 
+
                             <div className={classes['input']}>
                                 <label>Cedula</label>
-                                <Field name="document" placeholder="Cedula" />
+                                <Field type="number" name="document" placeholder="Cedula" />
                                 <span style={{ color: "red" }}> <ErrorMessage name="document" component="div" /></span>
                             </div>
 
@@ -140,7 +168,7 @@ export default function MemberCreateForm() {
                                 <span style={{ color: "red" }}> <ErrorMessage name="sector" component="div" /></span>
                             </div>
 
-                   
+
 
                         </div>
 

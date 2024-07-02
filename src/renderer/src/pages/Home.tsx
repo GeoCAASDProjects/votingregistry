@@ -193,7 +193,7 @@ export default function Home(): JSX.Element {
     if (!open) {
       setOpen(true);
     }
-    alert(id);
+
     const response = await singleSchoolMutate(id);
 
 
@@ -209,6 +209,13 @@ export default function Home(): JSX.Element {
     }
 
   }
+  function closeMemberForm(){
+    if(!currentSchool?.id){
+    setActionState("school");
+    } else{
+      setActionState("school");
+    }
+  }
 
   function createForm() {
 
@@ -223,15 +230,17 @@ export default function Home(): JSX.Element {
 
     }
   }
-  function schoolForm(currentEnclosure) {
+  function schoolForm() {
     setOpen(true);
     if (actionState != "schoolForm") {
       setActionState("schoolForm");
 
     }
   }
-  function memberForm(currentEnclosure) {
+  function memberForm() {
+
     setOpen(true);
+
     if (actionState != "memberForm") {
       setActionState("memberForm");
 
@@ -365,18 +374,14 @@ export default function Home(): JSX.Element {
           /*
             deleteModal={deleteModal}
             editForm={editForm}
-            singleSchoolPending={singleSchoolPending}
-            currentSchool={currentSchool}
-            
-            selectLocation={selectLocation}
-            schoolForm={schoolForm}*/
+      */
           />
           }
 
-{(actionState == "memberForm") &&
+          {(actionState == "memberForm") &&
 
-<MemberCreateForm/>
-}
+            <MemberCreateForm closeMemberForm={closeMemberForm} currentSchool={currentSchool?.id} />
+          }
 
         </Sidebar>
         <SimpleMap openForm={openForm} currentEnclosure={currentEnclosure?.id ?? null} actionState={actionState} onMarkerClick={sendDataToSidebar} enclosures={(!enclosurePending && enclosureData) ?? null} />
