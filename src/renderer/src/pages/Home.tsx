@@ -213,7 +213,7 @@ export default function Home(): JSX.Element {
     if(!currentSchool?.id){
     setActionState("school");
     } else{
-      setActionState("school");
+    setActionState("");
     }
   }
 
