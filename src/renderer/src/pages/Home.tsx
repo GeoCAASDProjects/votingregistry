@@ -146,8 +146,9 @@ export default function Home(): JSX.Element {
     if (!open) {
       setOpen(true);
     }
-    if (actionState != "form") {
-      setActionState("form")
+    if (!openEnclosureForm) {
+      setOpenEnclosureForm(true)
+      setActionState("")
     }
 
   }
@@ -233,6 +234,15 @@ export default function Home(): JSX.Element {
   const renderView = () => {
     switch (actionState) {
        case "":
+        if(openEnclosureForm){
+          return <EnclosureCreateForm
+
+          defaultValues={defaultFormValues}
+          open={openEnclosureForm}
+          edit={false}
+         setOpen={setOpenEnclosureForm}
+        />
+        }
         return <EnclosureInfo
         deleteModal={deleteModal}
        
@@ -244,14 +254,7 @@ export default function Home(): JSX.Element {
         openSchool={openSchool}
         
       />
-     case "form":
-        return <EnclosureCreateForm
-
-          defaultValues={defaultFormValues}
-          open={actionState == "form"}
-          edit={false}
-         setOpen
-        />
+ 
  
      {/* case "schoolForm":
         return <SchoolCreateForm
