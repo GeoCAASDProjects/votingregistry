@@ -133,30 +133,7 @@ export default function Home(): JSX.Element {
     }
   });
 
-
-  const {
-    mutate: singleSchoolCreateMutate,
-    data: singleSchoolCreateData,
-    isPending: singleSchoolCreatePending,
-    isError: singleSchoolCreateIsError,
-    error: singleSchoolCreateError
-  } = useMutation({
-    mutationFn: createSchool,
-    onSuccess: async (e) => {
-
-      queryClient.refetchQueries({ queryKey: ["enclosures"] });
-      console.log(e.data)
-      setActionState("");
-      clearEnclosure();
-
-      const response = await singleEnclosureMutate(e.data.enclosure_id);
-
-    },
-    onError: (e) => {
-
-      alert("Error")
-    }
-  });
+ 
 
   function toggleSidebar() {
     setOpen(currentVal => !currentVal);
@@ -165,6 +142,12 @@ export default function Home(): JSX.Element {
 
   function clearEnclosure() {
     setCurrentEnclosure(null);
+  }
+
+  async function loadEnclosure(id){
+    setActionState("");
+     clearEnclosure();
+     const response = await singleEnclosureMutate(id);
   }
 
   function clearSchool() {
@@ -258,7 +241,7 @@ export default function Home(): JSX.Element {
       alert(e);
     }
   }
-  async function submitSchoolData(data) {
+  /*async function submitSchoolData(data) {
 
     try {
       const response = singleSchoolCreateMutate(data);
@@ -269,7 +252,7 @@ export default function Home(): JSX.Element {
       console.error(e)
       alert(e);
     }
-  }
+  }*/
   async function updateData(data) {
 
     try {
@@ -348,9 +331,8 @@ export default function Home(): JSX.Element {
             />}
 
           {(actionState == "schoolForm") && <SchoolCreateForm
+          loadEnclosure={loadEnclosure}
             currentEnclosure={currentEnclosure?.id}
-            submitData={submitSchoolData}
-            isLoading={singleSchoolCreatePending}
             edit={false}
             defaultValues={{}}
           />}

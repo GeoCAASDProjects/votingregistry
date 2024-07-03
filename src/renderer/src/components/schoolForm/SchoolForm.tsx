@@ -3,16 +3,54 @@ import Button from '../button/Button'
 import * as Yup from 'yup';
 import classes from './schoolform.module.css'
 import { ErrorMessage, Field, Form, Formik } from 'formik';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { createSchool } from '@renderer/util/http/school-http';
 
-interface SchoolCreateFormI{
-    submitData?: (data:object)=>void,
+interface SchoolCreateFormI {
+    submitData?: (data: object) => void,
     defaultValues?: object,
     currentEnclosure?: number,
     isLoading?: boolean,
-    edit?: boolean
+    edit?: boolean,
+    loadEnclosure?: (id:number)=>void
 }
-export default function SchoolCreateForm({ submitData, defaultValues, currentEnclosure, isLoading, edit }:SchoolCreateFormI):JSX.Element {
+export default function SchoolCreateForm({ defaultValues, currentEnclosure, loadEnclosure, edit }: SchoolCreateFormI): JSX.Element {
+    const queryClient = useQueryClient();
 
+
+    const {
+        mutate: singleSchoolCreateMutate,
+        data: singleSchoolCreateData,
+        isPending: singleSchoolCreatePending,
+        isError: singleSchoolCreateIsError,
+        error: singleSchoolCreateError
+    } = useMutation({
+        mutationFn: createSchool,
+        onSuccess: async (e) => {
+
+            queryClient.refetchQueries({ queryKey: ["enclosures"] });
+            console.log(e.data)
+            loadEnclosure(e.data.enclosure_id)
+     
+        },
+        onError: (e) => {
+
+            alert("Error")
+        }
+    });
+
+    async function submitData(data) {
+
+        try {
+            const response = singleSchoolCreateMutate(data);
+            console.log("Answer")
+            console.log(response);
+
+        } catch (e) {
+            console.error(e)
+            alert(e);
+        }
+    }
     const SchoolSchema = Yup.object().shape({
         name: Yup.string().required('Requerido'),
 
@@ -51,7 +89,7 @@ export default function SchoolCreateForm({ submitData, defaultValues, currentEnc
                         </div>
 
 
-                        <Button type="submit" title="Enviar" iconName="Send" isLoading={isLoading} center />
+                        <Button type="submit" title="Enviar" iconName="Send" isLoading={singleSchoolCreatePending} center />
 
 
                     </div>
