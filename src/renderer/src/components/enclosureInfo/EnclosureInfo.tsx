@@ -8,10 +8,16 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import Modal from "../modal/Modal"
 import { Link } from "react-router-dom"
 import DynamicLoader from "../dynamicLoader/DynamicLoader"
+import EnclosureCreateForm from "../enclosureForm/EnclosureForm"
 
-export default function EnclosureInfo({ singleEnclosurePending, schoolForm, deleteModal, editForm, currentEnclosure, clearEnclosure, selectLocation, openSchool }) {
+export default function EnclosureInfo({ singleEnclosurePending, schoolForm, deleteModal,  currentEnclosure, clearEnclosure, selectLocation, openSchool }) {
+    /*if(!currentEnclosure){
+        return;
+    }*/
+    const defaultValues = {...currentEnclosure}
+    const [openForm, setIsOpenForm] = useState(false);
+    const [edit, setEdit] = useState(false);
 
-    const [isOpen, setIsOpen] = useState(false);
     const queryClient = useQueryClient();
 
     const [currentSchool, setCurrentSchool] = useState(null);
@@ -23,7 +29,21 @@ export default function EnclosureInfo({ singleEnclosurePending, schoolForm, dele
         enabled: !!currentEnclosure?.id
 
     });
+ 
+    function openEditForm(){
+        setEdit(true)
+        setIsOpenForm(true);
+    }
+    if(openForm){
+        return <EnclosureCreateForm
+        open={openForm}
+        setOpen={setIsOpenForm}
+        edit ={edit}
+        defaultValues={defaultValues}
 
+      
+      />
+    }
 
     return (
 
@@ -73,7 +93,7 @@ export default function EnclosureInfo({ singleEnclosurePending, schoolForm, dele
                     </table>
 
 
-                    <Button title="Editar" iconName="Edit" onClick={editForm} style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
+                    <Button title="Editar" iconName="Edit" onClick={openEditForm} style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
                     <Button title="Descargar" iconName="Download" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
                     <Button title="Borrar" onClick={deleteModal} iconName="Delete" style={{ background: "#22224F", width: "100%", color: "#FFFFFF", margin: "5px 0px" }} />
 
