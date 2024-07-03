@@ -5,16 +5,24 @@ import classes from './schoolform.module.css'
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createSchool } from '@renderer/util/http/school-http';
+import { Dispatch, SetStateAction } from 'react';
+import { Close } from '@mui/icons-material';
 
 interface SchoolCreateFormI {
-    submitData?: (data: object) => void,
+    //  submitData?: (data: object) => void,
     defaultValues?: object,
     currentEnclosure?: number,
-    isLoading?: boolean,
+    //  isLoading?: boolean,
     edit?: boolean,
-    loadEnclosure: (id:number)=>void
+    //   loadEnclosure: (id:number)=>void
+    open?: boolean,
+    setOpen: Dispatch<SetStateAction<boolean>>
 }
-export default function SchoolCreateForm({ defaultValues, currentEnclosure, loadEnclosure, clearEnclosure, edit }: SchoolCreateFormI): JSX.Element {
+export default function SchoolCreateForm({ defaultValues, currentEnclosure, /*loadEnclosure, clearEnclosure,*/ open, setOpen, edit }: SchoolCreateFormI): JSX.Element {
+
+    if (!open) {
+        return <></>;
+    }
     const queryClient = useQueryClient();
 
 
@@ -30,8 +38,10 @@ export default function SchoolCreateForm({ defaultValues, currentEnclosure, load
 
             queryClient.refetchQueries({ queryKey: ["enclosures"] });
             console.log(e.data)
-            loadEnclosure(e?.data?.enclosure_id)
-     
+            queryClient.refetchQueries({ queryKey: [`enclosure/${e?.data?.enclosure_id}/schools`] });
+            closeForm();
+            // loadEnclosure(e?.data?.enclosure_id)
+
         },
         onError: (e) => {
 
@@ -66,7 +76,9 @@ export default function SchoolCreateForm({ defaultValues, currentEnclosure, load
     function resetValues() {
 
     }
-
+    function closeForm(){
+        setOpen(false);
+    }
     return (
 
         <Formik
@@ -76,8 +88,13 @@ export default function SchoolCreateForm({ defaultValues, currentEnclosure, load
         >
             {({ isSubmitting }) => (
                 <Form>
+
                     <div className={classes['school-form']}>
-                        <h3>{`${edit? "Editar": "Crear"} Colegio`}</h3>
+                        <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
+                            <Close onClick={closeForm} />
+                        </div>
+
+                        <h3>{`${edit ? "Editar" : "Crear"} Colegio`}</h3>
                         <div style={{ margin: "10px 0" }}>
 
                             <div className={classes['input']}>

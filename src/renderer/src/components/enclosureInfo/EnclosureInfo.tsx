@@ -9,18 +9,21 @@ import Modal from "../modal/Modal"
 import { Link } from "react-router-dom"
 import DynamicLoader from "../dynamicLoader/DynamicLoader"
 import EnclosureCreateForm from "../enclosureForm/EnclosureForm"
+import SchoolCreateForm from "../schoolForm/SchoolForm"
 
-export default function EnclosureInfo({ singleEnclosurePending, schoolForm, deleteModal,  currentEnclosure, clearEnclosure, selectLocation, openSchool }) {
+export default function EnclosureInfo({ singleEnclosurePending, schoolForm, deleteModal, currentEnclosure, clearEnclosure, selectLocation, openSchool }) {
     /*if(!currentEnclosure){
         return;
     }*/
-    const defaultValues = {...currentEnclosure}
+
+    const defaultValues = { ...currentEnclosure }
     const [openForm, setIsOpenForm] = useState(false);
+    const [openSchoolForm, setOpenSchoolForm] = useState(false)
     const [edit, setEdit] = useState(false);
 
     const queryClient = useQueryClient();
 
-    const [currentSchool, setCurrentSchool] = useState(null);
+   // const [currentSchool, setCurrentSchool] = useState(null);
     const { data: schoolData, isPending: schoolDataPending, isError: schoolIsError, error: schoolError } = useQuery({
         queryKey: [`enclosure/${currentEnclosure?.id}/schools`],
         queryFn: ({ signal }) => fetchSchools({ signal, enclosureId: currentEnclosure?.id }),
@@ -29,20 +32,34 @@ export default function EnclosureInfo({ singleEnclosurePending, schoolForm, dele
         enabled: !!currentEnclosure?.id
 
     });
- 
-    function openEditForm(){
+
+    function openEditForm() {
         setEdit(true)
         setIsOpenForm(true);
     }
-    if(openForm){
-        return <EnclosureCreateForm
-        open={openForm}
-        setOpen={setIsOpenForm}
-        edit ={edit}
-        defaultValues={defaultValues}
+    function openCreateSchool(){
+        setOpenSchoolForm(true)
+    }
 
-      
-      />
+    if (openSchoolForm) {
+
+        return <SchoolCreateForm
+            defaultValues={{}}
+            currentEnclosure={currentEnclosure?.id}
+            edit={false}
+            open={openSchoolForm}
+            setOpen={setOpenSchoolForm}
+        />
+    }
+    if (openForm) {
+        return <EnclosureCreateForm
+            open={openForm}
+            setOpen={setIsOpenForm}
+            edit={edit}
+            defaultValues={defaultValues}
+
+
+        />
     }
 
     return (
@@ -51,7 +68,7 @@ export default function EnclosureInfo({ singleEnclosurePending, schoolForm, dele
 
 
             {singleEnclosurePending &&
-              <DynamicLoader/>
+                <DynamicLoader />
             }
 
             {(!singleEnclosurePending && !!currentEnclosure) ?
@@ -98,7 +115,7 @@ export default function EnclosureInfo({ singleEnclosurePending, schoolForm, dele
                     <Button title="Borrar" onClick={deleteModal} iconName="Delete" style={{ background: "#22224F", width: "100%", color: "#FFFFFF", margin: "5px 0px" }} />
 
                     <h3>Colegios</h3>
-                    {(schoolDataPending && !schoolError) && <DynamicLoader/>}
+                    {(schoolDataPending && !schoolError) && <DynamicLoader />}
                     {!schoolDataPending && schoolData?.data.length > 0 ?
                         <div>
 
@@ -138,7 +155,7 @@ export default function EnclosureInfo({ singleEnclosurePending, schoolForm, dele
                         </div>
 
                     }
-                    <Button onClick={() => schoolForm(currentEnclosure)} title="Añadir colegio" iconName="Add" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
+                    <Button onClick={openCreateSchool} title="Añadir colegio" iconName="Add" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
                     <Button title="Subir Colegios" iconName="Upload" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
                 </div>
                 :

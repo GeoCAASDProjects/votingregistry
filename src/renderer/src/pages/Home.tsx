@@ -229,6 +229,7 @@ export default function Home(): JSX.Element {
 
     sendDataToSidebar(data.id);
   }
+  const [openEnclosureForm, setOpenEnclosureForm] = useState(false);
   const renderView = () => {
     switch (actionState) {
        case "":
@@ -241,26 +242,25 @@ export default function Home(): JSX.Element {
         selectLocation={selectLocation}
         schoolForm={schoolForm}
         openSchool={openSchool}
-        defaultValues={defaultFormValues}
+        
       />
-  /*    case "form":
-      case "editForm":
+     case "form":
         return <EnclosureCreateForm
 
           defaultValues={defaultFormValues}
-          loadEnclosure={loadEnclosure}
-          edit={actionState == "editForm"}
-          clearEnclosure={clearEnclosure}
+          open={actionState == "form"}
+          edit={false}
+         setOpen
         />
-*/
-      case "schoolForm":
+ 
+     {/* case "schoolForm":
         return <SchoolCreateForm
           loadEnclosure={loadEnclosure}
           currentEnclosure={currentEnclosure?.id}
           edit={false}
        
           defaultValues={{}}
-        />
+        />*/}
        case "school":
         return  <SchoolInfo
         currentSchool={currentSchool}
