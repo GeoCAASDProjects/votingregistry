@@ -8,6 +8,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import Modal from "../modal/Modal"
 import { Link } from "react-router-dom"
 import { fetchMembers } from "@renderer/util/http/person-http"
+import DynamicLoader from "../dynamicLoader/DynamicLoader"
 
 export default function SchoolInfo({ singleSchoolPending, memberForm,  /*deleteModal, editForm,*/ currentSchool , clearSchool /*, selectLocation */}) {
 
@@ -31,9 +32,7 @@ export default function SchoolInfo({ singleSchoolPending, memberForm,  /*deleteM
   
 
             {singleSchoolPending &&
-                <div style={{ display: "flex", width: "100%", alignContent: "center", alignItems: "center", justifyContent: "center" }}>
-                    <CircularProgress color="inherit" size={30} />
-                </div>
+               <DynamicLoader/>
             }
 
             {(!singleSchoolPending && !!currentSchool) ?
@@ -65,7 +64,7 @@ export default function SchoolInfo({ singleSchoolPending, memberForm,  /*deleteM
                     <Button title="Borrar" onClick={()=>alert("Deleting")} iconName="Delete" style={{ background: "#22224F", width: "100%", color: "#FFFFFF", margin: "5px 0px" }} />
 
                     <h3>Miembros</h3>
-                    {(memberDataPending && !memberError) && <CircularProgress/>}
+                    {(memberDataPending && !memberError) && <DynamicLoader/>}
                     {!memberDataPending && memberData?.data.length > 0 ?
                         <div>
 

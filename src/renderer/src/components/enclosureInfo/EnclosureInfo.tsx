@@ -7,8 +7,9 @@ import { deleteSchool, fetchSchools } from "@renderer/util/http/school-http"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import Modal from "../modal/Modal"
 import { Link } from "react-router-dom"
+import DynamicLoader from "../dynamicLoader/DynamicLoader"
 
-export default function EnclosureInfo({ singleEnclosurePending, schoolForm, deleteModal, editForm, currentEnclosure, clearEnclosure, selectLocation, openSchool}) {
+export default function EnclosureInfo({ singleEnclosurePending, schoolForm, deleteModal, editForm, currentEnclosure, clearEnclosure, selectLocation, openSchool }) {
 
     const [isOpen, setIsOpen] = useState(false);
     const queryClient = useQueryClient();
@@ -30,9 +31,7 @@ export default function EnclosureInfo({ singleEnclosurePending, schoolForm, dele
 
 
             {singleEnclosurePending &&
-                <div style={{ display: "flex", width: "100%", alignContent: "center", alignItems: "center", justifyContent: "center" }}>
-                    <CircularProgress color="inherit" size={30} />
-                </div>
+              <DynamicLoader/>
             }
 
             {(!singleEnclosurePending && !!currentEnclosure) ?
@@ -79,7 +78,7 @@ export default function EnclosureInfo({ singleEnclosurePending, schoolForm, dele
                     <Button title="Borrar" onClick={deleteModal} iconName="Delete" style={{ background: "#22224F", width: "100%", color: "#FFFFFF", margin: "5px 0px" }} />
 
                     <h3>Colegios</h3>
-                    {(schoolDataPending && !schoolError) && <CircularProgress />}
+                    {(schoolDataPending && !schoolError) && <DynamicLoader/>}
                     {!schoolDataPending && schoolData?.data.length > 0 ?
                         <div>
 
@@ -95,17 +94,17 @@ export default function EnclosureInfo({ singleEnclosurePending, schoolForm, dele
 
 
                                             <td>   {enclosure.name}</td>
-                                            <td style={{textAlign:"center"}}>
+                                            <td style={{ textAlign: "center" }}>
                                                 {enclosure.members.length ?? 0}</td>
                                             {<td>
-                                                <div className={classes["actions"]} onClick={()=>openSchool(enclosure.id)}>
-                                          
-                                              <Visibility/>
-                                         
-                                            
-                                              
+                                                <div className={classes["actions"]} onClick={() => openSchool(enclosure.id)}>
+
+                                                    <Visibility />
+
+
+
                                                 </div>
-                                              
+
                                             </td>}
                                         </tr>
                                     ))}

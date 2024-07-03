@@ -12,9 +12,9 @@ interface SchoolCreateFormI {
     currentEnclosure?: number,
     isLoading?: boolean,
     edit?: boolean,
-    loadEnclosure?: (id:number)=>void
+    loadEnclosure: (id:number)=>void
 }
-export default function SchoolCreateForm({ defaultValues, currentEnclosure, loadEnclosure, edit }: SchoolCreateFormI): JSX.Element {
+export default function SchoolCreateForm({ defaultValues, currentEnclosure, loadEnclosure, clearEnclosure, edit }: SchoolCreateFormI): JSX.Element {
     const queryClient = useQueryClient();
 
 
@@ -30,7 +30,7 @@ export default function SchoolCreateForm({ defaultValues, currentEnclosure, load
 
             queryClient.refetchQueries({ queryKey: ["enclosures"] });
             console.log(e.data)
-            loadEnclosure(e.data.enclosure_id)
+            loadEnclosure(e?.data?.enclosure_id)
      
         },
         onError: (e) => {
@@ -77,7 +77,7 @@ export default function SchoolCreateForm({ defaultValues, currentEnclosure, load
             {({ isSubmitting }) => (
                 <Form>
                     <div className={classes['school-form']}>
-                        <h3>Nuevo Colegio</h3>
+                        <h3>{`${edit? "Editar": "Crear"} Colegio`}</h3>
                         <div style={{ margin: "10px 0" }}>
 
                             <div className={classes['input']}>

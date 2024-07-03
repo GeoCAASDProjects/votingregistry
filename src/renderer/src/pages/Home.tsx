@@ -66,49 +66,7 @@ export default function Home(): JSX.Element {
     }
   });
 
-  const {
-    mutate: singleEnclosureCreateMutate,
-    data: singleEnclosureCreateData,
-    isPending: singleEnclosureCreatePending,
-    isError: singleEnclosureCreateIsError,
-    error: singleEnclosureCreateError
-  } = useMutation({
-    mutationFn: createEnclosure,
-    onSuccess: async (e) => {
-      console.log("The data")
-      console.log(e.data);
-      queryClient.refetchQueries({ queryKey: ["enclosures"] });
-      setActionState("")
-      setCurrentEnclosure(e.data)
 
-    },
-    onError: (e) => {
-
-      alert("Error")
-    }
-  });
-
-  const {
-    mutate: singleEnclosureUpdateMutate,
-    data: singleEnclosureUpdateData,
-    isPending: singleEnclosureUpdatePending,
-    isError: singleEnclosureUpdateIsError,
-    error: singleEnclosureUpdateError
-  } = useMutation({
-    mutationFn: updateEnclosure,
-    onSuccess: async (e) => {
-      console.log("The data")
-      console.log(e.data);
-      queryClient.refetchQueries({ queryKey: ["enclosures"] });
-      setActionState("")
-      setCurrentEnclosure(e.data)
-
-    },
-    onError: (e) => {
-
-      alert("Error")
-    }
-  });
 
 
   const {
@@ -133,7 +91,7 @@ export default function Home(): JSX.Element {
     }
   });
 
- 
+
 
   function toggleSidebar() {
     setOpen(currentVal => !currentVal);
@@ -141,13 +99,14 @@ export default function Home(): JSX.Element {
 
 
   function clearEnclosure() {
+    setActionState("");
     setCurrentEnclosure(null);
   }
 
-  async function loadEnclosure(id){
+  async function loadEnclosure(id:number) {
     setActionState("");
-     clearEnclosure();
-     const response = await singleEnclosureMutate(id);
+    clearEnclosure();
+    const response = await singleEnclosureMutate(id);
   }
 
   function clearSchool() {
@@ -192,10 +151,10 @@ export default function Home(): JSX.Element {
     }
 
   }
-  function closeMemberForm(){
-    if(!currentSchool?.id){
-    setActionState("school");
-    } else{
+  function closeMemberForm() {
+    if (!currentSchool?.id) {
+      setActionState("school");
+    } else {
       setActionState("school");
     }
   }
@@ -229,42 +188,7 @@ export default function Home(): JSX.Element {
 
     }
   }
-  async function submitData(data) {
-    console.log(data)
-    try {
-      const response = singleEnclosureCreateMutate(data);
-      console.log("Answer")
-      console.log(response);
 
-    } catch (e) {
-      console.error(e)
-      alert(e);
-    }
-  }
-  /*async function submitSchoolData(data) {
-
-    try {
-      const response = singleSchoolCreateMutate(data);
-      console.log("Answer")
-      console.log(response);
-
-    } catch (e) {
-      console.error(e)
-      alert(e);
-    }
-  }*/
-  async function updateData(data) {
-
-    try {
-      const response = singleEnclosureUpdateMutate(data);
-      console.log("Answer")
-      console.log(response);
-
-    } catch (e) {
-      console.error(e)
-      alert(e);
-    }
-  }
   async function deleteData(id) {
 
     try {
@@ -304,7 +228,57 @@ export default function Home(): JSX.Element {
 
     sendDataToSidebar(data.id);
   }
+  const renderView = () => {
+    switch (actionState) {
+       case "":
+        return <EnclosureInfo
+        deleteModal={deleteModal}
+        editForm={editForm}
+        singleEnclosurePending={singleEnclosurePending}
+        currentEnclosure={currentEnclosure}
+        clearEnclosure={clearEnclosure}
+        selectLocation={selectLocation}
+        schoolForm={schoolForm}
+        openSchool={openSchool}
+      />
+      case "form":
+      case "editForm":
+        return <EnclosureCreateForm
 
+          defaultValues={defaultFormValues}
+          loadEnclosure={loadEnclosure}
+          edit={actionState == "editForm"}
+          clearEnclosure={clearEnclosure}
+        />
+
+      case "schoolForm":
+        return <SchoolCreateForm
+          loadEnclosure={loadEnclosure}
+          currentEnclosure={currentEnclosure?.id}
+          edit={false}
+       
+          defaultValues={{}}
+        />
+       case "school":
+        return  <SchoolInfo
+        currentSchool={currentSchool}
+        singleSchoolPending={singleSchoolPending}
+        clearSchool={clearSchool}
+        memberForm={memberForm}
+      /*
+        deleteModal={deleteModal}
+        editForm={editForm}
+  */
+      />
+      case "memberForm":
+        return   <MemberCreateForm closeMemberForm={closeMemberForm} currentSchool={currentSchool?.id} />
+      case "location":
+        return
+      default:
+      return <h1>Not Found</h1>
+
+    }
+  }
   return (
     <>
       <div style={{ flex: 1, height: "100%" }}>
@@ -319,52 +293,8 @@ export default function Home(): JSX.Element {
           toggleSidebar={toggleSidebar}
           createForm={createForm}
         >
-
-          {actionState == "" && <SearchBar searchDataFunction={searchDataFunction} selectSearch={selectSearch} />}
-
-          {(actionState == "form" || actionState == "editForm") &&
-            <EnclosureCreateForm
-              submitData={actionState == "editForm" ? updateData : submitData}
-              defaultValues={defaultFormValues}
-              isLoading={singleEnclosureCreatePending}
-              edit={actionState == "editForm"}
-            />}
-
-          {(actionState == "schoolForm") && <SchoolCreateForm
-          loadEnclosure={loadEnclosure}
-            currentEnclosure={currentEnclosure?.id}
-            edit={false}
-            defaultValues={{}}
-          />}
-
-          {actionState == "" && <EnclosureInfo
-            deleteModal={deleteModal}
-            editForm={editForm}
-            singleEnclosurePending={singleEnclosurePending}
-            currentEnclosure={currentEnclosure}
-            clearEnclosure={clearEnclosure}
-            selectLocation={selectLocation}
-            schoolForm={schoolForm}
-            openSchool={openSchool}
-          />}
-
-          {actionState == "school" && <SchoolInfo
-            currentSchool={currentSchool}
-            singleSchoolPending={singleSchoolPending}
-            clearSchool={clearSchool}
-            memberForm={memberForm}
-          /*
-            deleteModal={deleteModal}
-            editForm={editForm}
-      */
-          />
-          }
-
-          {(actionState == "memberForm") &&
-
-            <MemberCreateForm closeMemberForm={closeMemberForm} currentSchool={currentSchool?.id} />
-          }
-
+            {actionState == "" && <SearchBar searchDataFunction={searchDataFunction} selectSearch={selectSearch} />}
+          {renderView()}
         </Sidebar>
         <SimpleMap openForm={openForm} currentEnclosure={currentEnclosure?.id ?? null} actionState={actionState} onMarkerClick={sendDataToSidebar} enclosures={(!enclosurePending && enclosureData) ?? null} />
       </div>
