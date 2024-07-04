@@ -185,7 +185,7 @@ export default function SimpleMap({ enclosures, actionState, onMarkerClick, curr
           </Marker>
         )}
         {
-          !!enclosures && enclosures.data.map((enclosure) => { return !actionState && !(actionState == "formData"  && enclosure.id == currentEnclosure) && <Marker key={enclosure.id} icon={currentEnclosure == enclosure.id ? purpleIcon : blueIcon} eventHandlers={{ click: () => ClickOnMarker(enclosure) }} position={[enclosure.latitude, enclosure.longitude]} /> }
+          !!enclosures && enclosures.data.map((enclosure) => { return  <Marker key={enclosure.id} icon={currentEnclosure == enclosure.id ? purpleIcon : blueIcon} eventHandlers={{ click: () => ClickOnMarker(enclosure) }} position={[enclosure.latitude, enclosure.longitude]} /> }
           )
         }
       </MapContainer>

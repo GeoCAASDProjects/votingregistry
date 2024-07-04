@@ -39,7 +39,7 @@ export default function Home(): JSX.Element {
   } = useMutation({
     mutationFn: fetchEnclosure,
     onSuccess: async (e) => {
-   
+      setActionState("enclosure")
       setCurrentEnclosure(e.data)
     },
     onError: (e) => {
@@ -78,15 +78,16 @@ export default function Home(): JSX.Element {
   } = useMutation({
     mutationFn: deleteEnclosure,
     onSuccess: async (e) => {
-   
+
       queryClient.refetchQueries({ queryKey: ["enclosures"] });
+
       setActionState("")
       setCurrentEnclosure(null)
 
     },
     onError: (e) => {
       console.log("The error inside the mutation")
-     
+
     }
   });
 
@@ -101,10 +102,12 @@ export default function Home(): JSX.Element {
   } = useMutation({
     mutationFn: createEnclosure,
     onSuccess: async (e) => {
-      console.log("The data")
-      console.log(e.data);
+
       queryClient.refetchQueries({ queryKey: ["enclosures"] });
-    
+
+      setActionState("enclosures");
+      setOpenEnclosureForm(false);
+      loadEnclosure(e.data.id);
 
     },
     onError: (e) => {
@@ -122,10 +125,9 @@ export default function Home(): JSX.Element {
   } = useMutation({
     mutationFn: updateEnclosure,
     onSuccess: async (e) => {
-      console.log("The data")
-      console.log(e.data);
+
       queryClient.refetchQueries({ queryKey: ["enclosures"] });
- 
+
 
     },
     onError: (e) => {
@@ -135,11 +137,10 @@ export default function Home(): JSX.Element {
   });
 
 
-  async function submitEnclosure(data) {
+  async function submitEnclosureData(data) {
     console.log(data)
     try {
-      const response = singleEnclosureCreateMutate(data);
-       
+      const response = await singleEnclosureCreateMutate(data);
 
     } catch (e) {
       console.error(e)
@@ -147,7 +148,7 @@ export default function Home(): JSX.Element {
     }
   }
 
-  async function updatEnclosure(data) {
+  async function updateEnclosureData(data) {
 
     try {
       const response = singleEnclosureUpdateMutate(data);
@@ -215,7 +216,7 @@ export default function Home(): JSX.Element {
     }
     if (!openEnclosureForm) {
       setOpenEnclosureForm(true)
-      setActionState("enclosure")
+      setActionState("")
     }
 
   }
@@ -284,16 +285,11 @@ export default function Home(): JSX.Element {
   }
   const [openEnclosureForm, setOpenEnclosureForm] = useState(false);
 
+  const [openMemberForm, setOpenMemberForm] = useState(false);
+
   const renderView = () => {
     switch (actionState) {
       case "":
-        return <>
-        <Button title="Añadir recintos" iconName="Add" onClick={selectLocation} style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
-        <Button title="Añadir sector" iconName="Polyline" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
-        <Button title="Subir Archivos" iconName="Upload" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
-
-    </>
-      case "enclosure":
         if (openEnclosureForm) {
           return <EnclosureCreateForm
 
@@ -302,10 +298,21 @@ export default function Home(): JSX.Element {
             edit={false}
             setOpen={setOpenEnclosureForm}
             loadEnclosure={loadEnclosure}
-            submitData={submitEnclosure}
+            submitData={submitEnclosureData}
             isLoading={singleEnclosureCreatePending}
           />
         }
+        return <>
+
+
+          <SearchBar searchDataFunction={searchDataFunction} selectSearch={selectSearch} />
+          <Button title="Añadir recintos" iconName="Add" onClick={selectLocation} style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
+          <Button title="Añadir sector" iconName="Polyline" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
+          <Button title="Subir Archivos" iconName="Upload" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
+
+        </>
+      case "enclosure":
+
         return <EnclosureInfo
           deleteModal={deleteModal}
 
@@ -313,6 +320,7 @@ export default function Home(): JSX.Element {
           currentEnclosure={currentEnclosure}
           clearEnclosure={clearEnclosure}
           openSchool={openSchool}
+          updateEnclosure={updateEnclosureData}
 
         />
 
@@ -341,14 +349,15 @@ export default function Home(): JSX.Element {
           <p>Deseas borrar el Recinto junto con todos sus colegios y usuarios?</p>
         </Modal>}
 
-
         <Sidebar
           actionState={actionState}
           isOpen={open}
           toggleSidebar={toggleSidebar}
           createForm={createForm}
         >
-          {actionState == "" && <SearchBar searchDataFunction={searchDataFunction} selectSearch={selectSearch} />}
+
+
+
           {renderView()}
         </Sidebar>
         <SimpleMap openForm={openForm} currentEnclosure={currentEnclosure?.id ?? null} actionState={actionState} onMarkerClick={sendDataToSidebar} enclosures={(!enclosurePending && enclosureData) ?? null} />

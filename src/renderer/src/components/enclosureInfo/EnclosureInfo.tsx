@@ -11,7 +11,7 @@ import DynamicLoader from "../dynamicLoader/DynamicLoader"
 import EnclosureCreateForm from "../enclosureForm/EnclosureForm"
 import SchoolCreateForm from "../schoolForm/SchoolForm"
 
-export default function EnclosureInfo({ singleEnclosurePending, deleteModal, currentEnclosure, clearEnclosure, openSchool }) {
+export default function EnclosureInfo({ singleEnclosurePending, deleteModal, currentEnclosure, clearEnclosure, openSchool, updateEnclosure }) {
     /*if(!currentEnclosure){
         return;
     }*/
@@ -55,8 +55,9 @@ export default function EnclosureInfo({ singleEnclosurePending, deleteModal, cur
         return <EnclosureCreateForm
             open={openForm}
             setOpen={setIsOpenForm}
-            edit={edit}
+            edit={true}
             defaultValues={defaultValues}
+            submitData={updateEnclosure}
 
         />
     }

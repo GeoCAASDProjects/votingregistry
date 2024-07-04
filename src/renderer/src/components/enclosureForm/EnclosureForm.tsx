@@ -34,7 +34,9 @@ export default function EnclosureCreateForm({ defaultValues, edit, open, setOpen
     longitude: defaultValues.longitude ?? 0,
     latitude: defaultValues.latitude ?? 0
   }
- 
+ function submitForm(e){
+  submitData(e)
+ }
   return (
 
     <Formik
