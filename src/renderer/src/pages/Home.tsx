@@ -12,7 +12,7 @@ import { createSchool, fetchSchool } from "@renderer/util/http/school-http";
 import { Enclosure } from "@renderer/util/types";
 import { UseMutationResult, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-
+import classes from './home.module.css'
 
 export default function Home(): JSX.Element {
   const queryClient = useQueryClient();
@@ -103,7 +103,7 @@ export default function Home(): JSX.Element {
     setCurrentEnclosure(null);
   }
 
-  async function loadEnclosure(id:number) {
+  async function loadEnclosure(id: number) {
     setActionState("");
     clearEnclosure();
     const response = await singleEnclosureMutate(id);
@@ -165,7 +165,7 @@ export default function Home(): JSX.Element {
     setOpen(true);
     setActionState("");
   }
- 
+
   function memberForm() {
 
     setOpen(true);
@@ -216,53 +216,53 @@ export default function Home(): JSX.Element {
     sendDataToSidebar(data.id);
   }
   const [openEnclosureForm, setOpenEnclosureForm] = useState(false);
-  
+
   const renderView = () => {
     switch (actionState) {
-       case "":
-        if(openEnclosureForm){
+      case "":
+        if (openEnclosureForm) {
           return <EnclosureCreateForm
 
-          defaultValues={defaultFormValues}
-          open={openEnclosureForm}
-          edit={false}
-         setOpen={setOpenEnclosureForm}
-         loadEnclosure={loadEnclosure}
-        />
+            defaultValues={defaultFormValues}
+            open={openEnclosureForm}
+            edit={false}
+            setOpen={setOpenEnclosureForm}
+            loadEnclosure={loadEnclosure}
+          />
         }
         return <EnclosureInfo
-        deleteModal={deleteModal}
-       
-        singleEnclosurePending={singleEnclosurePending}
-        currentEnclosure={currentEnclosure}
-        clearEnclosure={clearEnclosure}
-        selectLocation={selectLocation}
-      /*  schoolForm={schoolForm}*/
-        openSchool={openSchool}
-        
-      />
-  
-       case "school":
-        return  <SchoolInfo
-        singleSchoolPending={singleSchoolPending}
-        currentSchool={currentSchool}
-      
-        clearSchool={clearSchool}
-        memberForm={memberForm}
- 
-      />
+          deleteModal={deleteModal}
+
+          singleEnclosurePending={singleEnclosurePending}
+          currentEnclosure={currentEnclosure}
+          clearEnclosure={clearEnclosure}
+          selectLocation={selectLocation}
+          /*  schoolForm={schoolForm}*/
+          openSchool={openSchool}
+
+        />
+
+      case "school":
+        return <SchoolInfo
+          singleSchoolPending={singleSchoolPending}
+          currentSchool={currentSchool}
+
+          clearSchool={clearSchool}
+          memberForm={memberForm}
+
+        />
       case "memberForm":
-        return   <MemberCreateForm closeMemberForm={closeMemberForm} currentSchool={currentSchool?.id} />
+        return <MemberCreateForm closeMemberForm={closeMemberForm} currentSchool={currentSchool?.id} />
       case "location":
         return
       default:
-      return <h1>Not Found</h1>
+        return <h1>Not Found</h1>
 
     }
   }
   return (
     <>
-      <div style={{ flex: 1, height: "100%" }}>
+      <div className={classes["home-container"]}>
         {<Modal title="Borrar recinto?" isOpen={isOpen} setIsOpen={setIsOpen} onSubmit={() => deleteData(currentEnclosure?.id)}>
           <p>Deseas borrar el Recinto junto con todos sus colegios y usuarios?</p>
         </Modal>}
@@ -274,7 +274,7 @@ export default function Home(): JSX.Element {
           toggleSidebar={toggleSidebar}
           createForm={createForm}
         >
-            {actionState == "" && <SearchBar searchDataFunction={searchDataFunction} selectSearch={selectSearch} />}
+          {actionState == "" && <SearchBar searchDataFunction={searchDataFunction} selectSearch={selectSearch} />}
           {renderView()}
         </Sidebar>
         <SimpleMap openForm={openForm} currentEnclosure={currentEnclosure?.id ?? null} actionState={actionState} onMarkerClick={sendDataToSidebar} enclosures={(!enclosurePending && enclosureData) ?? null} />

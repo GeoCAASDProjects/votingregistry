@@ -35,7 +35,7 @@ export default function SchoolInfo({ singleSchoolPending, memberForm,  /*deleteM
                <DynamicLoader/>
             }
 
-            {(!singleSchoolPending && !!currentSchool) ?
+            {(!singleSchoolPending && !!currentSchool) &&
 
                 <div>
                     <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
@@ -94,19 +94,7 @@ export default function SchoolInfo({ singleSchoolPending, memberForm,  /*deleteM
                     <Button onClick={memberForm} title="Añadir miembro" iconName="Add" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
                     <Button title="Subir Colegios" iconName="Upload" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
                 </div>
-                :
-
-                <>
               
-                    <Button title="Añadir sector" iconName="Polyline" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
-                    <Button title="Subir Archivos" iconName="Upload" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
-
-
-
-
-
-                </>
-
 
 
             }
