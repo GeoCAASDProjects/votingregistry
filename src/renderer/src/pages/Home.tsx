@@ -13,6 +13,7 @@ import { Enclosure } from "@renderer/util/types";
 import { UseMutationResult, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import classes from './home.module.css'
+import Button from "@renderer/components/button/Button";
 
 export default function Home(): JSX.Element {
   const queryClient = useQueryClient();
@@ -38,8 +39,7 @@ export default function Home(): JSX.Element {
   } = useMutation({
     mutationFn: fetchEnclosure,
     onSuccess: async (e) => {
-      console.log(e.data)
-      console.log("------------------------------------")
+   
       setCurrentEnclosure(e.data)
     },
     onError: (e) => {
@@ -78,8 +78,7 @@ export default function Home(): JSX.Element {
   } = useMutation({
     mutationFn: deleteEnclosure,
     onSuccess: async (e) => {
-      console.log("The data")
-      console.log(e.data);
+   
       queryClient.refetchQueries({ queryKey: ["enclosures"] });
       setActionState("")
       setCurrentEnclosure(null)
@@ -87,7 +86,7 @@ export default function Home(): JSX.Element {
     },
     onError: (e) => {
       console.log("The error inside the mutation")
-      console.log(e)
+     
     }
   });
 
@@ -104,14 +103,14 @@ export default function Home(): JSX.Element {
   }
 
   async function loadEnclosure(id: number) {
-    setActionState("");
     clearEnclosure();
+    setActionState("enclosure");
     const response = await singleEnclosureMutate(id);
   }
 
   function clearSchool() {
     setCurrentSchool(null);
-    setActionState("");
+    setActionState("enclosure");
   }
 
   function selectLocation() {
@@ -148,7 +147,7 @@ export default function Home(): JSX.Element {
     }
     if (!openEnclosureForm) {
       setOpenEnclosureForm(true)
-      setActionState("")
+      setActionState("enclosure")
     }
 
   }
@@ -163,7 +162,7 @@ export default function Home(): JSX.Element {
   function createForm() {
 
     setOpen(true);
-    setActionState("");
+    setActionState("enclosure");
   }
 
   function memberForm() {
@@ -220,6 +219,13 @@ export default function Home(): JSX.Element {
   const renderView = () => {
     switch (actionState) {
       case "":
+        return <>
+        <Button title="Añadir recintos" iconName="Add" onClick={selectLocation} style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
+        <Button title="Añadir sector" iconName="Polyline" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
+        <Button title="Subir Archivos" iconName="Upload" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
+
+    </>
+      case "enclosure":
         if (openEnclosureForm) {
           return <EnclosureCreateForm
 
@@ -236,8 +242,6 @@ export default function Home(): JSX.Element {
           singleEnclosurePending={singleEnclosurePending}
           currentEnclosure={currentEnclosure}
           clearEnclosure={clearEnclosure}
-          selectLocation={selectLocation}
-          /*  schoolForm={schoolForm}*/
           openSchool={openSchool}
 
         />

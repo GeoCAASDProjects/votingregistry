@@ -11,7 +11,7 @@ import DynamicLoader from "../dynamicLoader/DynamicLoader"
 import EnclosureCreateForm from "../enclosureForm/EnclosureForm"
 import SchoolCreateForm from "../schoolForm/SchoolForm"
 
-export default function EnclosureInfo({ singleEnclosurePending, deleteModal, currentEnclosure, clearEnclosure, selectLocation, openSchool }) {
+export default function EnclosureInfo({ singleEnclosurePending, deleteModal, currentEnclosure, clearEnclosure, openSchool }) {
     /*if(!currentEnclosure){
         return;
     }*/
@@ -70,7 +70,7 @@ export default function EnclosureInfo({ singleEnclosurePending, deleteModal, cur
                 <DynamicLoader />
             }
 
-            {(!singleEnclosurePending && !!currentEnclosure) ?
+            {(!singleEnclosurePending && !!currentEnclosure) &&
 
                 <div>
                     <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
@@ -157,18 +157,7 @@ export default function EnclosureInfo({ singleEnclosurePending, deleteModal, cur
                     <Button onClick={openCreateSchool} title="Añadir colegio" iconName="Add" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
                     <Button title="Subir Colegios" iconName="Upload" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
                 </div>
-                :
-
-                <>
-                    <Button title="Añadir recintos" iconName="Add" onClick={selectLocation} style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
-                    <Button title="Añadir sector" iconName="Polyline" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
-                    <Button title="Subir Archivos" iconName="Upload" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
-
-
-
-
-
-                </>
+           
 
 
 
