@@ -165,22 +165,7 @@ export default function Home(): JSX.Element {
     setOpen(true);
     setActionState("");
   }
-  /*
-  function editForm() {
-    setOpen(true);
-    if (actionState != "editForm") {
-      setDefaultFormValues({ ...currentEnclosure })
-      setActionState("editForm");
-
-    }
-  }*/
-  /*function schoolForm() {
-    setOpen(true);
-    if (actionState != "schoolForm") {
-      setActionState("schoolForm");
-
-    }
-  }*/
+ 
   function memberForm() {
 
     setOpen(true);
