@@ -7,7 +7,7 @@ import SchoolCreateForm from "@renderer/components/schoolForm/SchoolForm";
 import SchoolInfo from "@renderer/components/schoolInfo/SchoolInfo";
 import SearchBar from "@renderer/components/searchBar/SearchBar";
 import Sidebar from "@renderer/components/sidebar/Sidebar";
-import { deleteEnclosure, fetchEnclosure, fetchEnclosures } from "@renderer/util/http/enclosure-http";
+import { createEnclosure, deleteEnclosure, fetchEnclosure, fetchEnclosures, updateEnclosure } from "@renderer/util/http/enclosure-http";
 import { createSchool, fetchSchool } from "@renderer/util/http/school-http";
 import { Enclosure } from "@renderer/util/types";
 import { UseMutationResult, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -91,6 +91,74 @@ export default function Home(): JSX.Element {
   });
 
 
+
+  const {
+    mutate: singleEnclosureCreateMutate,
+    data: singleEnclosureCreateData,
+    isPending: singleEnclosureCreatePending,
+    isError: singleEnclosureCreateIsError,
+    error: singleEnclosureCreateError
+  } = useMutation({
+    mutationFn: createEnclosure,
+    onSuccess: async (e) => {
+      console.log("The data")
+      console.log(e.data);
+      queryClient.refetchQueries({ queryKey: ["enclosures"] });
+    
+
+    },
+    onError: (e) => {
+
+      alert("Error")
+    }
+  });
+
+  const {
+    mutate: singleEnclosureUpdateMutate,
+    data: singleEnclosureUpdateData,
+    isPending: singleEnclosureUpdatePending,
+    isError: singleEnclosureUpdateIsError,
+    error: singleEnclosureUpdateError
+  } = useMutation({
+    mutationFn: updateEnclosure,
+    onSuccess: async (e) => {
+      console.log("The data")
+      console.log(e.data);
+      queryClient.refetchQueries({ queryKey: ["enclosures"] });
+ 
+
+    },
+    onError: (e) => {
+
+      alert("Error")
+    }
+  });
+
+
+  async function submitEnclosure(data) {
+    console.log(data)
+    try {
+      const response = singleEnclosureCreateMutate(data);
+       
+
+    } catch (e) {
+      console.error(e)
+      alert(e);
+    }
+  }
+
+  async function updatEnclosure(data) {
+
+    try {
+      const response = singleEnclosureUpdateMutate(data);
+      console.log("Answer")
+      console.log(response);
+
+    } catch (e) {
+      console.error(e)
+      alert(e);
+    }
+  }
 
   function toggleSidebar() {
     setOpen(currentVal => !currentVal);
@@ -234,6 +302,8 @@ export default function Home(): JSX.Element {
             edit={false}
             setOpen={setOpenEnclosureForm}
             loadEnclosure={loadEnclosure}
+            submitData={submitEnclosure}
+            isLoading={singleEnclosureCreatePending}
           />
         }
         return <EnclosureInfo

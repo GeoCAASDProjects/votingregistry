@@ -6,7 +6,7 @@ import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createEnclosure, updateEnclosure } from '@renderer/util/http/enclosure-http';
 import { Close } from '@mui/icons-material';
-export default function EnclosureCreateForm({ defaultValues, edit, open, setOpen, loadEnclosure, /*clearEnclosure*/ }) {
+export default function EnclosureCreateForm({ defaultValues, edit, open, setOpen, loadEnclosure, submitData, isLoading}) {
 
   if (!open) {
     return;
@@ -17,76 +17,7 @@ export default function EnclosureCreateForm({ defaultValues, edit, open, setOpen
     setOpen(false);
   }
 
-  const {
-    mutate: singleEnclosureCreateMutate,
-    data: singleEnclosureCreateData,
-    isPending: singleEnclosureCreatePending,
-    isError: singleEnclosureCreateIsError,
-    error: singleEnclosureCreateError
-  } = useMutation({
-    mutationFn: createEnclosure,
-    onSuccess: async (e) => {
-      console.log("The data")
-      console.log(e.data);
-      queryClient.refetchQueries({ queryKey: ["enclosures"] });
-      closeForm();
-      loadEnclosure(e.data.id);
 
-    },
-    onError: (e) => {
-
-      alert("Error")
-    }
-  });
-
-  const {
-    mutate: singleEnclosureUpdateMutate,
-    data: singleEnclosureUpdateData,
-    isPending: singleEnclosureUpdatePending,
-    isError: singleEnclosureUpdateIsError,
-    error: singleEnclosureUpdateError
-  } = useMutation({
-    mutationFn: updateEnclosure,
-    onSuccess: async (e) => {
-      console.log("The data")
-      console.log(e.data);
-      queryClient.refetchQueries({ queryKey: ["enclosures"] });
-      closeForm();
-      //   loadEnclosure(e.data.id);
-
-    },
-    onError: (e) => {
-
-      alert("Error")
-    }
-  });
-
-
-  async function submitData(data) {
-    console.log(data)
-    try {
-      const response = singleEnclosureCreateMutate(data);
-      console.log("Answer")
-      console.log(response);
-
-    } catch (e) {
-      console.error(e)
-      alert(e);
-    }
-  }
-
-  async function updateData(data) {
-
-    try {
-      const response = singleEnclosureUpdateMutate(data);
-      console.log("Answer")
-      console.log(response);
-
-    } catch (e) {
-      console.error(e)
-      alert(e);
-    }
-  }
 
   const EnclosureSchema = Yup.object().shape({
     name: Yup.string().required('Requerido'),
@@ -103,13 +34,13 @@ export default function EnclosureCreateForm({ defaultValues, edit, open, setOpen
     longitude: defaultValues.longitude ?? 0,
     latitude: defaultValues.latitude ?? 0
   }
-
+ 
   return (
 
     <Formik
       initialValues={initialValues}
       validationSchema={EnclosureSchema}
-      onSubmit={edit ? updateData : submitData}
+      onSubmit={submitData}
     >
       {({ isSubmitting }) => (
         <Form>
@@ -144,7 +75,7 @@ export default function EnclosureCreateForm({ defaultValues, edit, open, setOpen
             </div>
 
 
-            <Button type="submit" title="Enviar" iconName="Send" isLoading={edit ? singleEnclosureUpdatePending : singleEnclosureCreatePending} center />
+            <Button type="submit" title="Enviar" iconName="Send" isLoading={isLoading} center />
 
             {/*  <Button onClick={resetValues} title="ResetValues" iconName="RestartAlt" isLoading={isLoading} center/>*/}
           </div>
