@@ -30,14 +30,6 @@ export default function Home(): JSX.Element {
     gcTime: 30000,
   });
 
-  
-  /*const { data: singleEnclosureData, isPending: singleEnclosurePending, isError: singleEnclosureIsError, error: singleEnclosureError } = useQuery((id)=>{
-    queryKey: [`enclosure/${id}`],
-    queryFn: ({ signal }, query?) => fetchEnclosures({ signal, query }),
-    staleTime: 5000,
-    gcTime: 30000,
-  });
-  */
 
   const {
     mutate: singleEnclosureMutate,
@@ -241,7 +233,7 @@ export default function Home(): JSX.Element {
   function createForm() {
 
     setOpen(true);
-    setActionState("enclosure");
+    setActionState("");
   }
 
   function memberForm() {
@@ -297,6 +289,7 @@ export default function Home(): JSX.Element {
 
   const [openMemberForm, setOpenMemberForm] = useState(false);
 
+   
   const renderView = () => {
     switch (actionState) {
       case "":
