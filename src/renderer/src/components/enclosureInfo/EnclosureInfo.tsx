@@ -11,7 +11,7 @@ import DynamicLoader from "../dynamicLoader/DynamicLoader"
 import EnclosureCreateForm from "../enclosureForm/EnclosureForm"
 import SchoolCreateForm from "../schoolForm/SchoolForm"
 
-export default function EnclosureInfo({ singleEnclosurePending, schoolForm, deleteModal, currentEnclosure, clearEnclosure, selectLocation, openSchool }) {
+export default function EnclosureInfo({ singleEnclosurePending, /*schoolForm,*/ deleteModal, currentEnclosure, clearEnclosure, selectLocation, openSchool }) {
     /*if(!currentEnclosure){
         return;
     }*/

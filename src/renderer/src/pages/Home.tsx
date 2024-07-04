@@ -7,7 +7,7 @@ import SchoolCreateForm from "@renderer/components/schoolForm/SchoolForm";
 import SchoolInfo from "@renderer/components/schoolInfo/SchoolInfo";
 import SearchBar from "@renderer/components/searchBar/SearchBar";
 import Sidebar from "@renderer/components/sidebar/Sidebar";
-import { createEnclosure, deleteEnclosure, fetchEnclosure, fetchEnclosures, updateEnclosure } from "@renderer/util/http/enclosure-http";
+import { deleteEnclosure, fetchEnclosure, fetchEnclosures } from "@renderer/util/http/enclosure-http";
 import { createSchool, fetchSchool } from "@renderer/util/http/school-http";
 import { Enclosure } from "@renderer/util/types";
 import { UseMutationResult, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -174,13 +174,13 @@ export default function Home(): JSX.Element {
 
     }
   }*/
-  function schoolForm() {
+  /*function schoolForm() {
     setOpen(true);
     if (actionState != "schoolForm") {
       setActionState("schoolForm");
 
     }
-  }
+  }*/
   function memberForm() {
 
     setOpen(true);
@@ -241,6 +241,7 @@ export default function Home(): JSX.Element {
           open={openEnclosureForm}
           edit={false}
          setOpen={setOpenEnclosureForm}
+         loadEnclosure={loadEnclosure}
         />
         }
         return <EnclosureInfo
@@ -250,30 +251,19 @@ export default function Home(): JSX.Element {
         currentEnclosure={currentEnclosure}
         clearEnclosure={clearEnclosure}
         selectLocation={selectLocation}
-        schoolForm={schoolForm}
+      /*  schoolForm={schoolForm}*/
         openSchool={openSchool}
         
       />
- 
- 
-     {/* case "schoolForm":
-        return <SchoolCreateForm
-          loadEnclosure={loadEnclosure}
-          currentEnclosure={currentEnclosure?.id}
-          edit={false}
-       
-          defaultValues={{}}
-        />*/}
+  
        case "school":
         return  <SchoolInfo
-        currentSchool={currentSchool}
         singleSchoolPending={singleSchoolPending}
+        currentSchool={currentSchool}
+      
         clearSchool={clearSchool}
         memberForm={memberForm}
-      /*
-        deleteModal={deleteModal}
-        editForm={editForm}
-  */
+ 
       />
       case "memberForm":
         return   <MemberCreateForm closeMemberForm={closeMemberForm} currentSchool={currentSchool?.id} />

@@ -6,12 +6,16 @@ import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createEnclosure, updateEnclosure } from '@renderer/util/http/enclosure-http';
 import { Close } from '@mui/icons-material';
-export default function EnclosureCreateForm({ defaultValues, edit, open, setOpen /*, loadEnclosure, clearEnclosure*/ }) {
+export default function EnclosureCreateForm({ defaultValues, edit, open, setOpen, loadEnclosure, /*clearEnclosure*/ }) {
 
   if (!open) {
     return;
   }
   const queryClient = useQueryClient();
+
+  function closeForm() {
+    setOpen(false);
+  }
 
   const {
     mutate: singleEnclosureCreateMutate,
@@ -25,7 +29,8 @@ export default function EnclosureCreateForm({ defaultValues, edit, open, setOpen
       console.log("The data")
       console.log(e.data);
       queryClient.refetchQueries({ queryKey: ["enclosures"] });
-     // loadEnclosure(e.data.id);
+      closeForm();
+      loadEnclosure(e.data.id);
 
     },
     onError: (e) => {
@@ -46,7 +51,8 @@ export default function EnclosureCreateForm({ defaultValues, edit, open, setOpen
       console.log("The data")
       console.log(e.data);
       queryClient.refetchQueries({ queryKey: ["enclosures"] });
-   //   loadEnclosure(e.data.id);
+      closeForm();
+      //   loadEnclosure(e.data.id);
 
     },
     onError: (e) => {
@@ -96,9 +102,6 @@ export default function EnclosureCreateForm({ defaultValues, edit, open, setOpen
     address: defaultValues.address ?? "",
     longitude: defaultValues.longitude ?? 0,
     latitude: defaultValues.latitude ?? 0
-  }
-  function closeForm() {
-    setOpen(false);
   }
 
   return (
