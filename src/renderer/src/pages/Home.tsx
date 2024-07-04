@@ -216,6 +216,7 @@ export default function Home(): JSX.Element {
     sendDataToSidebar(data.id);
   }
   const [openEnclosureForm, setOpenEnclosureForm] = useState(false);
+  
   const renderView = () => {
     switch (actionState) {
        case "":
