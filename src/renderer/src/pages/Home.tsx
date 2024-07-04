@@ -162,6 +162,7 @@ export default function Home(): JSX.Element {
   }
 
   function toggleSidebar() {
+ 
     setOpen(currentVal => !currentVal);
   }
 
