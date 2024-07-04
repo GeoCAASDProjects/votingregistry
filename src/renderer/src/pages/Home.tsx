@@ -30,6 +30,15 @@ export default function Home(): JSX.Element {
     gcTime: 30000,
   });
 
+  
+  /*const { data: singleEnclosureData, isPending: singleEnclosurePending, isError: singleEnclosureIsError, error: singleEnclosureError } = useQuery((id)=>{
+    queryKey: [`enclosure/${id}`],
+    queryFn: ({ signal }, query?) => fetchEnclosures({ signal, query }),
+    staleTime: 5000,
+    gcTime: 30000,
+  });
+  */
+
   const {
     mutate: singleEnclosureMutate,
     data: singleEnclosureData,
@@ -162,7 +171,7 @@ export default function Home(): JSX.Element {
   }
 
   function toggleSidebar() {
- 
+   
     setOpen(currentVal => !currentVal);
   }
 
