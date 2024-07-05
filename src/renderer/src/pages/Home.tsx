@@ -163,7 +163,7 @@ export default function Home(): JSX.Element {
   }
 
   function toggleSidebar() {
-   
+
     setOpen(currentVal => !currentVal);
   }
 
@@ -289,22 +289,23 @@ export default function Home(): JSX.Element {
 
   const [openMemberForm, setOpenMemberForm] = useState(false);
 
-   
+
   const renderView = () => {
+    if (openEnclosureForm) {
+      return <EnclosureCreateForm
+
+        defaultValues={defaultFormValues}
+        open={openEnclosureForm}
+        edit={false}
+        setOpen={setOpenEnclosureForm}
+        loadEnclosure={loadEnclosure}
+        submitData={submitEnclosureData}
+        isLoading={singleEnclosureCreatePending}
+      />
+    }
     switch (actionState) {
       case "":
-        if (openEnclosureForm) {
-          return <EnclosureCreateForm
 
-            defaultValues={defaultFormValues}
-            open={openEnclosureForm}
-            edit={false}
-            setOpen={setOpenEnclosureForm}
-            loadEnclosure={loadEnclosure}
-            submitData={submitEnclosureData}
-            isLoading={singleEnclosureCreatePending}
-          />
-        }
         return <>
 
 
@@ -359,9 +360,47 @@ export default function Home(): JSX.Element {
           createForm={createForm}
         >
 
+          {openEnclosureForm && <EnclosureCreateForm
+
+            defaultValues={defaultFormValues}
+            open={openEnclosureForm}
+            edit={false}
+            setOpen={setOpenEnclosureForm}
+            loadEnclosure={loadEnclosure}
+            submitData={submitEnclosureData}
+            isLoading={singleEnclosureCreatePending}
+          />}
+          {actionState == "" && <>
+            <SearchBar searchDataFunction={searchDataFunction} selectSearch={selectSearch} />
+            <Button title="Añadir recintos" iconName="Add" onClick={selectLocation} style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
+            <Button title="Añadir sector" iconName="Polyline" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
+            <Button title="Subir Archivos" iconName="Upload" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
+
+          </>}
+          {actionState == "enclosure" && <EnclosureInfo
+            deleteModal={deleteModal}
+            singleEnclosurePending={singleEnclosurePending}
+            currentEnclosure={currentEnclosure}
+            clearEnclosure={clearEnclosure}
+            openSchool={openSchool}
+            updateEnclosure={updateEnclosureData}
+
+          />}
+          {
+            actionState == "school" && <SchoolInfo
+              singleSchoolPending={singleSchoolPending}
+              currentSchool={currentSchool}
+
+              clearSchool={clearSchool}
+              memberForm={memberForm}
+
+            />
+          }
+          {
+            actionState == "memberForm" && <MemberCreateForm closeMemberForm={closeMemberForm} currentSchool={currentSchool?.id} />
 
 
-          {renderView()}
+          }
         </Sidebar>
         <SimpleMap openForm={openForm} currentEnclosure={currentEnclosure?.id ?? null} actionState={actionState} onMarkerClick={sendDataToSidebar} enclosures={(!enclosurePending && enclosureData) ?? null} />
       </div>

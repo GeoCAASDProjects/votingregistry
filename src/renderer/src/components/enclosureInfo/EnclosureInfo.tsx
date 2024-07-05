@@ -23,7 +23,7 @@ export default function EnclosureInfo({ singleEnclosurePending, deleteModal, cur
 
     const queryClient = useQueryClient();
 
-   // const [currentSchool, setCurrentSchool] = useState(null);
+    // const [currentSchool, setCurrentSchool] = useState(null);
     const { data: schoolData, isPending: schoolDataPending, isError: schoolIsError, error: schoolError } = useQuery({
         queryKey: [`enclosure/${currentEnclosure?.id}/schools`],
         queryFn: ({ signal }) => fetchSchools({ signal, enclosureId: currentEnclosure?.id }),
@@ -37,7 +37,7 @@ export default function EnclosureInfo({ singleEnclosurePending, deleteModal, cur
         setEdit(true)
         setIsOpenForm(true);
     }
-    function openCreateSchool(){
+    function openCreateSchool() {
         setOpenSchoolForm(true)
     }
 
@@ -158,7 +158,7 @@ export default function EnclosureInfo({ singleEnclosurePending, deleteModal, cur
                     <Button onClick={openCreateSchool} title="Añadir colegio" iconName="Add" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
                     <Button title="Subir Colegios" iconName="Upload" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
                 </div>
-           
+
 
 
 
