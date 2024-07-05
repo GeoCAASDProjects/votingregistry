@@ -298,6 +298,18 @@ export default function Home(): JSX.Element {
       <Button title="Subir Archivos" iconName="Upload" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
 
     </>}
+    {
+      actionState == "enclosureForm" && <EnclosureCreateForm
+
+      defaultValues={defaultFormValues}
+      open={openEnclosureForm}
+      edit={false}
+      setOpen={setOpenEnclosureForm}
+      loadEnclosure={loadEnclosure}
+      submitData={submitEnclosureData}
+      isLoading={singleEnclosureCreatePending}
+    />
+    }
     {actionState == "enclosure" && <EnclosureInfo
       deleteModal={deleteModal}
       singleEnclosurePending={singleEnclosurePending}
@@ -335,6 +347,7 @@ export default function Home(): JSX.Element {
       isLoading={singleEnclosureCreatePending}
     />
   }
+  
   return (
     <>
       <div className={classes["home-container"]}>
