@@ -8,7 +8,7 @@ import SchoolInfo from "@renderer/components/schoolInfo/SchoolInfo";
 import SearchBar from "@renderer/components/searchBar/SearchBar";
 import Sidebar from "@renderer/components/sidebar/Sidebar";
 import { createEnclosure, deleteEnclosure, fetchEnclosure, fetchEnclosures, updateEnclosure } from "@renderer/util/http/enclosure-http";
-import { createSchool, fetchSchool } from "@renderer/util/http/school-http";
+import { createSchool, deleteSchool, fetchSchool } from "@renderer/util/http/school-http";
 import { Enclosure } from "@renderer/util/types";
 import { UseMutationResult, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
@@ -94,6 +94,30 @@ export default function Home(): JSX.Element {
 
 
 
+
+  const {
+    mutate: singleSchoolDeleteMutate,
+    data: singleSchoolDeleteData,
+    isPending: singleSchoolDeletePending,
+    isError: singleSchoolDeleteIsError,
+    error: singleSchoolDeleteError
+  } = useMutation({
+    mutationFn: deleteSchool,
+    onSuccess: async (e) => {
+
+      queryClient.refetchQueries({ queryKey: ["enclosures"] });
+
+      setActionState("enclosure")
+
+
+    },
+    onError: (e) => {
+      console.log("The error inside the mutation")
+
+    }
+  });
+
+
   const {
     mutate: singleEnclosureCreateMutate,
     data: singleEnclosureCreateData,
@@ -106,7 +130,7 @@ export default function Home(): JSX.Element {
 
       queryClient.refetchQueries({ queryKey: ["enclosures"] });
 
-      setActionState("enclosures");
+      //  setActionState("enclosures");
       setOpenEnclosureForm(false);
       loadEnclosure(e.data.id);
 
@@ -128,7 +152,31 @@ export default function Home(): JSX.Element {
     onSuccess: async (e) => {
 
       queryClient.refetchQueries({ queryKey: ["enclosures"] });
+      //   setActionState("enclosures");
+      setOpenEnclosureForm(false);
+      loadEnclosure(e.data.id);
 
+    },
+    onError: (e) => {
+
+      alert("Error")
+    }
+  });
+
+  const {
+    mutate: singleSchoolUpdateMutate,
+    data: singleSchoolUpdateData,
+    isPending: singleSchoolUpdatePending,
+    isError: singleSchoolUpdateIsError,
+    error: singleSchoolUpdateError
+  } = useMutation({
+    mutationFn: updateSchool,
+    onSuccess: async (e) => {
+
+      queryClient.refetchQueries({ queryKey: ["enclosures"] });
+      //   setActionState("enclosures");
+      
+      setCurrentSchool(e.data.id);
 
     },
     onError: (e) => {
@@ -162,6 +210,19 @@ export default function Home(): JSX.Element {
     }
   }
 
+  async function updateSchoolData(data) {
+
+    try {
+      const response = singleSchoolUpdateMutate(data);
+      console.log("Answer")
+      console.log(response);
+
+    } catch (e) {
+      console.error(e)
+      alert(e);
+    }
+  }
+
   function toggleSidebar() {
 
     setOpen(currentVal => !currentVal);
@@ -175,8 +236,8 @@ export default function Home(): JSX.Element {
 
   async function loadEnclosure(id: number) {
     clearEnclosure();
-    setActionState("enclosure");
     const response = await singleEnclosureMutate(id);
+    setActionState("enclosure");
   }
 
   function clearSchool() {
@@ -251,17 +312,26 @@ export default function Home(): JSX.Element {
     try {
       const response = singleEnclosureDeleteMutate(id);
 
-      setIsOpen(false);
+
     } catch (e) {
       console.error(e)
 
     }
   }
-  const [isOpen, setIsOpen] = useState<boolean>(false)
 
-  function deleteModal() {
-    setIsOpen(true);
+  async function deleteSchoolData(id) {
+
+    try {
+      const response = singleSchoolDeleteMutate(id);
+
+
+    } catch (e) {
+      console.error(e)
+
+    }
   }
+
+
 
 
   const searchDataFunction = async (query: string): Promise<object[]> => {
@@ -288,7 +358,12 @@ export default function Home(): JSX.Element {
   const [openEnclosureForm, setOpenEnclosureForm] = useState(false);
 
   const [openMemberForm, setOpenMemberForm] = useState(false);
-  
+
+  function openEditForm() {
+    setDefaultFormValues({ ...currentEnclosure })
+    setOpenEnclosureForm(true);
+  }
+
   let renderView;
   renderView = <>
     {actionState == "" && <>
@@ -298,25 +373,14 @@ export default function Home(): JSX.Element {
       <Button title="Subir Archivos" iconName="Upload" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
 
     </>}
-    {
-      actionState == "enclosureForm" && <EnclosureCreateForm
-
-      defaultValues={defaultFormValues}
-      open={openEnclosureForm}
-      edit={false}
-      setOpen={setOpenEnclosureForm}
-      loadEnclosure={loadEnclosure}
-      submitData={submitEnclosureData}
-      isLoading={singleEnclosureCreatePending}
-    />
-    }
     {actionState == "enclosure" && <EnclosureInfo
-      deleteModal={deleteModal}
+
       singleEnclosurePending={singleEnclosurePending}
       currentEnclosure={currentEnclosure}
       clearEnclosure={clearEnclosure}
       openSchool={openSchool}
-      updateEnclosure={updateEnclosureData}
+      openForm={openEditForm}
+      deleteData={deleteData}
 
     />}
     {
@@ -326,6 +390,7 @@ export default function Home(): JSX.Element {
 
         clearSchool={clearSchool}
         memberForm={memberForm}
+        deleteData={deleteSchoolData}
 
       />
     }
@@ -340,20 +405,17 @@ export default function Home(): JSX.Element {
 
       defaultValues={defaultFormValues}
       open={openEnclosureForm}
-      edit={false}
+      edit={!!currentEnclosure?.id}
       setOpen={setOpenEnclosureForm}
-      loadEnclosure={loadEnclosure}
-      submitData={submitEnclosureData}
+      //   loadEnclosure={loadEnclosure}
+      submitData={!!currentEnclosure?.id ? updateEnclosureData : submitEnclosureData}
       isLoading={singleEnclosureCreatePending}
     />
   }
-  
   return (
     <>
       <div className={classes["home-container"]}>
-        {<Modal title="Borrar recinto?" isOpen={isOpen} setIsOpen={setIsOpen} onSubmit={() => deleteData(currentEnclosure?.id)}>
-          <p>Deseas borrar el Recinto junto con todos sus colegios y usuarios?</p>
-        </Modal>}
+
 
         <Sidebar
           actionState={actionState}

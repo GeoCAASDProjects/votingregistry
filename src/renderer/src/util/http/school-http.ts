@@ -27,6 +27,35 @@ export async function fetchSchools({signal, enclosureId}){
 }
 
 
+export async function updateSchool(data){
+    alert("UPDATING!");
+    console.log("THE DATA")
+    console.log("----------------------------------------------------------------------")
+    console.log({...data})
+  
+    let url = `${BASE_URL_API}/school/${data.id}`;
+    const config: AxiosRequestConfig ={
+     
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+        },
+     
+    }
+
+    try{
+        const response = await axios.patch(url, data, config);
+      
+        console.log(response);
+      
+        return response.data;
+        } catch(error){
+            console.log(error);
+            
+          throw new Error('Request failed');
+        }
+}
+
+
 export async function fetchSchool(id){
     let url = `${BASE_URL_API}/school/${id}`;
 

@@ -11,13 +11,14 @@ import DynamicLoader from "../dynamicLoader/DynamicLoader"
 import EnclosureCreateForm from "../enclosureForm/EnclosureForm"
 import SchoolCreateForm from "../schoolForm/SchoolForm"
 
-export default function EnclosureInfo({ singleEnclosurePending, deleteModal, currentEnclosure, clearEnclosure, openSchool, updateEnclosure }) {
+export default function EnclosureInfo({ singleEnclosurePending, currentEnclosure, clearEnclosure, openForm, openSchool, deleteData }) {
     /*if(!currentEnclosure){
         return;
     }*/
 
+    const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false)
+
     const defaultValues = { ...currentEnclosure }
-    const [openForm, setIsOpenForm] = useState(false);
     const [openSchoolForm, setOpenSchoolForm] = useState(false)
     const [edit, setEdit] = useState(false);
 
@@ -33,10 +34,7 @@ export default function EnclosureInfo({ singleEnclosurePending, deleteModal, cur
 
     });
 
-    function openEditForm() {
-        setEdit(true)
-        setIsOpenForm(true);
-    }
+
     function openCreateSchool() {
         setOpenSchoolForm(true)
     }
@@ -51,22 +49,17 @@ export default function EnclosureInfo({ singleEnclosurePending, deleteModal, cur
             setOpen={setOpenSchoolForm}
         />
     }
-    if (openForm) {
-        return <EnclosureCreateForm
-            open={openForm}
-            setOpen={setIsOpenForm}
-            edit={true}
-            defaultValues={defaultValues}
-            submitData={updateEnclosure}
 
-        />
+    function deleteModal() {
+        setDeleteModalOpen(true);
     }
-
     return (
 
         <>
 
-
+            {<Modal title="Borrar recinto?" isOpen={deleteModalOpen} setIsOpen={setDeleteModalOpen} onSubmit={() => deleteData(currentEnclosure?.id)}>
+                <p>Deseas borrar el Recinto junto con todos sus colegios y usuarios?</p>
+            </Modal>}
             {singleEnclosurePending &&
                 <DynamicLoader />
             }
@@ -110,7 +103,7 @@ export default function EnclosureInfo({ singleEnclosurePending, deleteModal, cur
                     </table>
 
 
-                    <Button title="Editar" iconName="Edit" onClick={openEditForm} style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
+                    <Button title="Editar" iconName="Edit" onClick={openForm} style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
                     <Button title="Descargar" iconName="Download" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
                     <Button title="Borrar" onClick={deleteModal} iconName="Delete" style={{ background: "#22224F", width: "100%", color: "#FFFFFF", margin: "5px 0px" }} />
 

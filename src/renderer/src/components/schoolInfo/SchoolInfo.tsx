@@ -10,8 +10,8 @@ import { Link } from "react-router-dom"
 import { fetchMembers } from "@renderer/util/http/person-http"
 import DynamicLoader from "../dynamicLoader/DynamicLoader"
 
-export default function SchoolInfo({ singleSchoolPending, memberForm,  /*deleteModal, editForm,*/ currentSchool , clearSchool /*, selectLocation */}) {
-
+export default function SchoolInfo({ singleSchoolPending, memberForm, deleteData, currentSchool , clearSchool /*, selectLocation */}) {
+    const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false)
     const [isOpen, setIsOpen] = useState(false);
     const queryClient = useQueryClient();
 
@@ -24,12 +24,16 @@ export default function SchoolInfo({ singleSchoolPending, memberForm,  /*deleteM
       enabled: !!currentSchool?.id
       
     });
-  
+    function deleteModal() {
+        setDeleteModalOpen(true);
+    }
 
     return (
 
         <>
-  
+         {<Modal title="Borrar recinto?" isOpen={deleteModalOpen} setIsOpen={setDeleteModalOpen} onSubmit={() => deleteData(currentSchool.id)}>
+                <p>Deseas borrar el Colegio? esta accion no es reversible</p>
+            </Modal>}
 
             {singleSchoolPending &&
                <DynamicLoader/>
@@ -61,7 +65,7 @@ export default function SchoolInfo({ singleSchoolPending, memberForm,  /*deleteM
 
                     <Button title="Editar" iconName="Edit" onClick={()=>alert("Updating")} style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
                     <Button title="Descargar" iconName="Download" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
-                    <Button title="Borrar" onClick={()=>alert("Deleting")} iconName="Delete" style={{ background: "#22224F", width: "100%", color: "#FFFFFF", margin: "5px 0px" }} />
+                    <Button title="Borrar" onClick={deleteModal} iconName="Delete" style={{ background: "#22224F", width: "100%", color: "#FFFFFF", margin: "5px 0px" }} />
 
                     <h3>Miembros</h3>
                     {(memberDataPending && !memberError) && <DynamicLoader/>}

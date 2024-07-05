@@ -6,7 +6,7 @@ import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createEnclosure, updateEnclosure } from '@renderer/util/http/enclosure-http';
 import { Close } from '@mui/icons-material';
-export default function EnclosureCreateForm({ defaultValues, edit, open, setOpen, loadEnclosure, submitData, isLoading}) {
+export default function EnclosureCreateForm({ defaultValues, edit, open, setOpen, /* loadEnclosure,*/ submitData, isLoading}) {
 
   if (!open) {
     return;
@@ -51,7 +51,7 @@ export default function EnclosureCreateForm({ defaultValues, edit, open, setOpen
               <Close onClick={closeForm} />
             </div>
 
-            <h3>Nuevo Recinto</h3>
+            <h3>{`${edit ? "Editar": "Nuevo"} Recinto`}</h3>
             <div style={{ margin: "10px 0" }}>
 
               <div className={classes['input']}>
