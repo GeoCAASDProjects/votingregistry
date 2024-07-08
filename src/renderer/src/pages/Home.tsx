@@ -421,7 +421,6 @@ export default function Home(): JSX.Element {
         memberForm={memberForm}
         deleteData={deleteSchoolData}
         openMember={openMember}
-
       />
     }
     {

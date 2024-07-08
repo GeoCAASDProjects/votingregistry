@@ -10,6 +10,7 @@ import { Link } from "react-router-dom"
 import { fetchMembers } from "@renderer/util/http/person-http"
 import DynamicLoader from "../dynamicLoader/DynamicLoader"
 import ProfilePicture from "../profilePicture/ProfilePicture"
+import IconButton from "../iconButton/IconButton"
 
 export default function SchoolInfo({ singleSchoolPending, memberForm, deleteData, currentSchool, clearSchool, openMember /*, selectLocation */ }) {
     const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false)
@@ -44,7 +45,7 @@ export default function SchoolInfo({ singleSchoolPending, memberForm, deleteData
 
                 <div>
                     <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
-                        <Close onClick={clearSchool} />
+                    <IconButton iconName="Close" onClick={clearSchool}/>
                     </div>
 
 
