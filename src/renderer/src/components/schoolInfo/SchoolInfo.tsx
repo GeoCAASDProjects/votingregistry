@@ -87,7 +87,7 @@ export default function SchoolInfo({ singleSchoolPending, memberForm, deleteData
                                         <tr key={member.id}>
                                             <td>{`${member.name} ${member.last_name}`}</td>
                                             <td>
-                                                <div className={classes["actions"]} onClick={() => openMember()}>
+                                                <div className={classes["actions"]} onClick={() => openMember(member.id)}>
 
                                                     <Visibility />
 

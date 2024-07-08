@@ -7,6 +7,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createSchool } from '@renderer/util/http/school-http';
 import { Dispatch, SetStateAction } from 'react';
 import { Close } from '@mui/icons-material';
+import IconButton from '../iconButton/IconButton';
 
 interface SchoolCreateFormI {
     //  submitData?: (data: object) => void,
@@ -91,7 +92,7 @@ export default function SchoolCreateForm({ defaultValues, currentEnclosure, /*lo
 
                     <div className={classes['school-form']}>
                         <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
-                            <Close onClick={closeForm} />
+                        <IconButton iconName="Close" onClick={closeForm}/>
                         </div>
 
                         <h3>{`${edit ? "Editar" : "Crear"} Colegio`}</h3>

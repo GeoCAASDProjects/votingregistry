@@ -16,6 +16,7 @@ import classes from './home.module.css'
 import Button from "@renderer/components/button/Button";
 import UserInfo from "@renderer/components/userInfo/UserInfo";
 import MemberInfo from "@renderer/components/memberInfo/MemberInfo";
+import { fetchPerson } from "@renderer/util/http/person-http";
 
 export default function Home(): JSX.Element {
   const queryClient = useQueryClient();
@@ -24,6 +25,7 @@ export default function Home(): JSX.Element {
   const [defaultFormValues, setDefaultFormValues] = useState({});
   const [currentEnclosure, setCurrentEnclosure] = useState<Enclosure | null>(null);
   const [currentSchool, setCurrentSchool] = useState(null);
+  const [currentMember, setCurrentMember] = useState(null);
 
   const { data: enclosureData, isPending: enclosurePending, isError: enclosureIsError, error: enclosureError } = useQuery({
     queryKey: ["enclosures"],
@@ -62,6 +64,25 @@ export default function Home(): JSX.Element {
     onSuccess: async (e) => {
       setCurrentSchool(e.data);
       setActionState("school");
+    },
+    onError: (e) => {
+
+      alert("Error")
+    }
+  });
+
+  
+  const {
+    mutate: singleMemberMutate,
+    data: singleMemberData,
+    isPending: singleMemberPending,
+    isError: singleMemberIsError,
+    error: singleMemberError
+  } = useMutation({
+    mutationFn: fetchPerson,
+    onSuccess: async (e) => {
+      setCurrentMember(e.data);
+      setActionState("member");
     },
     onError: (e) => {
 
@@ -273,9 +294,12 @@ export default function Home(): JSX.Element {
 
 
   }
-  function openMember(){
-    alert("Hello")
-    setActionState("member")
+  async function openMember(id){
+    if (!open) {
+      setOpen(true);
+    }
+
+    const response = await singleMemberMutate(id);
   }
   function openForm(data) {
     setDefaultFormValues({ longitude: data.lng.toFixed(2), latitude: data.lat.toFixed(2), address: data.address })
@@ -406,7 +430,7 @@ export default function Home(): JSX.Element {
 
     }
     {
-      actionState == "member" &&  <MemberInfo/>
+      actionState == "member" &&  <MemberInfo currentMember={currentMember}/>
       
     }
   </>

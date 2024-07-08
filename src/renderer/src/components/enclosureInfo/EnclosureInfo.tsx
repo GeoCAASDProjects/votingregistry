@@ -10,6 +10,7 @@ import { Link } from "react-router-dom"
 import DynamicLoader from "../dynamicLoader/DynamicLoader"
 import EnclosureCreateForm from "../enclosureForm/EnclosureForm"
 import SchoolCreateForm from "../schoolForm/SchoolForm"
+import IconButton from "../iconButton/IconButton"
 
 export default function EnclosureInfo({ singleEnclosurePending, currentEnclosure, clearEnclosure, openForm, openSchool, deleteData }) {
     /*if(!currentEnclosure){
@@ -68,7 +69,7 @@ export default function EnclosureInfo({ singleEnclosurePending, currentEnclosure
 
                 <div>
                     <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
-                        <Close onClick={clearEnclosure} />
+                        <IconButton iconName="Close" onClick={clearEnclosure}/>
                     </div>
 
                     <table className={classes['table']}>

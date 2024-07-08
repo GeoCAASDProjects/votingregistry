@@ -6,6 +6,7 @@ import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { createPerson } from '@renderer/util/http/person-http';
 import { Close } from '@mui/icons-material';
+import IconButton from '../iconButton/IconButton';
 
 interface MemberCreateFormI {
     submitData?: (data: object) => void;
@@ -90,7 +91,8 @@ export default function MemberCreateForm({currentSchool, closeMemberForm}) {
                 <Form>
                     <div className={classes['member-form']}>
                     <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
-                        <Close onClick={closeMemberForm} />
+                       
+                        <IconButton iconName="Close" onClick={closeMemberForm}/>
                     </div>
                         <h3>Nuevo Miembro</h3>
                         <div style={{ margin: "10px 0" }}>
