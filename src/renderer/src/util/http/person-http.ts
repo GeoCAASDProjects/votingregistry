@@ -74,3 +74,24 @@ export async function createPerson(data){
           throw new Error('Request failed');
         }
 }
+
+export async function fetchPerson(id){
+    let url = `${BASE_URL_API}/person/${id}`;
+
+    const config: AxiosRequestConfig ={
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+        },
+     
+    }
+    try{
+    const response = await axios.get(url, config);
+  
+    console.log(response);
+    return response.data;
+    } catch(error){
+        console.log(error);
+        
+      throw new Error('Request failed');
+    }
+}

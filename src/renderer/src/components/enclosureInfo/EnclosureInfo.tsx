@@ -7,13 +7,25 @@ import { deleteSchool, fetchSchools } from "@renderer/util/http/school-http"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import Modal from "../modal/Modal"
 import { Link } from "react-router-dom"
+import DynamicLoader from "../dynamicLoader/DynamicLoader"
+import EnclosureCreateForm from "../enclosureForm/EnclosureForm"
+import SchoolCreateForm from "../schoolForm/SchoolForm"
+import IconButton from "../iconButton/IconButton"
 
-export default function EnclosureInfo({ singleEnclosurePending, schoolForm, deleteModal, editForm, currentEnclosure, clearEnclosure, selectLocation, openSchool}) {
+export default function EnclosureInfo({ singleEnclosurePending, currentEnclosure, clearEnclosure, openForm, openSchool, deleteData }) {
+    /*if(!currentEnclosure){
+        return;
+    }*/
 
-    const [isOpen, setIsOpen] = useState(false);
+    const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false)
+
+    const defaultValues = { ...currentEnclosure }
+    const [openSchoolForm, setOpenSchoolForm] = useState(false)
+    const [edit, setEdit] = useState(false);
+
     const queryClient = useQueryClient();
 
-    const [currentSchool, setCurrentSchool] = useState(null);
+    // const [currentSchool, setCurrentSchool] = useState(null);
     const { data: schoolData, isPending: schoolDataPending, isError: schoolIsError, error: schoolError } = useQuery({
         queryKey: [`enclosure/${currentEnclosure?.id}/schools`],
         queryFn: ({ signal }) => fetchSchools({ signal, enclosureId: currentEnclosure?.id }),
@@ -24,22 +36,40 @@ export default function EnclosureInfo({ singleEnclosurePending, schoolForm, dele
     });
 
 
+    function openCreateSchool() {
+        setOpenSchoolForm(true)
+    }
+
+    if (openSchoolForm) {
+
+        return <SchoolCreateForm
+            defaultValues={{}}
+            currentEnclosure={currentEnclosure?.id}
+            edit={false}
+            open={openSchoolForm}
+            setOpen={setOpenSchoolForm}
+        />
+    }
+
+    function deleteModal() {
+        setDeleteModalOpen(true);
+    }
     return (
 
         <>
 
-
+            {<Modal title="Borrar recinto?" isOpen={deleteModalOpen} setIsOpen={setDeleteModalOpen} onSubmit={() => deleteData(currentEnclosure?.id)}>
+                <p>Deseas borrar el Recinto junto con todos sus colegios y usuarios?</p>
+            </Modal>}
             {singleEnclosurePending &&
-                <div style={{ display: "flex", width: "100%", alignContent: "center", alignItems: "center", justifyContent: "center" }}>
-                    <CircularProgress color="inherit" size={30} />
-                </div>
+                <DynamicLoader />
             }
 
-            {(!singleEnclosurePending && !!currentEnclosure) ?
+            {(!singleEnclosurePending && !!currentEnclosure) &&
 
                 <div>
                     <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
-                        <Close onClick={clearEnclosure} />
+                        <IconButton iconName="Close" onClick={clearEnclosure}/>
                     </div>
 
                     <table className={classes['table']}>
@@ -74,12 +104,12 @@ export default function EnclosureInfo({ singleEnclosurePending, schoolForm, dele
                     </table>
 
 
-                    <Button title="Editar" iconName="Edit" onClick={editForm} style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
+                    <Button title="Editar" iconName="Edit" onClick={openForm} style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
                     <Button title="Descargar" iconName="Download" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
                     <Button title="Borrar" onClick={deleteModal} iconName="Delete" style={{ background: "#22224F", width: "100%", color: "#FFFFFF", margin: "5px 0px" }} />
 
                     <h3>Colegios</h3>
-                    {(schoolDataPending && !schoolError) && <CircularProgress />}
+                    {(schoolDataPending && !schoolError) && <DynamicLoader />}
                     {!schoolDataPending && schoolData?.data.length > 0 ?
                         <div>
 
@@ -87,6 +117,7 @@ export default function EnclosureInfo({ singleEnclosurePending, schoolForm, dele
                                 <thead>
                                     <th>   <span style={{ fontWeight: "bold" }}>Nombre</span></th>
                                     <th>   <span style={{ fontWeight: "bold" }}>Personas</span></th>
+                                    <th>   <span style={{ fontWeight: "bold" }}>Acciones</span></th>
                                     {/*    <th>   <span style={{ fontWeight: "bold" }}>Acciones</span></th>*/}
                                 </thead>
                                 <tbody>
@@ -95,17 +126,17 @@ export default function EnclosureInfo({ singleEnclosurePending, schoolForm, dele
 
 
                                             <td>   {enclosure.name}</td>
-                                            <td style={{textAlign:"center"}}>
+                                            <td style={{ textAlign: "center" }}>
                                                 {enclosure.members.length ?? 0}</td>
                                             {<td>
-                                                <div className={classes["actions"]} onClick={()=>openSchool(enclosure.id)}>
-                                          
-                                              <Visibility/>
-                                         
-                                            
-                                              
+                                                <div className={classes["actions"]} onClick={() => openSchool(enclosure.id)}>
+
+                                                    <Visibility />
+
+
+
                                                 </div>
-                                              
+
                                             </td>}
                                         </tr>
                                     ))}
@@ -119,21 +150,10 @@ export default function EnclosureInfo({ singleEnclosurePending, schoolForm, dele
                         </div>
 
                     }
-                    <Button onClick={() => schoolForm(currentEnclosure)} title="Añadir colegio" iconName="Add" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
+                    <Button onClick={openCreateSchool} title="Añadir colegio" iconName="Add" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
                     <Button title="Subir Colegios" iconName="Upload" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
                 </div>
-                :
 
-                <>
-                    <Button title="Añadir recintos" iconName="Add" onClick={selectLocation} style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
-                    <Button title="Añadir sector" iconName="Polyline" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
-                    <Button title="Subir Archivos" iconName="Upload" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
-
-
-
-
-
-                </>
 
 
 
