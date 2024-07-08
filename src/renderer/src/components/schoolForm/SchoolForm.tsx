@@ -10,7 +10,7 @@ import { Close } from '@mui/icons-material';
 
 interface SchoolCreateFormI {
     //  submitData?: (data: object) => void,
-    defaultValues?: object,
+    defaultValues?: object|null,
     currentEnclosure?: number,
     //  isLoading?: boolean,
     edit?: boolean,

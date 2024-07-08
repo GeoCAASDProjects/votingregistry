@@ -116,6 +116,7 @@ export default function EnclosureInfo({ singleEnclosurePending, currentEnclosure
                                 <thead>
                                     <th>   <span style={{ fontWeight: "bold" }}>Nombre</span></th>
                                     <th>   <span style={{ fontWeight: "bold" }}>Personas</span></th>
+                                    <th>   <span style={{ fontWeight: "bold" }}>Acciones</span></th>
                                     {/*    <th>   <span style={{ fontWeight: "bold" }}>Acciones</span></th>*/}
                                 </thead>
                                 <tbody>

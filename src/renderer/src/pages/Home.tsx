@@ -8,12 +8,14 @@ import SchoolInfo from "@renderer/components/schoolInfo/SchoolInfo";
 import SearchBar from "@renderer/components/searchBar/SearchBar";
 import Sidebar from "@renderer/components/sidebar/Sidebar";
 import { createEnclosure, deleteEnclosure, fetchEnclosure, fetchEnclosures, updateEnclosure } from "@renderer/util/http/enclosure-http";
-import { createSchool, deleteSchool, fetchSchool } from "@renderer/util/http/school-http";
+import { createSchool, deleteSchool, fetchSchool, updateSchool } from "@renderer/util/http/school-http";
 import { Enclosure } from "@renderer/util/types";
 import { UseMutationResult, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import classes from './home.module.css'
 import Button from "@renderer/components/button/Button";
+import UserInfo from "@renderer/components/userInfo/UserInfo";
+import MemberInfo from "@renderer/components/memberInfo/MemberInfo";
 
 export default function Home(): JSX.Element {
   const queryClient = useQueryClient();
@@ -271,7 +273,10 @@ export default function Home(): JSX.Element {
 
 
   }
-
+  function openMember(){
+    alert("Hello")
+    setActionState("member")
+  }
   function openForm(data) {
     setDefaultFormValues({ longitude: data.lng.toFixed(2), latitude: data.lat.toFixed(2), address: data.address })
     if (!open) {
@@ -356,7 +361,7 @@ export default function Home(): JSX.Element {
     sendDataToSidebar(data.id);
   }
   const [openEnclosureForm, setOpenEnclosureForm] = useState(false);
-
+  const [openSchoolForm, setOpenSchoolForm] = useState(false);
   const [openMemberForm, setOpenMemberForm] = useState(false);
 
   function openEditForm() {
@@ -391,6 +396,7 @@ export default function Home(): JSX.Element {
         clearSchool={clearSchool}
         memberForm={memberForm}
         deleteData={deleteSchoolData}
+        openMember={openMember}
 
       />
     }
@@ -398,6 +404,10 @@ export default function Home(): JSX.Element {
       actionState == "memberForm" && <MemberCreateForm closeMemberForm={closeMemberForm} currentSchool={currentSchool?.id} />
 
 
+    }
+    {
+      actionState == "member" &&  <MemberInfo/>
+      
     }
   </>
   if (openEnclosureForm) {
@@ -412,6 +422,19 @@ export default function Home(): JSX.Element {
       isLoading={singleEnclosureCreatePending}
     />
   }
+  
+  if (openSchoolForm) {
+    renderView = <SchoolCreateForm
+
+      defaultValues={currentSchool}
+      open={openSchoolForm}
+      edit={!!currentSchool?.id}
+      setOpen={setOpenSchoolForm}
+      //   loadEnclosure={loadEnclosure}
+      submitData={!!currentSchool?.id ? updateEnclosureData : submitEnclosureData}
+      isLoading={singleSchoolUpdatePending}
+    />
+  }
   return (
     <>
       <div className={classes["home-container"]}>
@@ -423,7 +446,7 @@ export default function Home(): JSX.Element {
           toggleSidebar={toggleSidebar}
           createForm={createForm}
         >
-
+          
           {renderView}
 
         </Sidebar>

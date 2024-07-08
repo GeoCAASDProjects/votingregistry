@@ -1,6 +1,6 @@
 import { CircularProgress } from "@mui/material"
 import Button from "../button/Button"
-import { Close, Delete, Edit } from "@mui/icons-material"
+import { Close, Delete, Edit, Visibility } from "@mui/icons-material"
 import classes from './schoolInfo.module.css'
 import { useState } from "react"
 import { deleteSchool, fetchSchools } from "@renderer/util/http/school-http"
@@ -9,20 +9,21 @@ import Modal from "../modal/Modal"
 import { Link } from "react-router-dom"
 import { fetchMembers } from "@renderer/util/http/person-http"
 import DynamicLoader from "../dynamicLoader/DynamicLoader"
+import ProfilePicture from "../profilePicture/ProfilePicture"
 
-export default function SchoolInfo({ singleSchoolPending, memberForm, deleteData, currentSchool , clearSchool /*, selectLocation */}) {
+export default function SchoolInfo({ singleSchoolPending, memberForm, deleteData, currentSchool, clearSchool, openMember /*, selectLocation */ }) {
     const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false)
     const [isOpen, setIsOpen] = useState(false);
     const queryClient = useQueryClient();
 
     const [currentMember, setCurrentMember] = useState(null);
-   const { data: memberData, isPending: memberDataPending, isError: memberIsError, error: memberError } = useQuery({
-      queryKey: [`school/${currentSchool?.id}/members`],
-      queryFn: ({ signal }) => fetchMembers({ signal, schoolId: currentSchool?.id}),
-      staleTime: 5000,
-      gcTime: 30000,
-      enabled: !!currentSchool?.id
-      
+    const { data: memberData, isPending: memberDataPending, isError: memberIsError, error: memberError } = useQuery({
+        queryKey: [`school/${currentSchool?.id}/members`],
+        queryFn: ({ signal }) => fetchMembers({ signal, schoolId: currentSchool?.id }),
+        staleTime: 5000,
+        gcTime: 30000,
+        enabled: !!currentSchool?.id
+
     });
     function deleteModal() {
         setDeleteModalOpen(true);
@@ -31,12 +32,12 @@ export default function SchoolInfo({ singleSchoolPending, memberForm, deleteData
     return (
 
         <>
-         {<Modal title="Borrar recinto?" isOpen={deleteModalOpen} setIsOpen={setDeleteModalOpen} onSubmit={() => deleteData(currentSchool.id)}>
+            {<Modal title="Borrar recinto?" isOpen={deleteModalOpen} setIsOpen={setDeleteModalOpen} onSubmit={() => deleteData(currentSchool.id)}>
                 <p>Deseas borrar el Colegio? esta accion no es reversible</p>
             </Modal>}
 
             {singleSchoolPending &&
-               <DynamicLoader/>
+                <DynamicLoader />
             }
 
             {(!singleSchoolPending && !!currentSchool) &&
@@ -45,6 +46,9 @@ export default function SchoolInfo({ singleSchoolPending, memberForm, deleteData
                     <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
                         <Close onClick={clearSchool} />
                     </div>
+
+
+
 
                     <table className={classes['table']}>
                         <thead>
@@ -58,31 +62,40 @@ export default function SchoolInfo({ singleSchoolPending, memberForm, deleteData
                                 <td>{currentSchool.name}</td>
 
                             </tr>
-              
+
                         </tbody>
                     </table>
 
 
-                    <Button title="Editar" iconName="Edit" onClick={()=>alert("Updating")} style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
+                    <Button title="Editar" iconName="Edit" onClick={() => alert("Updating")} style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
                     <Button title="Descargar" iconName="Download" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
                     <Button title="Borrar" onClick={deleteModal} iconName="Delete" style={{ background: "#22224F", width: "100%", color: "#FFFFFF", margin: "5px 0px" }} />
 
                     <h3>Miembros</h3>
-                    {(memberDataPending && !memberError) && <DynamicLoader/>}
+                    {(memberDataPending && !memberError) && <DynamicLoader />}
                     {!memberDataPending && memberData?.data.length > 0 ?
                         <div>
 
                             <table className={classes['table']}>
                                 <thead>
                                     <th>   <span style={{ fontWeight: "bold" }}>Nombre</span></th>
-                                   
-                                
+                                    <th>   <span style={{ fontWeight: "bold" }}>Acciones</span></th>
+
                                 </thead>
                                 <tbody>
                                     {memberData?.data.length > 0 && memberData?.data.map((member) => (
                                         <tr key={member.id}>
                                             <td>{`${member.name} ${member.last_name}`}</td>
-                                        
+                                            <td>
+                                                <div className={classes["actions"]} onClick={() => openMember()}>
+
+                                                    <Visibility />
+
+
+
+                                                </div>
+
+                                            </td>
                                         </tr>
                                     ))}
 
@@ -98,7 +111,7 @@ export default function SchoolInfo({ singleSchoolPending, memberForm, deleteData
                     <Button onClick={memberForm} title="Añadir miembro" iconName="Add" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
                     <Button title="Subir Colegios" iconName="Upload" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
                 </div>
-              
+
 
 
             }
