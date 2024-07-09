@@ -7,13 +7,16 @@ import TextIcon from "../textIcon/TextIcon"
 import IconButton from "../iconButton/IconButton"
 import DynamicLoader from "../dynamicLoader/DynamicLoader"
 import { getNamedDate } from "@renderer/util/time/timeFunction"
-export default function MemberInfo({currentMember}) {
- 
+import { formatDocument } from "@renderer/util/miscFunctions"
+export default function MemberInfo({currentMember, openSchool, clearMember}) {
+
+    
+    
     return (
         <div style={{ width: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignContent: "center", alignItems: "center", gap: "20px"}}>
 
             <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
-            <IconButton iconName="Close" onClick={() => alert("Hello")}/>
+            <IconButton iconName="Close" onClick={() => clearMember(currentMember?.school?.id)}/>
             </div>
           
             <div >
@@ -25,7 +28,7 @@ export default function MemberInfo({currentMember}) {
                     <h2>{`${currentMember.name} ${currentMember.last_name}`}</h2>
 
                     <TextIcon title={currentMember?.phone ?? "--"} icon="Phone" />
-                    <TextIcon title={`***-***-0349`} icon="BadgeOutlined" />
+                    <TextIcon title={formatDocument(currentMember?.document) ?? "--"} icon="BadgeOutlined" />
                     <TextIcon title={`Unido el ${getNamedDate(currentMember?.created_at)}`} icon="CalendarMonth" />
 
 
@@ -42,23 +45,25 @@ export default function MemberInfo({currentMember}) {
 
                 </thead>
                 <tbody>
+                    {/*
                     <tr>
                         <td>   <span style={{ fontWeight: "bold" }}>Sector</span></td>
                         <td>Robelto</td>
 
                     </tr>
                     <tr>
-
                         <td>   <span style={{ fontWeight: "bold" }}>Recinto</span></td>
-                        <td>Villaman</td>
-
-                    </tr>
-
-                    <tr>
-                        <td>   <span style={{ fontWeight: "bold" }}>Colegio</span></td>
                         <td>Ramirez</td>
 
+                    </tr>*/}
+                    <tr>
+
+                        <td ><span style={{ fontWeight: "bold" }}>Colegio</span></td>
+                        <td onClick={()=>openSchool(currentMember?.school?.id)}>{currentMember?.school?.name}</td>
+
                     </tr>
+
+               
 
                 </tbody>
             </table>

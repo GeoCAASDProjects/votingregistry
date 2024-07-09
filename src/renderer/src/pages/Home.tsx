@@ -14,7 +14,6 @@ import { UseMutationResult, useMutation, useQuery, useQueryClient } from "@tanst
 import { useEffect, useState } from "react";
 import classes from './home.module.css'
 import Button from "@renderer/components/button/Button";
-import UserInfo from "@renderer/components/userInfo/UserInfo";
 import MemberInfo from "@renderer/components/memberInfo/MemberInfo";
 import { fetchPerson } from "@renderer/util/http/person-http";
 
@@ -267,6 +266,11 @@ export default function Home(): JSX.Element {
     setCurrentSchool(null);
     setActionState("enclosure");
   }
+  
+  function clearMember() {
+    setCurrentMember(null);
+    setActionState("school");
+  }
 
   function selectLocation() {
     setOpen(false);
@@ -392,7 +396,7 @@ export default function Home(): JSX.Element {
     setDefaultFormValues({ ...currentEnclosure })
     setOpenEnclosureForm(true);
   }
-
+ 
   let renderView;
   renderView = <>
     {actionState == "" && <>
@@ -429,7 +433,7 @@ export default function Home(): JSX.Element {
 
     }
     {
-      actionState == "member" &&  <MemberInfo currentMember={currentMember}/>
+      actionState == "member" &&  <MemberInfo currentMember={currentMember} openSchool={openSchool} clearMember={clearMember}/>
       
     }
   </>
