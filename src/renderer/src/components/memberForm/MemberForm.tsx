@@ -47,6 +47,7 @@ export default function MemberCreateForm({currentSchool, closeMemberForm}) {
         document: Yup.string().required('Requerido'),
         address: Yup.string().required('Requerido'),
         sector: Yup.string().required('Requerido'),
+        phone: Yup.string().required('Requerido'),
 
         /* school_id: Yup.string().required("Requerido")*/
     });
@@ -64,7 +65,7 @@ export default function MemberCreateForm({currentSchool, closeMemberForm}) {
         address: "",
         sector: "",
         school_id: currentSchool,
-        
+        phone: ""
         /*    school_id: ""*/
     }
     
@@ -113,6 +114,12 @@ export default function MemberCreateForm({currentSchool, closeMemberForm}) {
                                 <label>Fecha de nacimiento</label>
                                 <Field type="date" name="birth_date" />
                                 <span style={{ color: "red" }}> <ErrorMessage name="birth_date" component="div" /></span>
+                            </div>
+
+                            <div className={classes['input']}>
+                                <label>Número de teléfono</label>
+                                <Field name="phone" placeholder="Número de teléfono" />
+                                <span style={{ color: "red" }}> <ErrorMessage name="phone" component="div" /></span>
                             </div>
 
                             <div className={classes['input']}>
