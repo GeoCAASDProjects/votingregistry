@@ -1,17 +1,30 @@
+<<<<<<< HEAD
 import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvent, useMapEvents, FeatureGroup } from 'react-leaflet';
 import classes from "./home.module.css";
 import L, { latLng } from 'leaflet';
+=======
+import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvent, useMapEvents } from 'react-leaflet';
+import classes from "./home.module.css";
+import L from 'leaflet';
+>>>>>>> dc79b82a4f4f3a4f19b06e9c828c5c9922b6b205
 import "leaflet/dist/leaflet.css";
 import { useEffect, useRef, useState } from 'react';
 import SearchBar from '../searchBar/SearchBar';
 import { Check, Close } from '@mui/icons-material';
 import Button from '../button/Button';
+<<<<<<< HEAD
 import {EditControl} from "react-leaflet-draw";
 import "leaflet-draw/dist/leaflet.draw.css"
 import { getAddress, searchAddress } from '@renderer/util/http/map_token';
 
 type Position = [number, number];
 export default function SimpleMap({ enclosures, actionState, onMarkerClick, currentEnclosure, openForm, openFormSector }): JSX.Element {
+=======
+import { getAddress, searchAddress } from '@renderer/util/http/map_token';
+
+type Position = [number, number];
+export default function SimpleMap({ enclosures, actionState, onMarkerClick, currentEnclosure, openForm }): JSX.Element {
+>>>>>>> dc79b82a4f4f3a4f19b06e9c828c5c9922b6b205
 
   const mapRef = useRef(null)
 
@@ -154,6 +167,7 @@ export default function SimpleMap({ enclosures, actionState, onMarkerClick, curr
     setAddress(placeName);
  //   setSearchSelected(true);
   }
+<<<<<<< HEAD
 
   const _created = (e)=>console.log(e);
 
@@ -195,24 +209,35 @@ export default function SimpleMap({ enclosures, actionState, onMarkerClick, curr
     openFormSector(allCoordinates);
    }
   
+=======
+>>>>>>> dc79b82a4f4f3a4f19b06e9c828c5c9922b6b205
   return (
     <div style={{ width: '100%', height: '100%' }}>
       {<div style={{ position: "absolute", display: actionState == "location" ? "flex" : "none", justifyContent: "center", alignItems: "center", alignContent: "center", width: "100%", zIndex: 999, top: actionState == "location" ? 0 : -200, transition: ".4s ease-in-out" }}>
         <SearchBar searchDataFunction={searchDataFunction} selectSearch={selectSearch} style={{ margin: 0, width: "50%" }} />
       </div>
       }
+<<<<<<< HEAD
       {<div style={{ position: "absolute", display: "flex", justifyContent: "center", alignItems: "center", alignContent: "center", width: "100%", zIndex: 999, bottom:  (actionState == "location" || actionState == "drawPolygon")  ? 30 : -30, opacity: (actionState == "location" || actionState == "drawPolygon") ? 1 : 0, transition: ".4s ease-in-out" }}>
         <Button onClick={actionState=="location" ? openEnclosureForm : actionState=="drawPolygon" ? getAllPolygonCoordinates : ()=>{return}} style={{ padding: 5, borderRadius: "50%", backgroundColor: "purple", color: "white" }}><Check /></Button>
 
       </div>
       }
  
+=======
+      {<div style={{ position: "absolute", display: "flex", justifyContent: "center", alignItems: "center", alignContent: "center", width: "100%", zIndex: 999, bottom: actionState == "location" ? 30 : -30, opacity: actionState == "location" ? 1 : 0, transition: ".4s ease-in-out" }}>
+        <Button onClick={() => openForm({ ...marker, address: address })} style={{ padding: 5, borderRadius: "50%", backgroundColor: "purple", color: "white" }}><Check /></Button>
+
+      </div>
+      }
+>>>>>>> dc79b82a4f4f3a4f19b06e9c828c5c9922b6b205
 
       <MapContainer center={position} zoom={13} ref={mapRef} style={{ width: '100%', height: '100%' }}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
+<<<<<<< HEAD
       {actionState=="drawPolygon" && <FeatureGroup  ref= {featureGroupRef}>
           <EditControl position="topright" 
         
@@ -225,6 +250,8 @@ export default function SimpleMap({ enclosures, actionState, onMarkerClick, curr
           polygon: true
           }}/>
         </FeatureGroup>}
+=======
+>>>>>>> dc79b82a4f4f3a4f19b06e9c828c5c9922b6b205
         <SetZoomControlPosition position="bottomright" />
         {position && <UpdateMapCenter position={position} />}
         <MapClickHandler />

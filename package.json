@@ -34,7 +34,10 @@
     "leaflet": "^1.9.4",
     "mapbox-gl": "^3.4.0",
     "react-leaflet": "^4.2.1",
+<<<<<<< HEAD
     "react-leaflet-draw": "^0.20.4",
+=======
+>>>>>>> dc79b82a4f4f3a4f19b06e9c828c5c9922b6b205
     "react-router-dom": "^6.23.1",
     "yup": "^1.4.0"
   },
