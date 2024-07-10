@@ -1,0 +1,23 @@
+.enclosure-form{
+    display: flex;
+    flex-direction: column;
+}
+
+.input{
+    display: flex;
+    flex-direction: column;
+ 
+}
+.input input{
+    padding: 10px ;
+    font-size: 16px;
+    border-radius: 8px;
+    background-color: #503a65;
+    color: white;
+    border: none;
+    font-size: 14px;
+    margin: 5px 0px;
+    /*border: 1px solid white;*/
+   
+  }
+   

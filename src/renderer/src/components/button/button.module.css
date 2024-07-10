@@ -1,0 +1,35 @@
+.button-container {
+    padding: 10px;
+    font-size: inherit;
+    border-radius: 8px;
+    background-color:white;
+    border: none;
+    color: #3c2a4d;
+    font-weight: bold;
+    align-items: center;
+    align-content: center;
+    font-weight: bold;
+    
+ 
+  }
+  .button-container div{
+    font-weight: inherit;
+    display: flex;
+    gap: 4px;
+    align-content:center;
+    align-items:center;
+   
+  
+  }
+
+
+  .button-container:hover{
+    cursor: pointer;
+    opacity: 0.9
+  }
+
+  .center{
+    justify-content: center;
+  }
+
+ 

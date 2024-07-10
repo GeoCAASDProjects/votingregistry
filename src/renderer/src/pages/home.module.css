@@ -1,0 +1,9 @@
+#map{
+    width: 120px;
+    height: 120px
+}
+
+.home-container{
+    flex: 1;
+    height: 100% 
+}

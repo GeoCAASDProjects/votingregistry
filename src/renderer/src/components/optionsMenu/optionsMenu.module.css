@@ -1,0 +1,43 @@
+.comment-menu {
+
+  position: absolute;
+  /* Absolute positioning */
+
+  background: #0F0F40;
+  border-radius: 8px;
+  display: block;
+  margin-top: 30px;
+  z-index: 9999;
+  overflow: hidden;
+  /* min-width: 10rem;*/
+  width: auto
+}
+
+
+.menu-labels {
+
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+
+}
+
+.menu-labels div {
+  padding: 5px 15px;
+  /* Padding for spacing */
+  text-decoration: none;
+
+}
+
+.menu-labels div:hover {
+  cursor: pointer;
+  background: #414168;
+}
+
+.menu-labels div {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  align-content: center;
+}
