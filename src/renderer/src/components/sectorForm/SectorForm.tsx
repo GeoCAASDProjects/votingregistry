@@ -11,7 +11,7 @@ import IconButton from '../iconButton/IconButton';
 
 
 interface SectorCreateFormI {
-    //  submitData?: (data: object) => void,
+     submitData: (data: object) => void,
     defaultValues?: object | null,
     currentEnclosure?: number,
     //  isLoading?: boolean,
@@ -21,16 +21,14 @@ interface SectorCreateFormI {
     open?: boolean,
     setOpen: Dispatch<SetStateAction<boolean>>
 }
-export default function SectorCreateForm({ defaultValues, edit, closeForm}: SectorCreateFormI): JSX.Element {
+export default function SectorCreateForm({ defaultValues, edit, closeForm, submitData}: SectorCreateFormI): JSX.Element {
 
  
     const queryClient = useQueryClient();
 
 
 
-    async function submitData(data) {
-        alert("Submit data")
-    }
+ 
     const SectorSchema = Yup.object().shape({
         name: Yup.string().required('Requerido'),
         area: Yup.string().required('Requerido'),

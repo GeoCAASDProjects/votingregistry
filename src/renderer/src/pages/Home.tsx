@@ -17,7 +17,7 @@ import Button from "@renderer/components/button/Button";
 import MemberInfo from "@renderer/components/memberInfo/MemberInfo";
 import { fetchPerson } from "@renderer/util/http/person-http";
 import SectorCreateForm from "@renderer/components/sectorForm/SectorForm";
-import { fetchSectors } from "@renderer/util/http/sector-http";
+import { createSector, fetchSectors } from "@renderer/util/http/sector-http";
 
 export default function Home(): JSX.Element {
   const queryClient = useQueryClient();
@@ -292,6 +292,28 @@ export default function Home(): JSX.Element {
     }
   });
 
+  const {
+    mutate: singleSectorCreateMutate,
+    data: singleSectorCreateData,
+    isPending: singleSectorCreatePending,
+    isError: singleSectorCreateIsError,
+    error: singleSectorCreateError
+  } = useMutation({
+    mutationFn: createSector,
+    onSuccess: async (e) => {
+
+ 
+      queryClient.refetchQueries({ queryKey: [`sectors`] });
+      closeActionForm();
+      // loadEnclosure(e?.data?.enclosure_id)
+
+    },
+    onError: (e) => {
+
+      alert("Error")
+    }
+  });
+
   async function submitSchoolData(data) {
 
     try {
@@ -342,6 +364,16 @@ export default function Home(): JSX.Element {
     }
   }
 
+  async function submitSectorData(data) {
+    console.log(data)
+    try {
+      const response = await singleSectorCreateMutate(data);
+
+    } catch (e) {
+      console.error(e)
+      alert(e);
+    }
+  }
   function toggleSidebar() {
 
     setOpen(currentVal => !currentVal);
@@ -421,7 +453,7 @@ export default function Home(): JSX.Element {
   function openFormSector(data) {
     setOpen(true);
 
-   setDefaultSectorValues((prevValue)=>{return {...prevValue, area:JSON.stringify(data)}});
+   setDefaultSectorValues((prevValue)=>{return {...prevValue, area:JSON.stringify(data[0])}});
     setActionState("sectorCreateForm")
   }
   function closeMemberForm() {
@@ -571,7 +603,7 @@ export default function Home(): JSX.Element {
         edit={!!currentSchool?.id}
         closeForm={closeActionForm}
         //   loadEnclosure={loadEnclosure}
-        submitData={!!currentSchool?.id ? updateEnclosureData : submitEnclosureData}
+        submitData={submitSectorData}
         isLoading={singleSchoolUpdatePending}
       />
     }

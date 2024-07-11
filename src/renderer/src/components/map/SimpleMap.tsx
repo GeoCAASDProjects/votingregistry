@@ -247,7 +247,7 @@ export default function SimpleMap({ enclosures, sectors, actionState, onMarkerCl
           )
         }
         {
-          !!sectors && sectors.data.map((sector)=>{return <Polygon positions={sector.nodes.map((node)=>[node.latitude, node.longitude])}/>})
+          !!sectors && sectors.data.map((sector)=>{return actionState=="" && <Polygon positions={sector.nodes.map((node)=>[node.latitude, node.longitude])}/>})
 
           
         }
