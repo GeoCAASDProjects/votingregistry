@@ -27,30 +27,49 @@ export default function Home(): JSX.Element {
   const [currentSchool, setCurrentSchool] = useState(null);
   const [currentMember, setCurrentMember] = useState(null);
 
-  const [historyStack, setHistoryStack] = useState([]);
+  const [historyStack, setHistoryStack] = useState<string[]>([]);
 
-  function openAction(display){
-    if(!open){
+  function openAction(display) {
+ 
+    if (actionState == "drawPolygon" || actionState == "location") {
+      return;
+    }
+ 
+    if (!open) {
       setOpen(true);
     }
-    setHistoryStack((prevHistoryStack)=>[...prevHistoryStack, display]); 
+   if(actionState != null){
+    setHistoryStack((prevHistoryStack) => [...prevHistoryStack, actionState]);
+   }
     setActionState(display);
   }
-
-  function closeActionForm(){
-    if(!open){
+ 
+  function closeActionForm() {
+ 
+    if (!open) {
       setOpen(true);
     }
-    if(historyStack.length > 0){
-      const previousState = historyStack[historyStack.length-1];
-      setHistoryStack((prevHistoryStack)=>prevHistoryStack.slice(0, -1)); 
-      setActionState(previousState);
-    } else{
-      setActionState("")
+    if (historyStack.length <= 1) {
+      resetHistory();
+      return;
     }
+    
+    const previousState = historyStack[historyStack.length - 1];
+    
+    setHistoryStack((prevHistoryStack) => prevHistoryStack.slice(0, -1));
+   
+    setActionState(previousState);
+
 
   }
-
+  useEffect(() => {
+    console.log(historyStack);
+    console.log(actionState)
+  }, [historyStack])
+  function resetHistory() {
+    setHistoryStack([]);
+    setActionState("")
+  }
 
   const { data: enclosureData, isPending: enclosurePending, isError: enclosureIsError, error: enclosureError } = useQuery({
     queryKey: ["enclosures"],
@@ -69,8 +88,9 @@ export default function Home(): JSX.Element {
   } = useMutation({
     mutationFn: fetchEnclosure,
     onSuccess: async (e) => {
-      setActionState("enclosure")
-      setCurrentEnclosure(e.data)
+      
+      setCurrentEnclosure(e.data);
+      openAction("enclosure");
     },
     onError: (e) => {
 
@@ -88,7 +108,7 @@ export default function Home(): JSX.Element {
     mutationFn: fetchSchool,
     onSuccess: async (e) => {
       setCurrentSchool(e.data);
-      setActionState("school");
+      openAction("school");
     },
     onError: (e) => {
 
@@ -107,7 +127,7 @@ export default function Home(): JSX.Element {
     mutationFn: fetchPerson,
     onSuccess: async (e) => {
       setCurrentMember(e.data);
-      setActionState("member");
+      openAction("member");
     },
     onError: (e) => {
 
@@ -130,9 +150,9 @@ export default function Home(): JSX.Element {
 
       queryClient.refetchQueries({ queryKey: ["enclosures"] });
 
-      setActionState("")
+      //  openAction("")
       setCurrentEnclosure(null)
-
+      closeActionForm();
     },
     onError: (e) => {
       console.log("The error inside the mutation")
@@ -155,7 +175,7 @@ export default function Home(): JSX.Element {
 
       queryClient.refetchQueries({ queryKey: ["enclosures"] });
 
-      setActionState("enclosure")
+      openAction("enclosure")
 
 
     },
@@ -179,7 +199,11 @@ export default function Home(): JSX.Element {
       queryClient.refetchQueries({ queryKey: ["enclosures"] });
 
       //  setActionState("enclosures");
-      setOpenEnclosureForm(false);
+
+      if (actionState == "enclosureCreateForm") {
+        closeActionForm();
+
+      }
       loadEnclosure(e.data.id);
 
     },
@@ -200,8 +224,9 @@ export default function Home(): JSX.Element {
     onSuccess: async (e) => {
 
       queryClient.refetchQueries({ queryKey: ["enclosures"] });
-      //   setActionState("enclosures");
-      setOpenEnclosureForm(false);
+      if (actionState == "enclosureUpdateForm") {
+        closeActionForm();
+      }
       loadEnclosure(e.data.id);
 
     },
@@ -233,6 +258,41 @@ export default function Home(): JSX.Element {
     }
   });
 
+  const {
+    mutate: singleSchoolCreateMutate,
+    data: singleSchoolCreateData,
+    isPending: singleSchoolCreatePending,
+    isError: singleSchoolCreateIsError,
+    error: singleSchoolCreateError
+  } = useMutation({
+    mutationFn: createSchool,
+    onSuccess: async (e) => {
+
+      queryClient.refetchQueries({ queryKey: ["enclosures"] });
+      console.log(e.data)
+      queryClient.refetchQueries({ queryKey: [`enclosure/${e?.data?.enclosure_id}/schools`] });
+      closeActionForm();
+      // loadEnclosure(e?.data?.enclosure_id)
+
+    },
+    onError: (e) => {
+
+      alert("Error")
+    }
+  });
+
+  async function submitSchoolData(data) {
+
+    try {
+      const response = singleSchoolCreateMutate(data);
+      console.log("Answer")
+      console.log(response);
+
+    } catch (e) {
+      console.error(e)
+      alert(e);
+    }
+  }
 
   async function submitEnclosureData(data) {
     console.log(data)
@@ -275,27 +335,30 @@ export default function Home(): JSX.Element {
 
     setOpen(currentVal => !currentVal);
   }
-
+ 
 
   function clearEnclosure() {
-    setActionState("");
+
+     
     setCurrentEnclosure(null);
+    closeActionForm();
   }
 
   async function loadEnclosure(id: number) {
     clearEnclosure();
     const response = await singleEnclosureMutate(id);
-    setActionState("enclosure");
+    
   }
 
   function clearSchool() {
+    closeActionForm();
     setCurrentSchool(null);
-    setActionState("enclosure");
+  
   }
 
   function clearMember() {
     setCurrentMember(null);
-    setActionState("school");
+    closeActionForm();
   }
 
   function selectLocation() {
@@ -340,30 +403,23 @@ export default function Home(): JSX.Element {
     if (!open) {
       setOpen(true);
     }
-    if (!openEnclosureForm) {
-      setOpenEnclosureForm(true)
-      setActionState("")
-    }
+    setActionState("enclosureCreateForm")
 
   }
   function openFormSector(data) {
 
     setOpen(true);
-    setOpenSectorForm(true);
-    setActionState("");
+
+    setActionState("sectorCreateForm")
   }
   function closeMemberForm() {
-    if (!currentSchool?.id) {
-      setActionState("school");
-    } else {
-      setActionState("school");
-    }
+    closeActionForm()
   }
 
   function createForm() {
 
     setOpen(true);
-    setActionState("");
+    resetHistory();
   }
 
   function memberForm() {
@@ -371,7 +427,7 @@ export default function Home(): JSX.Element {
     setOpen(true);
 
     if (actionState != "memberForm") {
-      setActionState("memberForm");
+      openAction("memberForm");
 
     }
   }
@@ -424,14 +480,15 @@ export default function Home(): JSX.Element {
 
     sendDataToSidebar(data.id);
   }
-  const [openEnclosureForm, setOpenEnclosureForm] = useState(false);
-  const [openSchoolForm, setOpenSchoolForm] = useState(false);
-  const [openSectorForm, setOpenSectorForm] = useState(false);
-  const [openMemberForm, setOpenMemberForm] = useState(false);
+  
 
   function openEditForm() {
     setDefaultFormValues({ ...currentEnclosure })
-    setOpenEnclosureForm(true);
+  
+    openAction("enclosureEditForm")
+  }
+  function openCreateSchoolForm() {
+    openAction("schoolCreateForm")
   }
 
   let renderView;
@@ -451,6 +508,8 @@ export default function Home(): JSX.Element {
       openSchool={openSchool}
       openForm={openEditForm}
       deleteData={deleteData}
+      openSchoolForm={openCreateSchoolForm}
+
 
     />}
     {
@@ -465,51 +524,53 @@ export default function Home(): JSX.Element {
       />
     }
     {
-      actionState == "memberForm" && <MemberCreateForm closeMemberForm={closeMemberForm} currentSchool={currentSchool?.id} />
-
-
-    }
-    {
       actionState == "member" && <MemberInfo currentMember={currentMember} openSchool={openSchool} clearMember={clearMember} />
 
     }
+    {
+      (actionState == "enclosureCreateForm" || actionState == "enclosureEditForm") && <EnclosureCreateForm
+
+        defaultValues={defaultFormValues}
+
+        edit={!!currentEnclosure?.id}
+        closeForm={closeActionForm}
+        //   loadEnclosure={loadEnclosure}
+        submitData={!!currentEnclosure?.id ? updateEnclosureData : submitEnclosureData}
+        isLoading={singleEnclosureCreatePending}
+      />
+    }
+    {
+      (actionState == "schoolCreateForm" || actionState == "schoolEditForm") && <SchoolCreateForm
+
+        defaultValues={currentSchool}
+
+        edit={!!currentSchool?.id}
+        closeForm={closeActionForm}
+        //   loadEnclosure={loadEnclosure}
+        submitData={!!currentSchool?.id ? updateSchoolData : submitSchoolData}
+        isLoading={!!currentSchool?.id ? singleSchoolCreatePending : singleSchoolUpdatePending}
+      />
+    }
+    {
+      (actionState == "sectorCreateForm" || actionState == "sectorEditForm") && <SectorCreateForm
+
+        defaultValues={currentSchool}
+
+        edit={!!currentSchool?.id}
+        closeForm={closeActionForm}
+        //   loadEnclosure={loadEnclosure}
+        submitData={!!currentSchool?.id ? updateEnclosureData : submitEnclosureData}
+        isLoading={singleSchoolUpdatePending}
+      />
+    }
+    {
+      actionState == "memberForm" && <MemberCreateForm closeMemberForm={closeActionForm} currentSchool={currentSchool?.id} />
+
+
+    }
   </>
-  if (openEnclosureForm) {
-    renderView = <EnclosureCreateForm
 
-      defaultValues={defaultFormValues}
-      open={openEnclosureForm}
-      edit={!!currentEnclosure?.id}
-      setOpen={setOpenEnclosureForm}
-      //   loadEnclosure={loadEnclosure}
-      submitData={!!currentEnclosure?.id ? updateEnclosureData : submitEnclosureData}
-      isLoading={singleEnclosureCreatePending}
-    />
-  }
 
-  if (openSchoolForm) {
-    renderView = <SchoolCreateForm
-
-      defaultValues={currentSchool}
-      open={openSchoolForm}
-      edit={!!currentSchool?.id}
-      setOpen={setOpenSchoolForm}
-      //   loadEnclosure={loadEnclosure}
-      submitData={!!currentSchool?.id ? updateEnclosureData : submitEnclosureData}
-      isLoading={singleSchoolUpdatePending}
-    />
-  }
-
-  if (openSectorForm) {
-    renderView = <SectorCreateForm
-      open={openSectorForm}
-
-      setOpen={setOpenSectorForm}
-      defaultValues={{}}
-      edit={false}
-
-    />
-  }
   return (
     <>
       <div className={classes["home-container"]}>

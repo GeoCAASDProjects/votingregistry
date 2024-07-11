@@ -14,19 +14,18 @@ interface SchoolCreateFormI {
     defaultValues?: object|null,
     currentEnclosure?: number,
     //  isLoading?: boolean,
+    closeForm: ()=>void,
     edit?: boolean,
     //   loadEnclosure: (id:number)=>void
-    open?: boolean,
+    submitData:()=>void,
     setOpen: Dispatch<SetStateAction<boolean>>
 }
-export default function SchoolCreateForm({ defaultValues, currentEnclosure, /*loadEnclosure, clearEnclosure,*/ open, setOpen, edit }: SchoolCreateFormI): JSX.Element {
+export default function SchoolCreateForm({ defaultValues, currentEnclosure, closeForm, submitData, isLoading, edit }: SchoolCreateFormI): JSX.Element {
 
-    if (!open) {
-        return <></>;
-    }
+ 
     const queryClient = useQueryClient();
 
-
+/*
     const {
         mutate: singleSchoolCreateMutate,
         data: singleSchoolCreateData,
@@ -62,6 +61,7 @@ export default function SchoolCreateForm({ defaultValues, currentEnclosure, /*lo
             alert(e);
         }
     }
+        */
     const SchoolSchema = Yup.object().shape({
         name: Yup.string().required('Requerido'),
 
@@ -77,9 +77,7 @@ export default function SchoolCreateForm({ defaultValues, currentEnclosure, /*lo
     function resetValues() {
 
     }
-    function closeForm(){
-        setOpen(false);
-    }
+ 
     return (
 
         <Formik
@@ -107,7 +105,7 @@ export default function SchoolCreateForm({ defaultValues, currentEnclosure, /*lo
                         </div>
 
 
-                        <Button type="submit" title="Enviar" iconName="Send" isLoading={singleSchoolCreatePending} center />
+                        <Button type="submit" title="Enviar" iconName="Send" isLoading={isLoading} center />
 
 
                     </div>

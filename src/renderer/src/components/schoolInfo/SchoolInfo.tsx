@@ -13,6 +13,7 @@ import ProfilePicture from "../profilePicture/ProfilePicture"
 import IconButton from "../iconButton/IconButton"
 
 export default function SchoolInfo({ singleSchoolPending, memberForm, deleteData, currentSchool, clearSchool, openMember /*, selectLocation */ }) {
+ 
     const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false)
     const [isOpen, setIsOpen] = useState(false);
     const queryClient = useQueryClient();
@@ -37,7 +38,7 @@ export default function SchoolInfo({ singleSchoolPending, memberForm, deleteData
                 <p>Deseas borrar el Colegio? esta accion no es reversible</p>
             </Modal>}
 
-            {singleSchoolPending &&
+            {singleSchoolPending  &&
                 <DynamicLoader />
             }
 

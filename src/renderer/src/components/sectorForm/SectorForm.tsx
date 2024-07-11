@@ -17,14 +17,13 @@ interface SectorCreateFormI {
     //  isLoading?: boolean,
     edit?: boolean,
     //   loadEnclosure: (id:number)=>void
+    closeForm:()=>void,
     open?: boolean,
     setOpen: Dispatch<SetStateAction<boolean>>
 }
-export default function SectorCreateForm({ defaultValues, edit}: SectorCreateFormI): JSX.Element {
+export default function SectorCreateForm({ defaultValues, edit, closeForm}: SectorCreateFormI): JSX.Element {
 
-    if (!open) {
-        return <></>;
-    }
+ 
     const queryClient = useQueryClient();
 
 

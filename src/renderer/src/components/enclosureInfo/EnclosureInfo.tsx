@@ -12,16 +12,16 @@ import EnclosureCreateForm from "../enclosureForm/EnclosureForm"
 import SchoolCreateForm from "../schoolForm/SchoolForm"
 import IconButton from "../iconButton/IconButton"
 
-export default function EnclosureInfo({ singleEnclosurePending, currentEnclosure, clearEnclosure, openForm, openSchool, deleteData }) {
-    /*if(!currentEnclosure){
-        return;
-    }*/
+export default function EnclosureInfo({ singleEnclosurePending, currentEnclosure, clearEnclosure, openForm, openSchool, openSchoolForm, deleteData }) {
+    if(!singleEnclosurePending && !currentEnclosure){
+        return <p>There's no data here</p>
+    }
 
     const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false)
 
     const defaultValues = { ...currentEnclosure }
-    const [openSchoolForm, setOpenSchoolForm] = useState(false)
-    const [edit, setEdit] = useState(false);
+   // const [openSchoolForm, setOpenSchoolForm] = useState(false)
+ 
 
     const queryClient = useQueryClient();
 
@@ -35,7 +35,7 @@ export default function EnclosureInfo({ singleEnclosurePending, currentEnclosure
 
     });
 
-
+/*
     function openCreateSchool() {
         setOpenSchoolForm(true)
     }
@@ -49,7 +49,7 @@ export default function EnclosureInfo({ singleEnclosurePending, currentEnclosure
             open={openSchoolForm}
             setOpen={setOpenSchoolForm}
         />
-    }
+    }*/
 
     function deleteModal() {
         setDeleteModalOpen(true);
@@ -150,7 +150,7 @@ export default function EnclosureInfo({ singleEnclosurePending, currentEnclosure
                         </div>
 
                     }
-                    <Button onClick={openCreateSchool} title="Añadir colegio" iconName="Add" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
+                    <Button onClick={openSchoolForm} title="Añadir colegio" iconName="Add" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
                     <Button title="Subir Colegios" iconName="Upload" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
                 </div>
 

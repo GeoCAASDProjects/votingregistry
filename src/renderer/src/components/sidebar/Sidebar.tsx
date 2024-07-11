@@ -15,7 +15,7 @@ export default function Sidebar({ isOpen, toggleSidebar, children, actionState, 
     } else {
         sideBarButton = <MenuIcon />
     }
-    if (actionState == "location") {
+    if (actionState == "location" || actionState == "drawPolygon") {
         sideBarButton = <Close />
     }
 

@@ -7,16 +7,11 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createEnclosure, updateEnclosure } from '@renderer/util/http/enclosure-http';
 import { Close } from '@mui/icons-material';
 import IconButton from '../iconButton/IconButton';
-export default function EnclosureCreateForm({ defaultValues, edit, open, setOpen, /* loadEnclosure,*/ submitData, isLoading}) {
+export default function EnclosureCreateForm({ defaultValues, edit, closeForm, /* loadEnclosure,*/ submitData, isLoading}) {
 
-  if (!open) {
-    return;
-  }
+ 
   const queryClient = useQueryClient();
 
-  function closeForm() {
-    setOpen(false);
-  }
 
 
 
