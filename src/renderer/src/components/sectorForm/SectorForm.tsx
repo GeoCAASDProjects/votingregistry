@@ -33,7 +33,7 @@ export default function SectorCreateForm({ defaultValues, edit, closeForm}: Sect
     }
     const SectorSchema = Yup.object().shape({
         name: Yup.string().required('Requerido'),
-
+        area: Yup.string().required('Requerido'),
     });
 
 
@@ -41,6 +41,7 @@ export default function SectorCreateForm({ defaultValues, edit, closeForm}: Sect
 
         id: defaultValues?.id ?? null,
         name: defaultValues?.name ?? "",
+        area: defaultValues?.area ?? "",
 
     }
 
@@ -66,6 +67,12 @@ export default function SectorCreateForm({ defaultValues, edit, closeForm}: Sect
                                 <label>Nombre</label>
                                 <Field type="name" name="name" placeholder="Nombre" />
                                 <span style={{ color: "red" }}> <ErrorMessage name="name" component="div" /></span>
+                            </div>
+
+                            <div className={classes['input']}>
+                                <label>Area</label>
+                                <Field type="area" name="area" placeholder="Area" />
+                                <span style={{ color: "red" }}> <ErrorMessage name="area" component="div" /></span>
                             </div>
 
                         </div>

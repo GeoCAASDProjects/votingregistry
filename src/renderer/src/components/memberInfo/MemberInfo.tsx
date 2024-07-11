@@ -59,7 +59,7 @@ export default function MemberInfo({currentMember, openSchool, clearMember}) {
                     <tr>
 
                         <td ><span style={{ fontWeight: "bold" }}>Colegio</span></td>
-                        <td onClick={()=>openSchool(currentMember?.school?.id)}>{currentMember?.school?.name}</td>
+                        <td>{currentMember?.school?.name}</td>
 
                     </tr>
 

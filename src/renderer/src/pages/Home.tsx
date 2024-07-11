@@ -34,7 +34,10 @@ export default function Home(): JSX.Element {
     if (actionState == "drawPolygon" || actionState == "location") {
       return;
     }
- 
+  
+    if (display ==actionState) {
+      return;
+    }
     if (!open) {
       setOpen(true);
     }
@@ -406,10 +409,11 @@ export default function Home(): JSX.Element {
     setActionState("enclosureCreateForm")
 
   }
+  const [defaultSectorValues, setDefaultSectorValues] = useState({});
   function openFormSector(data) {
-
     setOpen(true);
 
+   setDefaultSectorValues((prevValue)=>{return {...prevValue, area:JSON.stringify(data)}});
     setActionState("sectorCreateForm")
   }
   function closeMemberForm() {
@@ -554,7 +558,7 @@ export default function Home(): JSX.Element {
     {
       (actionState == "sectorCreateForm" || actionState == "sectorEditForm") && <SectorCreateForm
 
-        defaultValues={currentSchool}
+        defaultValues={defaultSectorValues}
 
         edit={!!currentSchool?.id}
         closeForm={closeActionForm}
@@ -569,8 +573,7 @@ export default function Home(): JSX.Element {
 
     }
   </>
-
-
+   
   return (
     <>
       <div className={classes["home-container"]}>

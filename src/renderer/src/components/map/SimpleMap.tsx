@@ -213,8 +213,8 @@ export default function SimpleMap({ enclosures, actionState, onMarkerClick, curr
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-      {actionState=="drawPolygon" && <FeatureGroup  ref= {featureGroupRef}>
-          <EditControl position="topright" 
+   <FeatureGroup  ref= {featureGroupRef}>
+   {actionState=="drawPolygon" &&   <EditControl position="topright" 
         
           draw={{
           polyline: false,
@@ -223,8 +223,8 @@ export default function SimpleMap({ enclosures, actionState, onMarkerClick, curr
           circlemarker: false, 
           marker: false,
           polygon: true
-          }}/>
-        </FeatureGroup>}
+          }}/>}
+        </FeatureGroup>
         <SetZoomControlPosition position="bottomright" />
         {position && <UpdateMapCenter position={position} />}
         <MapClickHandler />

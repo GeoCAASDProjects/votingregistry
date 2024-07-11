@@ -14,6 +14,7 @@ import IconButton from "../iconButton/IconButton"
 
 export default function SchoolInfo({ singleSchoolPending, memberForm, deleteData, currentSchool, clearSchool, openMember /*, selectLocation */ }) {
  
+ 
     const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false)
     const [isOpen, setIsOpen] = useState(false);
     const queryClient = useQueryClient();
@@ -41,13 +42,14 @@ export default function SchoolInfo({ singleSchoolPending, memberForm, deleteData
             {singleSchoolPending  &&
                 <DynamicLoader />
             }
-
+    <div>
+    <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
+                    <IconButton iconName="Close" onClick={clearSchool}/>
+                    </div>
             {(!singleSchoolPending && !!currentSchool) &&
 
                 <div>
-                    <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
-                    <IconButton iconName="Close" onClick={clearSchool}/>
-                    </div>
+               
 
 
 
@@ -117,6 +119,7 @@ export default function SchoolInfo({ singleSchoolPending, memberForm, deleteData
 
 
             }
+            </div>
         </>
     )
 }
