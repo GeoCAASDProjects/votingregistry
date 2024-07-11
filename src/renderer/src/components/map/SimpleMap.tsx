@@ -1,4 +1,4 @@
-import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvent, useMapEvents, FeatureGroup } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvent, useMapEvents, FeatureGroup, Polygon } from 'react-leaflet';
 import classes from "./home.module.css";
 import L, { latLng } from 'leaflet';
 import "leaflet/dist/leaflet.css";
@@ -11,7 +11,7 @@ import "leaflet-draw/dist/leaflet.draw.css"
 import { getAddress, searchAddress } from '@renderer/util/http/map_token';
 
 type Position = [number, number];
-export default function SimpleMap({ enclosures, actionState, onMarkerClick, currentEnclosure, openForm, openFormSector }): JSX.Element {
+export default function SimpleMap({ enclosures, sectors, actionState, onMarkerClick, currentEnclosure, openForm, openFormSector }): JSX.Element {
 
   const mapRef = useRef(null)
 
@@ -233,6 +233,8 @@ export default function SimpleMap({ enclosures, actionState, onMarkerClick, curr
             {`Longitud: ${marker.lng.toFixed(2)}, Latitud: ${marker.lat.toFixed(2)}`}
           </Popup>
         </Marker>}
+        
+   {/*     <Polygon positions={[[19.209212104327538,-71.38414396861069],[18.83543592841989,-69.67105023406485],[17.415988587482595,-71.86732425271336]]}/>*/}
         {position && (
           <Marker position={position}>
             <Popup>
@@ -243,6 +245,11 @@ export default function SimpleMap({ enclosures, actionState, onMarkerClick, curr
         {
           !!enclosures && enclosures.data.map((enclosure) => { return (actionState=="" || enclosure.id == currentEnclosure) && <Marker key={enclosure.id} icon={currentEnclosure == enclosure.id ? purpleIcon : blueIcon} eventHandlers={{ click: () => ClickOnMarker(enclosure) }} position={[enclosure.latitude, enclosure.longitude]} /> }
           )
+        }
+        {
+          !!sectors && sectors.data.map((sector)=>{return <Polygon positions={sector.nodes.map((node)=>[node.latitude, node.longitude])}/>})
+
+          
         }
       </MapContainer>
     </div>

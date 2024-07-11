@@ -17,6 +17,7 @@ import Button from "@renderer/components/button/Button";
 import MemberInfo from "@renderer/components/memberInfo/MemberInfo";
 import { fetchPerson } from "@renderer/util/http/person-http";
 import SectorCreateForm from "@renderer/components/sectorForm/SectorForm";
+import { fetchSectors } from "@renderer/util/http/sector-http";
 
 export default function Home(): JSX.Element {
   const queryClient = useQueryClient();
@@ -77,6 +78,13 @@ export default function Home(): JSX.Element {
   const { data: enclosureData, isPending: enclosurePending, isError: enclosureIsError, error: enclosureError } = useQuery({
     queryKey: ["enclosures"],
     queryFn: ({ signal }, query?) => fetchEnclosures({ signal, query }),
+    staleTime: 5000,
+    gcTime: 30000,
+  });
+
+  const { data: sectorData, isPending: sectorPending, isError: sectorIsError, error: sectorError } = useQuery({
+    queryKey: ["sectors"],
+    queryFn: ({ signal }, query?) => fetchSectors({ signal}),
     staleTime: 5000,
     gcTime: 30000,
   });
@@ -589,7 +597,7 @@ export default function Home(): JSX.Element {
           {renderView}
 
         </Sidebar>
-        <SimpleMap openForm={openForm} openFormSector={openFormSector} currentEnclosure={currentEnclosure?.id ?? null} actionState={actionState} onMarkerClick={sendDataToSidebar} enclosures={(!enclosurePending && enclosureData) ?? null} />
+        <SimpleMap openForm={openForm} openFormSector={openFormSector} currentEnclosure={currentEnclosure?.id ?? null} actionState={actionState} onMarkerClick={sendDataToSidebar} enclosures={(!enclosurePending && enclosureData) ?? null} sectors={(!sectorPending && sectorData) ?? null} />
       </div>
 
     </>
