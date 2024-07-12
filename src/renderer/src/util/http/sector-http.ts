@@ -26,6 +26,28 @@ export async function fetchSectors({signal}){
     }
 }
 
+
+export async function fetchSector(id){
+    let url = `${BASE_URL_API}/sector/${id}`;
+
+    const config: AxiosRequestConfig ={
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+        },
+     
+    }
+    try{
+    const response = await axios.get(url, config);
+  
+    console.log(response);
+    return response.data;
+    } catch(error){
+        console.log(error);
+        
+      throw new Error('Request failed');
+    }
+}
+
 export async function create(data){
     console.log("THE DATA")
     console.log("----------------------------------------------------------------------")
@@ -79,3 +101,27 @@ export async function createSector(data){
 }
 
 
+
+
+
+export async function fetchSectorEnclosures({signal, sectorId}){
+    let url = `${BASE_URL_API}/sector/${sectorId}/schools`;
+  
+    const config: AxiosRequestConfig ={
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+        },
+        signal: signal,  
+    }
+    try{
+    const response = await axios.get(url, config);
+  
+    console.log(response);
+    
+    return response.data;
+    } catch(error){
+        console.log(error);
+        
+      throw new Error('Request failed');
+    }
+}

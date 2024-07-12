@@ -17,13 +17,13 @@ export default function InfoTemplate({ infoDisplay }) {
             }
 
 
-            {(!singleEnclosurePending && !!currentEnclosure) &&
+            {//(!singleEnclosurePending && !!currentEnclosure) &&
 
                 <div>
-                    <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
+              { /*     <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
                         <IconButton iconName="Close" onClick={clearEnclosure} />
-                    </div>
-
+                    </div>*/}
+}
                     <table className={classes['table']}>
                         <thead>
 
@@ -54,99 +54,50 @@ export default function InfoTemplate({ infoDisplay }) {
                         infoDisplay.relations.map((subData) => {
                             subData.map((data) => <>
                                 <h3>{data.label}</h3>
-                                {/*(schoolDataPending && !schoolError) && <DynamicLoader />*/}
-                                {data.table.data.length > 0 ?
-                                    <div>
 
-                                        <table className={classes['table']}>
-                                            <thead>
-                                                {
-                                                    data.table.map((column)=><th><span style={{ fontWeight: "bold" }}>{column.header}</span></th>)
-                                                }
-                                           
-                                               
-                                               
-                                            </thead>
-                                            <tbody>
-                                                {schoolData?.data.length > 0 && schoolData?.data.map((enclosure) => (
-                                                    <tr key={enclosure.id}>
+                                <div>
+
+                                    <table className={classes['table']}>
+                                        <thead>
+                                            {
+                                                data.columns.map((column) => <th><span style={{ fontWeight: "bold" }}>{column.header}</span></th>)
+                                            }
 
 
-                                                        <td>   {enclosure.name}</td>
-                                                        <td style={{ textAlign: "center" }}>
-                                                            {enclosure.members.length ?? 0}</td>
-                                                        {<td>
-                                                            <div className={classes["actions"]} onClick={() => openSchool(enclosure.id)}>
+
+                                        </thead>
+                                        <tbody>
+                                            {data.data.length > 0 && data.data.map((row, rowIndex) => (
+                                                <tr key={rowIndex}>
+                                                    {data.columns.map((column, colIndex) => (
+                                                        <td key={colIndex}>{row[column]}</td>
+                                                    ))}
+                                                    {/*<td>
+                                                            <div className={classes["actions"]} onClick={() => alert("Open data")}>
 
                                                                 <Visibility />
 
 
 
                                                             </div>
+                                                        </td>*/}
+                                                </tr>
+                                            ))}
 
-                                                        </td>}
-                                                    </tr>
-                                                ))}
+                                        </tbody>
+                                    </table>
+                                    <Button title="Descargar" iconName="Download" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
+                                </div> :
+                                <div style={{ margin: "5px 0px" }}>
+                                    <p>Este recinto no cuento con colegios actualmente</p>
+                                </div>
 
-                                            </tbody>
-                                        </table>
-                                        <Button title="Descargar" iconName="Download" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
-                                    </div> :
-                                    <div style={{ margin: "5px 0px" }}>
-                                        <p>Este recinto no cuento con colegios actualmente</p>
-                                    </div>
-
-                                }
-                                <Button onClick={openSchoolForm} title="Añadir colegio" iconName="Add" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
-                                <Button title="Subir Colegios" iconName="Upload" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
 
                             </>)
                         })
                     }
-                    <h3>Colegios</h3>
-                    {(schoolDataPending && !schoolError) && <DynamicLoader />}
-                    {!schoolDataPending && schoolData?.data.length > 0 ?
-                        <div>
-
-                            <table className={classes['table']}>
-                                <thead>
-                                    <th>   <span style={{ fontWeight: "bold" }}>Nombre</span></th>
-                                    <th>   <span style={{ fontWeight: "bold" }}>Personas</span></th>
-                                    <th>   <span style={{ fontWeight: "bold" }}>Acciones</span></th>
-                                    {/*    <th>   <span style={{ fontWeight: "bold" }}>Acciones</span></th>*/}
-                                </thead>
-                                <tbody>
-                                    {schoolData?.data.length > 0 && schoolData?.data.map((enclosure) => (
-                                        <tr key={enclosure.id}>
 
 
-                                            <td>   {enclosure.name}</td>
-                                            <td style={{ textAlign: "center" }}>
-                                                {enclosure.members.length ?? 0}</td>
-                                            {<td>
-                                                <div className={classes["actions"]} onClick={() => openSchool(enclosure.id)}>
-
-                                                    <Visibility />
-
-
-
-                                                </div>
-
-                                            </td>}
-                                        </tr>
-                                    ))}
-
-                                </tbody>
-                            </table>
-                            <Button title="Descargar" iconName="Download" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
-                        </div> :
-                        <div style={{ margin: "5px 0px" }}>
-                            <p>Este recinto no cuento con colegios actualmente</p>
-                        </div>
-
-                    }
-                    <Button onClick={openSchoolForm} title="Añadir colegio" iconName="Add" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
-                    <Button title="Subir Colegios" iconName="Upload" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
                 </div>
 
 

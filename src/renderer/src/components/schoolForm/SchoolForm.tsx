@@ -13,7 +13,7 @@ interface SchoolCreateFormI {
     //  submitData?: (data: object) => void,
     defaultValues?: object|null,
     currentEnclosure?: number,
-    //  isLoading?: boolean,
+     isLoading?: boolean,
     closeForm: ()=>void,
     edit?: boolean,
     //   loadEnclosure: (id:number)=>void
@@ -21,7 +21,7 @@ interface SchoolCreateFormI {
     setOpen: Dispatch<SetStateAction<boolean>>
 }
 export default function SchoolCreateForm({ defaultValues, currentEnclosure, closeForm, submitData, isLoading, edit }: SchoolCreateFormI): JSX.Element {
-
+console.log("the current enclosure is", currentEnclosure)
  
     const queryClient = useQueryClient();
 

@@ -17,7 +17,7 @@ import Button from "@renderer/components/button/Button";
 import MemberInfo from "@renderer/components/memberInfo/MemberInfo";
 import { fetchPerson } from "@renderer/util/http/person-http";
 import SectorCreateForm from "@renderer/components/sectorForm/SectorForm";
-import { createSector, fetchSectors } from "@renderer/util/http/sector-http";
+import { createSector, fetchSector, fetchSectors } from "@renderer/util/http/sector-http";
 
 export default function Home(): JSX.Element {
   const queryClient = useQueryClient();
@@ -27,6 +27,7 @@ export default function Home(): JSX.Element {
   const [currentEnclosure, setCurrentEnclosure] = useState<Enclosure | null>(null);
   const [currentSchool, setCurrentSchool] = useState(null);
   const [currentMember, setCurrentMember] = useState(null);
+  const [currentSector, setCurrentSector] = useState(null);
 
   const [historyStack, setHistoryStack] = useState<string[]>([]);
 
@@ -110,6 +111,25 @@ export default function Home(): JSX.Element {
   });
 
   const {
+    mutate: singleSectorMutate,
+    data: singleSectorData,
+    isPending: singleSectorPending,
+    isError: singleSectorIsError,
+    error: singleSectorError
+  } = useMutation({
+    mutationFn: fetchSector,
+    onSuccess: async (e) => {
+      
+      setCurrentSector(e.data);
+      openAction("sector");
+    },
+    onError: (e) => {
+
+      alert("Error")
+    }
+  });
+
+  const {
     mutate: singleSchoolMutate,
     data: singleSchoolData,
     isPending: singleSchoolPending,
@@ -185,7 +205,7 @@ export default function Home(): JSX.Element {
     onSuccess: async (e) => {
 
       queryClient.refetchQueries({ queryKey: ["enclosures"] });
-
+      setCurrentSchool(null)
       openAction("enclosure")
 
 
@@ -195,8 +215,7 @@ export default function Home(): JSX.Element {
 
     }
   });
-
-
+ 
   const {
     mutate: singleEnclosureCreateMutate,
     data: singleEnclosureCreateData,
@@ -387,9 +406,22 @@ export default function Home(): JSX.Element {
     closeActionForm();
   }
 
+  function clearSector() {
+
+     
+    setCurrentSector(null);
+    closeActionForm();
+  }
+
   async function loadEnclosure(id: number) {
     clearEnclosure();
     const response = await singleEnclosureMutate(id);
+    
+  }
+
+  async function loadSector(id: number) {
+    clearSector();
+    const response = await singleSectorMutate(id);
     
   }
 
@@ -421,6 +453,18 @@ export default function Home(): JSX.Element {
       return;
     }
     const response = await singleEnclosureMutate(id);
+
+
+  }
+
+  async function sendSectorToSidebar(id: number) {
+    if (!open) {
+      toggleSidebar();
+    }
+    if (currentSector?.id == id) {
+      return;
+    }
+    const response = await singleSectorMutate(id);
 
 
   }
@@ -590,7 +634,7 @@ export default function Home(): JSX.Element {
 
         edit={!!currentSchool?.id}
         closeForm={closeActionForm}
-        //   loadEnclosure={loadEnclosure}
+       currentEnclosure={currentEnclosure?.id}
         submitData={!!currentSchool?.id ? updateSchoolData : submitSchoolData}
         isLoading={!!currentSchool?.id ? singleSchoolCreatePending : singleSchoolUpdatePending}
       />
@@ -629,7 +673,7 @@ export default function Home(): JSX.Element {
           {renderView}
 
         </Sidebar>
-        <SimpleMap openForm={openForm} openFormSector={openFormSector} currentEnclosure={currentEnclosure?.id ?? null} actionState={actionState} onMarkerClick={sendDataToSidebar} enclosures={(!enclosurePending && enclosureData) ?? null} sectors={(!sectorPending && sectorData) ?? null} />
+        <SimpleMap openForm={openForm} openFormSector={openFormSector} currentEnclosure={currentEnclosure?.id ?? null} actionState={actionState} onMarkerClick={sendDataToSidebar} onPolygonClick={sendSectorToSidebar} enclosures={(!enclosurePending && enclosureData) ?? null} sectors={(!sectorPending && sectorData) ?? null} />
       </div>
 
     </>

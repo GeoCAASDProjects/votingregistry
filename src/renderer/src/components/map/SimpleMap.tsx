@@ -11,7 +11,7 @@ import "leaflet-draw/dist/leaflet.draw.css"
 import { getAddress, searchAddress } from '@renderer/util/http/map_token';
 
 type Position = [number, number];
-export default function SimpleMap({ enclosures, sectors, actionState, onMarkerClick, currentEnclosure, openForm, openFormSector }): JSX.Element {
+export default function SimpleMap({ enclosures, sectors, actionState, onMarkerClick, currentEnclosure, openForm, openFormSector,  onPolygonClick }): JSX.Element {
 
   const {BaseLayer, Overlay} = LayersControl;
   const mapRef = useRef(null)
@@ -259,7 +259,7 @@ export default function SimpleMap({ enclosures, sectors, actionState, onMarkerCl
            <FeatureGroup>
          
         {
-          !!sectors && sectors.data.map((sector)=>{return actionState=="" && <Polygon key={sector.id} positions={sector.nodes.map((node)=>[node.latitude, node.longitude])}/>})
+          !!sectors && sectors.data.map((sector)=>{return actionState=="" && <Polygon key={sector.id} eventHandlers={{ click: () => onPolygonClick(sector?.id) }} positions={sector.nodes.map((node)=>[node.latitude, node.longitude])}/>})
 
           
         }

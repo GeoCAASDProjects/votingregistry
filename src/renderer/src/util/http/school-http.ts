@@ -78,7 +78,7 @@ export async function fetchSchool(id){
 }
 
 export async function createSchool(data){
-    
+    console.log(data);
     let url = `${BASE_URL_API}/enclosure/${data.enclosure_id}/school`;
     const config: AxiosRequestConfig ={
      
