@@ -11,12 +11,13 @@ interface ButtonProps{
     iconName?: string|null;
     center?: boolean;
     children?: React.ReactNode;
-    onClick?: (data:any) =>void
+    onClick?: (data:any) =>void;
+    className?: string;
 }
 
-const Button:FC<ButtonProps> = ({title, isLoading, type, style, center, iconName, onClick, children}) =>{
+const Button:FC<ButtonProps> = ({title, isLoading, type, style, className, center, iconName, onClick, children}) =>{
     return(
-        <button type="submit" style={style} className={classes["button-container"]} onClick={onClick} disabled={!!isLoading}>
+        <button type="submit" style={style} className={`${classes["button-container"]} ${className}`} onClick={onClick} disabled={!!isLoading}>
         <div className={center ? classes["center"] : ""}>
         <DynamicIcon iconName={iconName ?? " "}/>
         {title}

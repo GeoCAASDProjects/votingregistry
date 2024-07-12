@@ -245,7 +245,7 @@ export default function SimpleMap({ enclosures, sectors, actionState, onMarkerCl
           </Marker>
         )}
 { (actionState!=="drawPolygon" && actionState!=="location")    &&    <LayersControl position="topright">
-            <Overlay name="Recintos">
+            <Overlay checked name="Recintos">
            <FeatureGroup>
           {
           !!enclosures && enclosures.data.map((enclosure) => { return (actionState=="" || enclosure.id == currentEnclosure) && <Marker key={enclosure.id} icon={currentEnclosure == enclosure.id ? purpleIcon : blueIcon} eventHandlers={{ click: () => ClickOnMarker(enclosure) }} position={[enclosure.latitude, enclosure.longitude]} /> }
@@ -255,7 +255,7 @@ export default function SimpleMap({ enclosures, sectors, actionState, onMarkerCl
  
             </Overlay>
 
-            <Overlay name="Sectores">
+            <Overlay checked name="Sectores">
            <FeatureGroup>
          
         {
