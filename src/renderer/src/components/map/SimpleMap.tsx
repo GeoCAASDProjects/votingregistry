@@ -1,6 +1,6 @@
-import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvent, useMapEvents, FeatureGroup, Polygon } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvent, useMapEvents, FeatureGroup, Polygon, LayersControl } from 'react-leaflet';
 import classes from "./home.module.css";
-import L, { latLng } from 'leaflet';
+import L, { DivOverlay, latLng } from 'leaflet';
 import "leaflet/dist/leaflet.css";
 import { useEffect, useRef, useState } from 'react';
 import SearchBar from '../searchBar/SearchBar';
@@ -13,6 +13,7 @@ import { getAddress, searchAddress } from '@renderer/util/http/map_token';
 type Position = [number, number];
 export default function SimpleMap({ enclosures, sectors, actionState, onMarkerClick, currentEnclosure, openForm, openFormSector }): JSX.Element {
 
+  const {BaseLayer, Overlay} = LayersControl;
   const mapRef = useRef(null)
 
   const [address, setAddress] = useState<string | null>(null);
@@ -213,7 +214,7 @@ export default function SimpleMap({ enclosures, sectors, actionState, onMarkerCl
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-   <FeatureGroup  ref= {featureGroupRef}>
+{(actionState=="sectorCreateForm" ||  actionState=="sectorEditForm" ||  actionState=="drawPolygon")  &&  <FeatureGroup  ref= {featureGroupRef}>
    {actionState=="drawPolygon" &&   <EditControl position="topright" 
         
           draw={{
@@ -224,7 +225,7 @@ export default function SimpleMap({ enclosures, sectors, actionState, onMarkerCl
           marker: false,
           polygon: true
           }}/>}
-        </FeatureGroup>
+        </FeatureGroup>}
         <SetZoomControlPosition position="bottomright" />
         {position && <UpdateMapCenter position={position} />}
         <MapClickHandler />
@@ -235,6 +236,7 @@ export default function SimpleMap({ enclosures, sectors, actionState, onMarkerCl
         </Marker>}
         
    {/*     <Polygon positions={[[19.209212104327538,-71.38414396861069],[18.83543592841989,-69.67105023406485],[17.415988587482595,-71.86732425271336]]}/>*/}
+
         {position && (
           <Marker position={position}>
             <Popup>
@@ -242,15 +244,32 @@ export default function SimpleMap({ enclosures, sectors, actionState, onMarkerCl
             </Popup>
           </Marker>
         )}
-        {
+{ (actionState!=="drawPolygon" && actionState!=="location")    &&    <LayersControl position="topright">
+            <Overlay name="Recintos">
+           <FeatureGroup>
+          {
           !!enclosures && enclosures.data.map((enclosure) => { return (actionState=="" || enclosure.id == currentEnclosure) && <Marker key={enclosure.id} icon={currentEnclosure == enclosure.id ? purpleIcon : blueIcon} eventHandlers={{ click: () => ClickOnMarker(enclosure) }} position={[enclosure.latitude, enclosure.longitude]} /> }
           )
         }
+          </FeatureGroup>
+ 
+            </Overlay>
+
+            <Overlay name="Sectores">
+           <FeatureGroup>
+         
         {
-          !!sectors && sectors.data.map((sector)=>{return actionState=="" && <Polygon positions={sector.nodes.map((node)=>[node.latitude, node.longitude])}/>})
+          !!sectors && sectors.data.map((sector)=>{return actionState=="" && <Polygon key={sector.id} positions={sector.nodes.map((node)=>[node.latitude, node.longitude])}/>})
 
           
         }
+          </FeatureGroup>
+ 
+            </Overlay>
+
+           </LayersControl>
+        }
+   
       </MapContainer>
     </div>
   )
