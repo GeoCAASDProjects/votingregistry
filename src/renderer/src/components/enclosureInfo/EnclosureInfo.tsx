@@ -11,17 +11,18 @@ import DynamicLoader from "../dynamicLoader/DynamicLoader"
 import EnclosureCreateForm from "../enclosureForm/EnclosureForm"
 import SchoolCreateForm from "../schoolForm/SchoolForm"
 import IconButton from "../iconButton/IconButton"
+import InfoTemplate from "../infoTemplate/InfoTemplate"
 
 export default function EnclosureInfo({ singleEnclosurePending, currentEnclosure, clearEnclosure, openForm, openSchool, openSchoolForm, deleteData }) {
-    if(!singleEnclosurePending && !currentEnclosure){
+    if (!singleEnclosurePending && !currentEnclosure) {
         return <p>There's no data here</p>
     }
 
     const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false)
 
     const defaultValues = { ...currentEnclosure }
-   // const [openSchoolForm, setOpenSchoolForm] = useState(false)
- 
+    // const [openSchoolForm, setOpenSchoolForm] = useState(false)
+
 
     const queryClient = useQueryClient();
 
@@ -35,25 +36,110 @@ export default function EnclosureInfo({ singleEnclosurePending, currentEnclosure
 
     });
 
-/*
-    function openCreateSchool() {
-        setOpenSchoolForm(true)
-    }
-
-    if (openSchoolForm) {
-
-        return <SchoolCreateForm
-            defaultValues={{}}
-            currentEnclosure={currentEnclosure?.id}
-            edit={false}
-            open={openSchoolForm}
-            setOpen={setOpenSchoolForm}
-        />
-    }*/
+    /*
+        function openCreateSchool() {
+            setOpenSchoolForm(true)
+        }
+    
+        if (openSchoolForm) {
+    
+            return <SchoolCreateForm
+                defaultValues={{}}
+                currentEnclosure={currentEnclosure?.id}
+                edit={false}
+                open={openSchoolForm}
+                setOpen={setOpenSchoolForm}
+            />
+        }*/
 
     function deleteModal() {
         setDeleteModalOpen(true);
     }
+
+
+ 
+
+
+    const infoDisplay = {
+        isLoading: singleEnclosurePending,
+        slug: "enclosure",
+        plural: "recintos",
+        label: "Recinto",
+        url: "enclosures",
+        singularUrl: "enclosures",
+        id: currentEnclosure?.id,
+        close: () => alert("Closing"),
+        deleteFunction: deleteData,
+        dataDisplay: [
+            {
+                label: "Nombre",
+                value: currentEnclosure?.name
+            },
+            {
+                label: "Dirección",
+                value: `${currentEnclosure?.address} (${currentEnclosure?.longitude}, ${currentEnclosure?.latitude})`
+            },
+
+        ],
+        actions: [
+            {
+                icon: "Edit",
+                label: "Editar",
+                action: openForm
+            },
+            {
+                icon: "Download",
+                label: "Descargar",
+                action: () => alert("Descargar")
+            },
+        ],
+        relations:
+            [{
+                slug: "school",
+                label: "Colegio",
+                url: "schools",
+                plural: "schools",
+                singularUrl: "school",
+                data: !schoolDataPending && schoolData.hasOwnProperty("data") ? schoolData.data.map((subInfo) => { return {id: subInfo.id, name: subInfo.name, members: subInfo.members.length } }) : [],
+                columns: [
+                    {
+                        field: 'name',
+                        header: "Nombre"
+                    },
+                    {
+                        field: 'members',
+                        header: "Miembros"
+                    },
+                ],
+                rowActions: [
+                    {
+                        name: "Ver",
+                        icon: "Visibility",
+                        action: openSchool
+                    }
+                ],
+                actions: [
+
+                    {
+                        icon: "Download",
+                        label: "Descargar",
+                        action: () => alert("Sub data Descargar")
+                    },
+                ]
+            },
+            ],
+
+    }
+
+    
+    return (
+
+        <>
+            {!schoolDataPending ? <InfoTemplate infoDisplay={infoDisplay} clearInfo={clearEnclosure} /> : <DynamicLoader/>}
+        </>
+    )
+
+    /*
     return (
 
         <>
@@ -109,46 +195,46 @@ export default function EnclosureInfo({ singleEnclosurePending, currentEnclosure
                                     <th>   <span style={{ fontWeight: "bold" }}>Nombre</span></th>
                                     <th>   <span style={{ fontWeight: "bold" }}>Personas</span></th>
                                     <th>   <span style={{ fontWeight: "bold" }}>Acciones</span></th>
-                                    {/*    <th>   <span style={{ fontWeight: "bold" }}>Acciones</span></th>*/}
-                                </thead>
-                                <tbody>
-                                    {schoolData?.data.length > 0 && schoolData?.data.map((enclosure) => (
-                                        <tr key={enclosure.id}>
+                                   
+                                </thead >
+    <tbody>
+        {schoolData?.data.length > 0 && schoolData?.data.map((enclosure) => (
+            <tr key={enclosure.id}>
 
 
-                                            <td>   {enclosure.name}</td>
-                                            <td style={{ textAlign: "center" }}>
-                                                {enclosure.members.length ?? 0}</td>
-                                            {<td>
-                                                <div className={classes["actions"]} onClick={() => openSchool(enclosure.id)}>
+                <td>   {enclosure.name}</td>
+                <td style={{ textAlign: "center" }}>
+                    {enclosure.members.length ?? 0}</td>
+                {<td>
+                    <div className={classes["actions"]} onClick={() => openSchool(enclosure.id)}>
 
-                                                    <Visibility />
+                        <Visibility />
 
 
 
-                                                </div>
+                    </div>
 
-                                            </td>}
-                                        </tr>
-                                    ))}
+                </td>}
+            </tr>
+        ))}
 
-                                </tbody>
-                            </table>
-                            <Button title="Descargar" iconName="Download" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
-                        </div> :
-                        <div style={{ margin: "5px 0px" }}>
-                            <p>Este recinto no cuento con colegios actualmente</p>
-                        </div>
+    </tbody>
+                            </table >
+    <Button title="Descargar" iconName="Download" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
+                        </div > :
+<div style={{ margin: "5px 0px" }}>
+    <p>Este recinto no cuento con colegios actualmente</p>
+</div>
 
                     }
                     <Button onClick={openSchoolForm} title="Añadir colegio" iconName="Add" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
                     <Button title="Subir Colegios" iconName="Upload" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
-                </div>
+                </div >
 
 
 
 
             }
         </>
-    )
+    )*/
 }

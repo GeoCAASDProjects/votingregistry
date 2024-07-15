@@ -20,7 +20,7 @@ export default function InfoTemplate({ infoDisplay, clearInfo }) {
 
         <>
 
-            <Modal title={`Borrar ${infoDisplay.label}?`} isOpen={deleteModalOpen} setIsOpen={setDeleteModalOpen} onSubmit={() => alert(infoDisplay?.id)}>
+            <Modal title={`Borrar ${infoDisplay.label}?`} isOpen={deleteModalOpen} setIsOpen={setDeleteModalOpen} onSubmit={() => infoDisplay.deleteFunction(infoDisplay.id)}>
                 <p>{`Desea borrar el ${infoDisplay.label} y todos sus datos asociados? esta accion no es reversible`}</p>
             </Modal>
             {infoDisplay?.loading &&
@@ -84,7 +84,14 @@ export default function InfoTemplate({ infoDisplay, clearInfo }) {
 
                                                     <td key={colIndex}>{row[column.field]}</td>
                                                 ))}
-
+                                                <td>
+                                                <div className={classes["actions"]}>
+                                                {relation.hasOwnProperty("rowActions") && relation.rowActions.map((action)=>
+                                                <IconButton iconName={`${action.icon}`} onClick={()=>action.action(row.id)}/>
+                                                )}
+                                                </div>
+                                                </td>
+                                       
                                             </tr>
                                         ))}
 
