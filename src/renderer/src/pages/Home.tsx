@@ -25,33 +25,35 @@ export default function Home(): JSX.Element {
   const [actionState, setActionState] = useState("");
   const [open, setOpen] = useState(false);
   const [defaultFormValues, setDefaultFormValues] = useState({});
+  
+  const [defaultSchoolValues, setDefaultSchoolValues] = useState({});
   const [currentEnclosure, setCurrentEnclosure] = useState<Enclosure | null>(null);
-  const [currentSchool, setCurrentSchool] = useState(null);
+  const [currentSchool, setCurrentSchool] = useState<{} | null>(null);
   const [currentMember, setCurrentMember] = useState(null);
   const [currentSector, setCurrentSector] = useState(null);
 
   const [historyStack, setHistoryStack] = useState<string[]>([]);
 
   function openAction(display) {
- 
+
     if (actionState == "drawPolygon" || actionState == "location") {
       return;
     }
-  
-    if (display ==actionState) {
+
+    if (display == actionState) {
       return;
     }
     if (!open) {
       setOpen(true);
     }
-   if(actionState != null){
-    setHistoryStack((prevHistoryStack) => [...prevHistoryStack, actionState]);
-   }
+    if (actionState != null) {
+      setHistoryStack((prevHistoryStack) => [...prevHistoryStack, actionState]);
+    }
     setActionState(display);
   }
- 
+
   function closeActionForm() {
- 
+
     if (!open) {
       setOpen(true);
     }
@@ -59,11 +61,11 @@ export default function Home(): JSX.Element {
       resetHistory();
       return;
     }
-    
+
     const previousState = historyStack[historyStack.length - 1];
-    
+
     setHistoryStack((prevHistoryStack) => prevHistoryStack.slice(0, -1));
-   
+
     setActionState(previousState);
 
 
@@ -86,7 +88,7 @@ export default function Home(): JSX.Element {
 
   const { data: sectorData, isPending: sectorPending, isError: sectorIsError, error: sectorError } = useQuery({
     queryKey: ["sectors"],
-    queryFn: ({ signal }, query?) => fetchSectors({ signal}),
+    queryFn: ({ signal }, query?) => fetchSectors({ signal }),
     staleTime: 5000,
     gcTime: 30000,
   });
@@ -101,7 +103,7 @@ export default function Home(): JSX.Element {
   } = useMutation({
     mutationFn: fetchEnclosure,
     onSuccess: async (e) => {
-      
+
       setCurrentEnclosure(e.data);
       openAction("enclosure");
     },
@@ -120,7 +122,7 @@ export default function Home(): JSX.Element {
   } = useMutation({
     mutationFn: fetchSector,
     onSuccess: async (e) => {
-      
+
       setCurrentSector(e.data);
       openAction("sector");
     },
@@ -216,7 +218,7 @@ export default function Home(): JSX.Element {
 
     }
   });
- 
+
   const {
     mutate: singleEnclosureCreateMutate,
     data: singleEnclosureCreateData,
@@ -279,7 +281,9 @@ export default function Home(): JSX.Element {
 
       queryClient.refetchQueries({ queryKey: ["enclosures"] });
       //   setActionState("enclosures");
-
+      if (actionState == "schoolUpdateForm") {
+        closeActionForm();
+      }
       setCurrentSchool(e.data.id);
 
     },
@@ -322,7 +326,7 @@ export default function Home(): JSX.Element {
     mutationFn: createSector,
     onSuccess: async (e) => {
 
- 
+
       queryClient.refetchQueries({ queryKey: [`sectors`] });
       closeActionForm();
       // loadEnclosure(e?.data?.enclosure_id)
@@ -398,18 +402,18 @@ export default function Home(): JSX.Element {
 
     setOpen(currentVal => !currentVal);
   }
- 
+
 
   function clearEnclosure() {
 
-     
+
     setCurrentEnclosure(null);
     closeActionForm();
   }
 
   function clearSector() {
 
-     
+
     setCurrentSector(null);
     closeActionForm();
   }
@@ -417,19 +421,19 @@ export default function Home(): JSX.Element {
   async function loadEnclosure(id: number) {
     clearEnclosure();
     const response = await singleEnclosureMutate(id);
-    
+
   }
 
   async function loadSector(id: number) {
     clearSector();
     const response = await singleSectorMutate(id);
-    
+
   }
 
   function clearSchool() {
     closeActionForm();
     setCurrentSchool(null);
-  
+
   }
 
   function clearMember() {
@@ -498,7 +502,7 @@ export default function Home(): JSX.Element {
   function openFormSector(data) {
     setOpen(true);
 
-   setDefaultSectorValues((prevValue)=>{return {...prevValue, area:JSON.stringify(data[0])}});
+    setDefaultSectorValues((prevValue) => { return { ...prevValue, area: JSON.stringify(data[0]) } });
     setActionState("sectorCreateForm")
   }
   function closeMemberForm() {
@@ -569,12 +573,16 @@ export default function Home(): JSX.Element {
 
     sendDataToSidebar(data.id);
   }
-  
+
 
   function openEditForm() {
     setDefaultFormValues({ ...currentEnclosure })
-  
+
     openAction("enclosureEditForm")
+  }
+  function openEditSchoolForm() {
+    setDefaultSchoolValues({ ...currentSchool })
+    openAction("schoolEditForm")
   }
   function openCreateSchoolForm() {
     openAction("schoolCreateForm")
@@ -605,7 +613,7 @@ export default function Home(): JSX.Element {
       actionState == "school" && <SchoolInfo
         singleSchoolPending={singleSchoolPending}
         currentSchool={currentSchool}
-
+        openForm={openEditSchoolForm}
         clearSchool={clearSchool}
         memberForm={memberForm}
         deleteData={deleteSchoolData}
@@ -613,7 +621,7 @@ export default function Home(): JSX.Element {
       />
     }
     {
-      actionState =="sector" && <SectorInfo singleSectorPending={singleSectorPending} currentSector={currentSector}/>
+      actionState == "sector" && <SectorInfo singleSectorPending={singleSectorPending} currentSector={currentSector} clearSector={clearSector}/>
     }
     {
       actionState == "member" && <MemberInfo currentMember={currentMember} openSchool={openSchool} clearMember={clearMember} />
@@ -638,7 +646,7 @@ export default function Home(): JSX.Element {
 
         edit={!!currentSchool?.id}
         closeForm={closeActionForm}
-       currentEnclosure={currentEnclosure?.id}
+        currentEnclosure={currentEnclosure?.id}
         submitData={!!currentSchool?.id ? updateSchoolData : submitSchoolData}
         isLoading={!!currentSchool?.id ? singleSchoolCreatePending : singleSchoolUpdatePending}
       />
@@ -661,7 +669,7 @@ export default function Home(): JSX.Element {
 
     }
   </>
-   
+
   return (
     <>
       <div className={classes["home-container"]}>
@@ -677,7 +685,17 @@ export default function Home(): JSX.Element {
           {renderView}
 
         </Sidebar>
-        <SimpleMap openForm={openForm} openFormSector={openFormSector} currentEnclosure={currentEnclosure?.id ?? null}  currentSector={currentSector?.id ?? null} actionState={actionState} onMarkerClick={sendDataToSidebar} onPolygonClick={sendSectorToSidebar} enclosures={(!enclosurePending && enclosureData) ?? null} sectors={(!sectorPending && sectorData) ?? null} />
+        <SimpleMap
+          openForm={openForm}
+          openFormSector={openFormSector}
+          currentEnclosure={currentEnclosure?.id ?? null}
+          currentSector={currentSector?.id ?? null}
+          actionState={actionState}
+          onMarkerClick={sendDataToSidebar}
+          onPolygonClick={sendSectorToSidebar}
+          enclosures={(!enclosurePending && enclosureData) ?? null}
+          sectors={(!sectorPending && sectorData) ?? null}
+        />
       </div>
 
     </>

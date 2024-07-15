@@ -6,14 +6,14 @@ import { useEffect, useRef, useState } from 'react';
 import SearchBar from '../searchBar/SearchBar';
 import { Check, Close } from '@mui/icons-material';
 import Button from '../button/Button';
-import {EditControl} from "react-leaflet-draw";
+import { EditControl } from "react-leaflet-draw";
 import "leaflet-draw/dist/leaflet.draw.css"
 import { getAddress, searchAddress } from '@renderer/util/http/map_token';
 
 type Position = [number, number];
-export default function SimpleMap({ enclosures, sectors, actionState, onMarkerClick, currentEnclosure, currentSector, openForm, openFormSector,  onPolygonClick }): JSX.Element {
+export default function SimpleMap({ enclosures, sectors, actionState, onMarkerClick, currentEnclosure, currentSector, openForm, openFormSector, onPolygonClick }): JSX.Element {
 
-  const {BaseLayer, Overlay} = LayersControl;
+  const { BaseLayer, Overlay } = LayersControl;
   const mapRef = useRef(null)
 
   const [address, setAddress] = useState<string | null>(null);
@@ -85,7 +85,7 @@ export default function SimpleMap({ enclosures, sectors, actionState, onMarkerCl
     shadowSize: [41, 41],
   });
 
- // const [searchSelected, setSearchSelected] = useState<boolean>(false);
+  // const [searchSelected, setSearchSelected] = useState<boolean>(false);
   /* const [searchValue, setSearchValue] = useState<string>('');
    const [searchList, setSearchList] = useState([]);
    useEffect(() => {
@@ -153,15 +153,15 @@ export default function SimpleMap({ enclosures, sectors, actionState, onMarkerCl
     setMarker({ lng: geometry[0], lat: geometry[1] });
     setPosition([geometry[1], geometry[0]])
     setAddress(placeName);
- //   setSearchSelected(true);
+    //   setSearchSelected(true);
   }
 
-  const _created = (e)=>console.log(e);
+  const _created = (e) => console.log(e);
 
   const featureGroupRef = useRef(null);
 
-  function handleCreated(e){
-    
+  function handleCreated(e) {
+
     const layer = e.layer;
     console.log(e)
   }
@@ -172,60 +172,60 @@ export default function SimpleMap({ enclosures, sectors, actionState, onMarkerCl
       editControlRef.current._toolbars.draw._modes.polygon.handler.enable();
     }
   }*/
-    const startPolygonDraw = () => {
-      if (featureGroupRef.current) {
-        const map = featureGroupRef.current._map;
-        const drawControl = new L.Draw.Polygon(map, {});
-        drawControl.enable();
-      }
-    };
-
-    function openEnclosureForm(){
-      openForm({ ...marker, address: address })
+  const startPolygonDraw = () => {
+    if (featureGroupRef.current) {
+      const map = featureGroupRef.current._map;
+      const drawControl = new L.Draw.Polygon(map, {});
+      drawControl.enable();
     }
+  };
 
-   const getAllPolygonCoordinates = ()=>{
+  function openEnclosureForm() {
+    openForm({ ...marker, address: address })
+  }
+
+  const getAllPolygonCoordinates = () => {
     const layers = featureGroupRef?.current?.getLayers();
-    const allCoordinates = layers.map((layer)=>{
-      if(layer instanceof L.Polygon){
-        return layer.getLatLngs()[0].map((latLng)=>[latLng.lat, latLng.lng])
+    const allCoordinates = layers.map((layer) => {
+      if (layer instanceof L.Polygon) {
+        return layer.getLatLngs()[0].map((latLng) => [latLng.lat, latLng.lng])
       }
       return null
     }).filter(Boolean);
-    
+
     openFormSector(allCoordinates);
-   }
-  
- 
+  }
+
+
   return (
     <div className={classes["map"]}>
-      {<div  className={`${classes["searchbar"]} ${actionState == "location" && classes["active"]}`}>
+      {<div className={`${classes["searchbar"]} ${actionState == "location" && classes["active"]}`}>
         <SearchBar searchDataFunction={searchDataFunction} selectSearch={selectSearch} style={{ margin: 0, width: "50%" }} />
       </div>
       }
       {<div className={`${classes["confirm-button"]} ${(actionState == "location" || actionState == "drawPolygon") && classes["confirm-active"]}`} >
-        <Button onClick={actionState=="location" ? openEnclosureForm : actionState=="drawPolygon" ? getAllPolygonCoordinates : ()=>{return}}  className={classes["button-styling"]}><Check /></Button>
+        <Button onClick={actionState == "location" ? openEnclosureForm : actionState == "drawPolygon" ? getAllPolygonCoordinates : () => { return }} className={classes["button-styling"]}><Check /></Button>
 
       </div>
       }
- 
+
 
       <MapContainer center={position} zoom={13} ref={mapRef} style={{ width: '100%', height: '100%' }}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-{(actionState=="sectorCreateForm" ||  actionState=="sectorEditForm" ||  actionState=="drawPolygon")  &&  <FeatureGroup  ref= {featureGroupRef}>
-   {actionState=="drawPolygon" &&   <EditControl position="topright" 
-        
-          draw={{
-          polyline: false,
-          rectangle: false,
-          circle: false,
-          circlemarker: false, 
-          marker: false,
-          polygon: true
-          }}/>}
+        {(actionState == "sectorCreateForm" || actionState == "sectorEditForm" || actionState == "drawPolygon") && <FeatureGroup ref={featureGroupRef}>
+          {actionState == "drawPolygon" && <EditControl position="topright"
+
+            draw={{
+              polyline: false,
+              rectangle: false,
+              circle: false,
+              circlemarker: false,
+              marker: false,
+              polygon: true
+            }} />}
         </FeatureGroup>}
         <SetZoomControlPosition position="bottomright" />
         {position && <UpdateMapCenter position={position} />}
@@ -235,8 +235,8 @@ export default function SimpleMap({ enclosures, sectors, actionState, onMarkerCl
             {`Longitud: ${marker.lng.toFixed(2)}, Latitud: ${marker.lat.toFixed(2)}`}
           </Popup>
         </Marker>}
-        
-   {/*     <Polygon positions={[[19.209212104327538,-71.38414396861069],[18.83543592841989,-69.67105023406485],[17.415988587482595,-71.86732425271336]]}/>*/}
+
+
 
         {position && (
           <Marker position={position}>
@@ -245,34 +245,51 @@ export default function SimpleMap({ enclosures, sectors, actionState, onMarkerCl
             </Popup>
           </Marker>
         )}
-{ (actionState!=="drawPolygon" && actionState!=="location")    &&    <LayersControl position="topright">
-            <Overlay checked name="Recintos">
-           <FeatureGroup>
-          {
-          !!enclosures && enclosures.data.map((enclosure) => { return (actionState=="" || enclosure.id == currentEnclosure) && <Marker key={enclosure.id} icon={currentEnclosure == enclosure.id ? purpleIcon : blueIcon} eventHandlers={{ click: () => ClickOnMarker(enclosure) }} position={[enclosure.latitude, enclosure.longitude]} /> }
-          )
-        }
-          </FeatureGroup>
- 
-            </Overlay>
+        {(actionState !== "drawPolygon" && actionState !== "location") && <LayersControl position="topright">
+          <Overlay checked name="Recintos">
+            <FeatureGroup>
+              {
+                !!enclosures && enclosures.data.map(
+                  (enclosure) => {
+                    return (actionState == "" || enclosure.id == currentEnclosure) && <Marker
+                      key={enclosure.id}
+                      icon={currentEnclosure == enclosure.id ? purpleIcon : blueIcon}
+                      eventHandlers={{ click: () => ClickOnMarker(enclosure) }}
+                      position={[enclosure.latitude, enclosure.longitude]}
+                    />
+                  }
+                )
+              }
+            </FeatureGroup>
 
-            <Overlay checked name="Sectores">
-           <FeatureGroup>
-         
-        {
-          !!sectors && sectors.data.map((sector)=>{return (actionState=="" || sector.id == currentSector) && <Polygon  pathOptions={{
-          color: (sector.id == currentSector) ? "purple" : "blue"
-          }}  key={sector.id} eventHandlers={{ click: () => onPolygonClick(sector?.id) }} positions={sector.nodes.map((node)=>[node.latitude, node.longitude])}/>})
+          </Overlay>
 
-          
-        }
-          </FeatureGroup>
- 
-            </Overlay>
+          <Overlay checked name="Sectores">
+            <FeatureGroup>
 
-           </LayersControl>
+              {
+                !!sectors && sectors.data.map((sector) => {
+                  return (actionState == "" || sector.id == currentSector) && <Polygon
+                    pathOptions={
+                      {
+                        color: (sector.id == currentSector) ? "purple" : "blue"
+                      }
+                    }
+                    key={sector.id}
+                    eventHandlers={{ click: () => onPolygonClick(sector?.id) }}
+                    positions={sector.nodes.map((node) => [node.latitude, node.longitude])}
+                  />
+                })
+
+
+              }
+            </FeatureGroup>
+
+          </Overlay>
+
+        </LayersControl>
         }
-   
+
       </MapContainer>
     </div>
   )

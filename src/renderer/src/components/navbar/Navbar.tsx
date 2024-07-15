@@ -36,11 +36,11 @@ export default function Navbar(): JSX.Element {
         </div>
         <ul className={classes["link-list"]}>
 
-          <li> <Link to="./">Mapa de Recintos</Link></li>
+          <li> <Link to="./">Mapa</Link></li>
           <li><Link to="./schools">Colegios</Link></li>
           <li><Link to="./people">Personas</Link></li>
           <li><Link to="./users">Usuarios</Link></li>
-          <li><Link to="./">Admin</Link></li>
+        
         </ul>
         <div className={classes["icons"]}>
           { /*   <Search  className={classes['icon']}/>*/}

@@ -12,7 +12,7 @@ import DynamicLoader from "../dynamicLoader/DynamicLoader"
 import ProfilePicture from "../profilePicture/ProfilePicture"
 import IconButton from "../iconButton/IconButton"
 
-export default function SchoolInfo({ singleSchoolPending, memberForm, deleteData, currentSchool, clearSchool, openMember /*, selectLocation */ }) {
+export default function SchoolInfo({ singleSchoolPending, memberForm, deleteData, currentSchool, clearSchool, openMember, openForm }) {
  
  
     const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false)
@@ -71,7 +71,7 @@ export default function SchoolInfo({ singleSchoolPending, memberForm, deleteData
                     </table>
 
 
-                    <Button title="Editar" iconName="Edit" onClick={() => alert("Updating")} style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
+                    <Button title="Editar" iconName="Edit" onClick={openForm} style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
                     <Button title="Descargar" iconName="Download" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
                     <Button title="Borrar" onClick={deleteModal} iconName="Delete" style={{ background: "#22224F", width: "100%", color: "#FFFFFF", margin: "5px 0px" }} />
 

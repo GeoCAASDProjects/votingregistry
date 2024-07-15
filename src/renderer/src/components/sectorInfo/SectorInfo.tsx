@@ -73,8 +73,9 @@ export default function SectorInfo({ singleSectorPending, memberForm, deleteData
                 slug: "recinto",
                 label: "Recintos",
                 url: "enclosures",
+                plural: "recintos",
                 singularUrl: "sectors",
-                data: !enclosureDataPending ? enclosureData.data.map((data)=>{data.name, data.address}) : [],
+                data: !enclosureDataPending && enclosureData.hasOwnProperty("data") ? enclosureData.data.map((subInfo)=>{return {name: subInfo.name, address: subInfo.address}}) : [],
                    columns: [
                         {
                             field: 'name',
@@ -82,7 +83,7 @@ export default function SectorInfo({ singleSectorPending, memberForm, deleteData
                         },
                         {
                             field: 'address',
-                            header: "direccion"
+                            header: "Dirección"
                         },
                     ],
                 actions: [
@@ -107,20 +108,10 @@ export default function SectorInfo({ singleSectorPending, memberForm, deleteData
 
     }
  
-useEffect(()=>{
-    if(enclosureDataPending) return
-    console.log("The enclosure data");
-console.log(enclosureData)
-}, [enclosureData, enclosureDataPending])
 return (
 
     <>
-        {/*<Modal title="Borrar recinto?" isOpen={deleteModalOpen} setIsOpen={setDeleteModalOpen} onSubmit={() => deleteData(currentSector.id)}>
-            <p>Deseas borrar el Colegio? esta accion no es reversible</p>
-        </Modal>*/}
-
-        
-    {!enclosureDataPending ?    <InfoTemplate infoDisplay={infoDisplay}/> : <p>Loading</p>}
+    {!enclosureDataPending ?    <InfoTemplate infoDisplay={infoDisplay} clearInfo={clearSector}/> : <p>Loading</p>}
     </>
 )
 }
