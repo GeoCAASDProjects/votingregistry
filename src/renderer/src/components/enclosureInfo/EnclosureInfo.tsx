@@ -78,6 +78,7 @@ export default function EnclosureInfo({ singleEnclosurePending, currentEnclosure
 
                         </thead>
                         <tbody>
+                            
                             <tr>
 
                                 <td>   <span style={{ fontWeight: "bold" }}>Nombre</span></td>
@@ -86,18 +87,8 @@ export default function EnclosureInfo({ singleEnclosurePending, currentEnclosure
                             </tr>
                             <tr>
                                 <td>   <span style={{ fontWeight: "bold" }}>Dirección</span></td>
-                                <td>{currentEnclosure.address}</td>
+                                <td>{`${currentEnclosure.address}  (${currentEnclosure.longitude}, ${currentEnclosure.latitude})`}</td>
 
-                            </tr>
-                            <tr>
-                                <td>   <span style={{ fontWeight: "bold" }}>Coordenadas</span></td>
-                                <td>{`${currentEnclosure.longitude}, ${currentEnclosure.latitude}`}</td>
-
-                            </tr>
-
-                            <tr>
-                                <td>   <span style={{ fontWeight: "bold" }}>Colegios</span></td>
-                                <td>{currentEnclosure.schools.length ?? 0}</td>
                             </tr>
 
                         </tbody>

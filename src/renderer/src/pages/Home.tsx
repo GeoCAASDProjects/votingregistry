@@ -281,10 +281,8 @@ export default function Home(): JSX.Element {
 
       queryClient.refetchQueries({ queryKey: ["enclosures"] });
       //   setActionState("enclosures");
-      if (actionState == "schoolUpdateForm") {
-        closeActionForm();
-      }
-      setCurrentSchool(e.data.id);
+      closeActionForm();
+      setCurrentSchool(e.data);
 
     },
     onError: (e) => {

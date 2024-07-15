@@ -25,16 +25,6 @@ export default function SectorInfo({ singleSectorPending, memberForm, deleteData
 
     });
 
-    const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false)
-    const [isOpen, setIsOpen] = useState(false);
-    const queryClient = useQueryClient();
-
-
-    function deleteModal() {
-        setDeleteModalOpen(true);
-    }
- 
-    console.log(currentSector)
 
     const infoDisplay = {
         slug: "sector",
@@ -42,6 +32,7 @@ export default function SectorInfo({ singleSectorPending, memberForm, deleteData
         label: "Sector",
         url: "sectors",
         singularUrl: "sectors",
+        id: currentSector.id,
         close: () => alert("Closing"),
 
         dataDisplay: [
@@ -56,11 +47,6 @@ export default function SectorInfo({ singleSectorPending, memberForm, deleteData
                 icon: "Edit",
                 label: "Editar",
                 action: () => alert("Edit")
-            },
-            {
-                icon: "Delete",
-                label: "Delete",
-                action: () => alert("Delete")
             },
             {
                 icon: "Download",
@@ -87,16 +73,7 @@ export default function SectorInfo({ singleSectorPending, memberForm, deleteData
                         },
                     ],
                 actions: [
-                    {
-                        icon: "Edit",
-                        label: "Editar",
-                        action: () => alert("Sub data Edit")
-                    },
-                    {
-                        icon: "Delete",
-                        label: "Delete",
-                        action: () => alert("Sub data Delete")
-                    },
+  
                     {
                         icon: "Download",
                         label: "Descargar",
