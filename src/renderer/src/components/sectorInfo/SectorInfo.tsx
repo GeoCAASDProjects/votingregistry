@@ -2,7 +2,7 @@ import { CircularProgress } from "@mui/material"
 import Button from "../button/Button"
 import { Close, Delete, Edit, Visibility } from "@mui/icons-material"
 import classes from './sectorInfo.module.css'
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import {fetchSectorEnclosures, fetchSectors } from "@renderer/util/http/sector-http"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import Modal from "../modal/Modal"
@@ -33,7 +33,8 @@ export default function SectorInfo({ singleSectorPending, memberForm, deleteData
     function deleteModal() {
         setDeleteModalOpen(true);
     }
-
+ 
+    console.log(currentSector)
 
     const infoDisplay = {
         slug: "sector",
@@ -46,7 +47,7 @@ export default function SectorInfo({ singleSectorPending, memberForm, deleteData
         dataDisplay: [
             {
                 label: "Nombre",
-                value: currentSector.data.name
+                value: currentSector.name
             },
         
         ],
@@ -73,7 +74,7 @@ export default function SectorInfo({ singleSectorPending, memberForm, deleteData
                 label: "Recintos",
                 url: "enclosures",
                 singularUrl: "sectors",
-                data: enclosureData.data.map((data)=>{data.name, data.address}),
+                data: !enclosureDataPending ? enclosureData.data.map((data)=>{data.name, data.address}) : [],
                    columns: [
                         {
                             field: 'name',
@@ -105,8 +106,12 @@ export default function SectorInfo({ singleSectorPending, memberForm, deleteData
             ],
 
     }
-
-
+ 
+useEffect(()=>{
+    if(enclosureDataPending) return
+    console.log("The enclosure data");
+console.log(enclosureData)
+}, [enclosureData, enclosureDataPending])
 return (
 
     <>
@@ -115,7 +120,7 @@ return (
         </Modal>*/}
 
         
-        <InfoTemplate infoDisplay={infoDisplay}/>
+    {!enclosureDataPending ?    <InfoTemplate infoDisplay={infoDisplay}/> : <p>Loading</p>}
     </>
 )
 }

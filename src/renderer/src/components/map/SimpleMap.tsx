@@ -1,5 +1,5 @@
 import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvent, useMapEvents, FeatureGroup, Polygon, LayersControl } from 'react-leaflet';
-import classes from "./home.module.css";
+import classes from "./simpleMap.module.css";
 import L, { DivOverlay, latLng } from 'leaflet';
 import "leaflet/dist/leaflet.css";
 import { useEffect, useRef, useState } from 'react';
@@ -11,7 +11,7 @@ import "leaflet-draw/dist/leaflet.draw.css"
 import { getAddress, searchAddress } from '@renderer/util/http/map_token';
 
 type Position = [number, number];
-export default function SimpleMap({ enclosures, sectors, actionState, onMarkerClick, currentEnclosure, openForm, openFormSector,  onPolygonClick }): JSX.Element {
+export default function SimpleMap({ enclosures, sectors, actionState, onMarkerClick, currentEnclosure, currentSector, openForm, openFormSector,  onPolygonClick }): JSX.Element {
 
   const {BaseLayer, Overlay} = LayersControl;
   const mapRef = useRef(null)
@@ -196,14 +196,15 @@ export default function SimpleMap({ enclosures, sectors, actionState, onMarkerCl
     openFormSector(allCoordinates);
    }
   
+ 
   return (
-    <div style={{ width: '100%', height: '100%' }}>
-      {<div style={{ position: "absolute", display: actionState == "location" ? "flex" : "none", justifyContent: "center", alignItems: "center", alignContent: "center", width: "100%", zIndex: 999, top: actionState == "location" ? 0 : -200, transition: ".4s ease-in-out" }}>
+    <div className={classes["map"]}>
+      {<div  className={`${classes["searchbar"]} ${actionState == "location" && classes["active"]}`}>
         <SearchBar searchDataFunction={searchDataFunction} selectSearch={selectSearch} style={{ margin: 0, width: "50%" }} />
       </div>
       }
-      {<div style={{ position: "absolute", display: "flex", justifyContent: "center", alignItems: "center", alignContent: "center", width: "100%", zIndex: 999, bottom:  (actionState == "location" || actionState == "drawPolygon")  ? 30 : -30, opacity: (actionState == "location" || actionState == "drawPolygon") ? 1 : 0, transition: ".4s ease-in-out" }}>
-        <Button onClick={actionState=="location" ? openEnclosureForm : actionState=="drawPolygon" ? getAllPolygonCoordinates : ()=>{return}} style={{ padding: 5, borderRadius: "50%", backgroundColor: "purple", color: "white" }}><Check /></Button>
+      {<div className={`${classes["confirm-button"]} ${(actionState == "location" || actionState == "drawPolygon") && classes["confirm-active"]}`} >
+        <Button onClick={actionState=="location" ? openEnclosureForm : actionState=="drawPolygon" ? getAllPolygonCoordinates : ()=>{return}}  className={classes["button-styling"]}><Check /></Button>
 
       </div>
       }
@@ -259,7 +260,9 @@ export default function SimpleMap({ enclosures, sectors, actionState, onMarkerCl
            <FeatureGroup>
          
         {
-          !!sectors && sectors.data.map((sector)=>{return actionState=="" && <Polygon key={sector.id} eventHandlers={{ click: () => onPolygonClick(sector?.id) }} positions={sector.nodes.map((node)=>[node.latitude, node.longitude])}/>})
+          !!sectors && sectors.data.map((sector)=>{return (actionState=="" || sector.id == currentSector) && <Polygon  pathOptions={{
+          color: (sector.id == currentSector) ? "purple" : "blue"
+          }}  key={sector.id} eventHandlers={{ click: () => onPolygonClick(sector?.id) }} positions={sector.nodes.map((node)=>[node.latitude, node.longitude])}/>})
 
           
         }

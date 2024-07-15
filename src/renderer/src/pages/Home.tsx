@@ -18,6 +18,7 @@ import MemberInfo from "@renderer/components/memberInfo/MemberInfo";
 import { fetchPerson } from "@renderer/util/http/person-http";
 import SectorCreateForm from "@renderer/components/sectorForm/SectorForm";
 import { createSector, fetchSector, fetchSectors } from "@renderer/util/http/sector-http";
+import SectorInfo from "@renderer/components/sectorInfo/SectorInfo";
 
 export default function Home(): JSX.Element {
   const queryClient = useQueryClient();
@@ -612,6 +613,9 @@ export default function Home(): JSX.Element {
       />
     }
     {
+      actionState =="sector" && <SectorInfo singleSectorPending={singleSectorPending} currentSector={currentSector}/>
+    }
+    {
       actionState == "member" && <MemberInfo currentMember={currentMember} openSchool={openSchool} clearMember={clearMember} />
 
     }
@@ -673,7 +677,7 @@ export default function Home(): JSX.Element {
           {renderView}
 
         </Sidebar>
-        <SimpleMap openForm={openForm} openFormSector={openFormSector} currentEnclosure={currentEnclosure?.id ?? null} actionState={actionState} onMarkerClick={sendDataToSidebar} onPolygonClick={sendSectorToSidebar} enclosures={(!enclosurePending && enclosureData) ?? null} sectors={(!sectorPending && sectorData) ?? null} />
+        <SimpleMap openForm={openForm} openFormSector={openFormSector} currentEnclosure={currentEnclosure?.id ?? null}  currentSector={currentSector?.id ?? null} actionState={actionState} onMarkerClick={sendDataToSidebar} onPolygonClick={sendSectorToSidebar} enclosures={(!enclosurePending && enclosureData) ?? null} sectors={(!sectorPending && sectorData) ?? null} />
       </div>
 
     </>

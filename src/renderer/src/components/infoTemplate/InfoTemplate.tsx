@@ -23,7 +23,7 @@ export default function InfoTemplate({ infoDisplay }) {
               { /*     <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
                         <IconButton iconName="Close" onClick={clearEnclosure} />
                     </div>*/}
-}
+
                     <table className={classes['table']}>
                         <thead>
 
@@ -51,7 +51,7 @@ export default function InfoTemplate({ infoDisplay }) {
                         )
                     }
                     {
-                        infoDisplay.relations.map((subData) => {
+                     !!infoDisplay && infoDisplay.length>0 &&   infoDisplay.relations.map((subData) => {
                             subData.map((data) => <>
                                 <h3>{data.label}</h3>
 
