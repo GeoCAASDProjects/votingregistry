@@ -53,7 +53,7 @@ export default function InfoTemplate({ infoDisplay, clearInfo }) {
                     !!infoDisplay  && infoDisplay.relations.map((relation) =>
                     
                     <>
-                            <h3>{relation.label}</h3>
+                            <h3>{`${relation.label} (${relation.data.length})`}</h3>
                             
                  {relation.data.length>0    ?       <div>
 
