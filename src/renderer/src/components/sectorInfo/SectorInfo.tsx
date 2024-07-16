@@ -13,7 +13,7 @@ import ProfilePicture from "../profilePicture/ProfilePicture"
 import IconButton from "../iconButton/IconButton"
 import InfoTemplate from "../infoTemplate/InfoTemplate"
 
-export default function SectorInfo({ singleSectorPending, memberForm, deleteData, currentSector, clearSector, openMember /*, selectLocation */ }) {
+export default function SectorInfo({ singleSectorPending, memberForm, deleteData, currentSector, clearSector, openEnclosure, openForm /*, selectLocation */ }) {
 
 
     const { data: enclosureData, isPending: enclosureDataPending, isError: enclosureIsError, error: enclosureError } = useQuery({
@@ -32,13 +32,13 @@ export default function SectorInfo({ singleSectorPending, memberForm, deleteData
         label: "Sector",
         url: "sectors",
         singularUrl: "sectors",
-        id: currentSector.id,
+        id: currentSector?.id,
         close: () => alert("Closing"),
 
         dataDisplay: [
             {
                 label: "Nombre",
-                value: currentSector.name
+                value: currentSector?.name
             },
         
         ],
@@ -46,7 +46,7 @@ export default function SectorInfo({ singleSectorPending, memberForm, deleteData
             {
                 icon: "Edit",
                 label: "Editar",
-                action: () => alert("Edit")
+                action: openForm
             },
             {
                 icon: "Download",
@@ -62,7 +62,7 @@ export default function SectorInfo({ singleSectorPending, memberForm, deleteData
                 plural: "recintos",
                 singularUrl: "sectors",
                 isLoading: enclosureDataPending,
-                data: !!enclosureData && enclosureData.hasOwnProperty("data") ? enclosureData.data.map((subInfo)=>{return {name: subInfo.name, address: subInfo.address}}) : [],
+                data: !!enclosureData && enclosureData.hasOwnProperty("data") ? enclosureData.data.map((subInfo)=>{return {id:subInfo.id, name: subInfo.name, address: subInfo.address}}) : [],
                    columns: [
                         {
                             field: 'name',
@@ -72,6 +72,13 @@ export default function SectorInfo({ singleSectorPending, memberForm, deleteData
                             field: 'address',
                             header: "Dirección"
                         },
+                    ],
+                    rowActions: [
+                        {
+                            name: "Ver",
+                            icon: "Visibility",
+                            action: openEnclosure
+                        }
                     ],
                 actions: [
   

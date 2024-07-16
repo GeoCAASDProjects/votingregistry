@@ -85,6 +85,11 @@ export default function SchoolInfo({ singleSchoolPending, memberForm, deleteData
                     }
                 ],
                 actions: [
+                    {
+                        icon: "Add",
+                        label: "Añadir Miembro",
+                        action: memberForm
+                    },
 
                     {
                         icon: "Download",

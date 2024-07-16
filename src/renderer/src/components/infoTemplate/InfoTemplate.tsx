@@ -9,14 +9,14 @@ import Modal from '../modal/Modal';
 
 
 export default function InfoTemplate({ infoDisplay, clearInfo }) {
-     
+
     const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false)
     const [isOpen, setIsOpen] = useState(false);
     function triggerModal() {
         setDeleteModalOpen(true);
     }
-    if(infoDisplay.isLoading){
-       return <DynamicLoader />
+    if (infoDisplay.isLoading) {
+        return <DynamicLoader />
     }
     return (
 
@@ -25,96 +25,98 @@ export default function InfoTemplate({ infoDisplay, clearInfo }) {
             <Modal title={`Borrar ${infoDisplay.label}?`} isOpen={deleteModalOpen} setIsOpen={setDeleteModalOpen} onSubmit={() => infoDisplay.deleteFunction(infoDisplay.id)}>
                 <p>{`Desea borrar el ${infoDisplay.label} y todos sus datos asociados? esta accion no es reversible`}</p>
             </Modal>
-            
+
             {!!infoDisplay?.isLoading ?
-                <DynamicLoader />:
-           
-
-            <div>
-
-                <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
-                    <IconButton iconName="Close" onClick={clearInfo} />
-                </div>
-
-                <table className={classes['table']}>
-                    <thead>
+                <DynamicLoader /> :
 
 
-                    </thead>
-                    <tbody>
-                        {
-                            infoDisplay.dataDisplay.map((data) =>
-                                <tr>
+                <div>
 
-                                    <td>   <span style={{ fontWeight: "bold" }}>{data.label}</span></td>
-                                    <td>{data.value}</td>
+                    <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
+                        <IconButton iconName="Close" onClick={clearInfo} />
+                    </div>
 
-                                </tr>
-                            )
-                        }
+                    <table className={classes['table']}>
+                        <thead>
 
 
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {
+                                infoDisplay.dataDisplay.map((data) =>
+                                    <tr>
 
-                {
+                                        <td>   <span style={{ fontWeight: "bold" }}>{data.label}</span></td>
+                                        <td>{data.value}</td>
 
-                    infoDisplay.actions.map((button) => <Button title={button.label} iconName={button.icon} onClick={button.action} className={classes["sidebar-button"]} />)
-                }
-                <Button title={"Borrar"} iconName="Delete" onClick={triggerModal} className={classes["sidebar-button"]} />
-                {
-                    !!infoDisplay && infoDisplay.relations.map((relation) =>
-                        relation.isLoading ? <DynamicLoader/>: 
-                        <>
-                            <h3>{`${relation.label} (${relation.data.length})`}</h3>
-
-                            {relation.data.length > 0 ? <div>
-
-                                <table className={classes['table']}>
-                                    <thead>
-                                        {
-                                            relation.columns.map((column) => <th><span style={{ fontWeight: "bold" }}>{column.header}</span></th>)
-                                        }
+                                    </tr>
+                                )
+                            }
 
 
+                        </tbody>
+                    </table>
 
-                                    </thead>
-                                    <tbody>
-                                        {relation.data.length > 0 && relation.data.map((row, rowIndex) => (
-                                            <tr key={rowIndex}>
-                                                {relation.columns.map((column, colIndex) => (
+                    {
 
-                                                    <td key={colIndex}>{row[column.field]}</td>
+                        infoDisplay.actions.map((button) => <Button title={button.label} iconName={button.icon} onClick={button.action} className={classes["sidebar-button"]} />)
+                    }
+                    <Button title={"Borrar"} iconName="Delete" onClick={triggerModal} className={classes["sidebar-button"]} />
+                    {
+                        !!infoDisplay && infoDisplay.relations.map((relation) =>
+                            relation.isLoading ? <DynamicLoader /> :
+                                <>
+                                    <h3>{`${relation.label} (${relation.data.length})`}</h3>
+
+                                    {relation.data.length > 0 ? <div>
+
+                                        <table className={classes['table']}>
+                                            <thead>
+                                                {
+                                                    relation.columns.map((column) => <th><span style={{ fontWeight: "bold" }}>{column.header}</span></th>)
+                                                }
+
+
+
+                                            </thead>
+                                            <tbody>
+                                                {relation.data.length > 0 && relation.data.map((row, rowIndex) => (
+                                                    <tr key={rowIndex}>
+                                                        {relation.columns.map((column, colIndex) => (
+
+                                                            <td key={colIndex}>{row[column.field]}</td>
+                                                        ))}
+                                                        <td>
+                                                            <div className={classes["actions"]}>
+                                                                {relation.hasOwnProperty("rowActions") && relation.rowActions.map((action) =>
+                                                                    <IconButton iconName={`${action.icon}`} onClick={() => action.action(row.id)} />
+                                                                )}
+                                                            </div>
+                                                        </td>
+
+                                                    </tr>
                                                 ))}
-                                                <td>
-                                                <div className={classes["actions"]}>
-                                                {relation.hasOwnProperty("rowActions") && relation.rowActions.map((action)=>
-                                                <IconButton iconName={`${action.icon}`} onClick={()=>action.action(row.id)}/>
-                                                )}
-                                                </div>
-                                                </td>
-                                       
-                                            </tr>
-                                        ))}
 
-                                    </tbody>
-                                </table>
-                                {
+                                            </tbody>
+                                        </table>
 
-                                    relation.actions.map((button) => <Button title={button.label} iconName={button.icon} onClick={button.action} className={classes["sidebar-button"]} />)
-                                }
-                            </div> :
-                                <div style={{ margin: "5px 0px" }}>
-                                    <p>{`Este ${infoDisplay.slug} no cuenta con ${relation?.plural} actualmente`}</p>
-                                </div>}
+                                    </div> :
+                                        <div style={{ margin: "5px 0px" }}>
+                                            <p>{`Este ${infoDisplay.slug} no cuenta con ${relation?.plural} actualmente`}</p>
+                                        </div>
 
-                        </>
-                    )
-                }
+                                    }
+                                    {
+
+                                        relation.actions.map((button) => <Button title={button.label} iconName={button.icon} onClick={button.action} className={classes["sidebar-button"]} />)
+                                    }
+                                </>
+                        )
+                    }
 
 
-            </div>
-             }
+                </div>
+            }
 
 
         </>

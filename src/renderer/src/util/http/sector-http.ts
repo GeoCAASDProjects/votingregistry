@@ -76,6 +76,30 @@ export async function createSector(data){
 }
 
 
+export async function updateSector(data){
+
+    let url = `${BASE_URL_API}/sector/${data.id}`;
+    const config: AxiosRequestConfig ={
+     
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+        },
+     
+    }
+
+    try{
+        const response = await axios.patch(url, data, config);
+      
+        console.log(response);
+        alert(response)
+        return response.data;
+        } catch(error){
+            alert(error)
+            console.log(error);
+            
+          throw new Error('Request failed');
+        }
+}
 
 
 

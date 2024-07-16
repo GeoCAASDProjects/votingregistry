@@ -34,12 +34,12 @@ export default function SectorCreateForm({ defaultValues, edit, closeForm, submi
         area: Yup.string().required('Requerido'),
     });
 
-
+   
     const initialValues = {
 
         id: defaultValues?.id ?? null,
         name: defaultValues?.name ?? "",
-        area: defaultValues?.area ?? "",
+        area: defaultValues?.area  ?? "",
 
     }
 

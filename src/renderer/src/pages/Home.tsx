@@ -17,7 +17,7 @@ import Button from "@renderer/components/button/Button";
 import MemberInfo from "@renderer/components/memberInfo/MemberInfo";
 import { fetchPerson } from "@renderer/util/http/person-http";
 import SectorCreateForm from "@renderer/components/sectorForm/SectorForm";
-import { createSector, fetchSector, fetchSectors } from "@renderer/util/http/sector-http";
+import { createSector, fetchSector, fetchSectors, updateSector } from "@renderer/util/http/sector-http";
 import SectorInfo from "@renderer/components/sectorInfo/SectorInfo";
 
 export default function Home(): JSX.Element {
@@ -30,7 +30,7 @@ export default function Home(): JSX.Element {
   const [currentEnclosure, setCurrentEnclosure] = useState<Enclosure | null>(null);
   const [currentSchool, setCurrentSchool] = useState<{} | null>(null);
   const [currentMember, setCurrentMember] = useState(null);
-  const [currentSector, setCurrentSector] = useState(null);
+  const [currentSector, setCurrentSector] = useState<{} | null>(null);
 
   const [historyStack, setHistoryStack] = useState<string[]>([]);
 
@@ -327,6 +327,32 @@ export default function Home(): JSX.Element {
 
       queryClient.refetchQueries({ queryKey: [`sectors`] });
       closeActionForm();
+       
+      loadSector(e.data.id)
+      // loadEnclosure(e?.data?.enclosure_id)
+
+    },
+    onError: (e) => {
+
+      alert("Error")
+    }
+  });
+
+  
+  const {
+    mutate: singleSectorUpdateMutate,
+    data: singleSectorUpdateData,
+    isPending: singleSectorUpdatePending,
+    isError: singleSectorUpdateIsError,
+    error: singleSectorUpdateError
+  } = useMutation({
+    mutationFn: updateSector,
+    onSuccess: async (e) => {
+      alert(JSON.stringify(e));
+      queryClient.refetchQueries({ queryKey: [`sectors`] });
+      closeActionForm();
+      loadSector(e.data.id)
+   //   loadSector(e.data.id)
       // loadEnclosure(e?.data?.enclosure_id)
 
     },
@@ -390,6 +416,16 @@ export default function Home(): JSX.Element {
     console.log(data)
     try {
       const response = await singleSectorCreateMutate(data);
+
+    } catch (e) {
+      console.error(e)
+      alert(e);
+    }
+  }
+  async function updateSectorData(data) {
+    console.log(data)
+    try {
+      const response = await singleSectorUpdateMutate(data);
 
     } catch (e) {
       console.error(e)
@@ -489,7 +525,7 @@ export default function Home(): JSX.Element {
     const response = await singleMemberMutate(id);
   }
   function openForm(data) {
-    setDefaultFormValues({ longitude: data.lng.toFixed(2), latitude: data.lat.toFixed(2), address: data.address })
+    setDefaultFormValues((prevFormValues)=>{return {...prevFormValues, longitude: data.lng.toFixed(2), latitude: data.lat.toFixed(2), address: data.address }})
     if (!open) {
       setOpen(true);
     }
@@ -586,6 +622,11 @@ export default function Home(): JSX.Element {
     openAction("schoolCreateForm")
   }
 
+  function openEditSectorForm() {
+    setDefaultSectorValues({...currentSector, area:  JSON.stringify(currentSector?.nodes?.map((node)=>[node.latitude, node.longitude]))})
+    openAction("sectorEditForm")
+  }
+
   let renderView;
   renderView = <>
     {actionState == "" && <>
@@ -619,7 +660,7 @@ export default function Home(): JSX.Element {
       />
     }
     {
-      actionState == "sector" && <SectorInfo singleSectorPending={singleSectorPending} currentSector={currentSector} clearSector={clearSector}/>
+      actionState == "sector" && <SectorInfo singleSectorPending={singleSectorPending} currentSector={currentSector} openForm={openEditSectorForm} clearSector={clearSector} openEnclosure={sendDataToSidebar}/>
     }
     {
       actionState == "member" && <MemberInfo currentMember={currentMember} openSchool={openSchool} clearMember={clearMember} />
@@ -646,7 +687,7 @@ export default function Home(): JSX.Element {
         closeForm={closeActionForm}
         currentEnclosure={currentEnclosure?.id}
         submitData={!!currentSchool?.id ? updateSchoolData : submitSchoolData}
-        isLoading={!!currentSchool?.id ? singleSchoolCreatePending : singleSchoolUpdatePending}
+        isLoading={!!currentSchool?.id ? singleSchoolUpdatePending:  singleSchoolCreatePending }
       />
     }
     {
@@ -657,8 +698,8 @@ export default function Home(): JSX.Element {
         edit={!!currentSchool?.id}
         closeForm={closeActionForm}
         //   loadEnclosure={loadEnclosure}
-        submitData={submitSectorData}
-        isLoading={singleSchoolUpdatePending}
+        submitData={!!currentSector?.id ? updateSectorData : submitSectorData}
+        isLoading={!!currentSector?.id ? singleSectorUpdatePending:  singleSectorCreatePending}
       />
     }
     {

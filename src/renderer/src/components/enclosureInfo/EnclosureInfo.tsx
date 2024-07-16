@@ -14,10 +14,10 @@ import IconButton from "../iconButton/IconButton"
 import InfoTemplate from "../infoTemplate/InfoTemplate"
 
 export default function EnclosureInfo({ singleEnclosurePending, currentEnclosure, clearEnclosure, openForm, openSchool, openSchoolForm, deleteData }) {
-    if (!singleEnclosurePending && !currentEnclosure) {
+  /*  if (!singleEnclosurePending && !currentEnclosure) {
         return <p>There's no data here</p>
     }
-
+*/
     const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false)
 
     const defaultValues = { ...currentEnclosure }
@@ -125,6 +125,11 @@ export default function EnclosureInfo({ singleEnclosurePending, currentEnclosure
                         icon: "Download",
                         label: "Descargar",
                         action: () => alert("Sub data Descargar")
+                    },
+                    {
+                        icon: "Add",
+                        label: "Añadir Colegio",
+                        action: openSchoolForm
                     },
                 ]
             },
