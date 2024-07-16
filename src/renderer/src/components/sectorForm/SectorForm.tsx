@@ -18,10 +18,11 @@ interface SectorCreateFormI {
     edit?: boolean,
     //   loadEnclosure: (id:number)=>void
     closeForm:()=>void,
+    drawPolygon:()=>void,
     open?: boolean,
     setOpen: Dispatch<SetStateAction<boolean>>
 }
-export default function SectorCreateForm({ defaultValues, edit, closeForm, submitData}: SectorCreateFormI): JSX.Element {
+export default function SectorCreateForm({ defaultValues, edit, closeForm, submitData, drawPolygon}: SectorCreateFormI): JSX.Element {
 
  
     const queryClient = useQueryClient();
@@ -41,7 +42,7 @@ export default function SectorCreateForm({ defaultValues, edit, closeForm, submi
         name: defaultValues?.name ?? "",
         area: defaultValues?.area  ?? "",
 
-    }
+    } 
 
     return (
 
@@ -68,7 +69,13 @@ export default function SectorCreateForm({ defaultValues, edit, closeForm, submi
                             </div>
 
                             <div className={classes['input']}>
-                                <label>Area</label>
+                              <div style={{display:"flex", gap: "10x", alignItems:"center", alignContent:"center"}}>  
+                                <label>Area</label> 
+                                { !!edit && <IconButton onClick={drawPolygon} iconName="Map"/>}
+
+                                </div>
+                                
+                               
                                 <Field type="area" name="area" placeholder="Area" />
                                 <span style={{ color: "red" }}> <ErrorMessage name="area" component="div" /></span>
                             </div>

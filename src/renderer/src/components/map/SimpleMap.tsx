@@ -11,7 +11,7 @@ import "leaflet-draw/dist/leaflet.draw.css"
 import { getAddress, searchAddress } from '@renderer/util/http/map_token';
 
 type Position = [number, number];
-export default function SimpleMap({ enclosures, sectors, actionState, onMarkerClick, currentEnclosure, currentSector, openForm, openFormSector, onPolygonClick }): JSX.Element {
+export default function SimpleMap({ enclosures, sectors, actionState, onMarkerClick, currentEnclosure, currentSector, openForm, openFormSector, onPolygonClick, edit }): JSX.Element {
 
   const { BaseLayer, Overlay } = LayersControl;
   const mapRef = useRef(null)

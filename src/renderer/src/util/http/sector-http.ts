@@ -102,6 +102,28 @@ export async function updateSector(data){
 }
 
 
+export async function deleteSector(id){
+    
+    let url = `${BASE_URL_API}/sector/${id}`;
+    const config: AxiosRequestConfig ={
+     
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+        },
+     
+    }
+    try{
+        const response = await axios.delete(url, config);
+        return response.data;
+    
+    }catch(error){
+        console.log("The error inside the delete function")
+        console.log(error)
+        throw new Error('Request failed.')
+    }
+}
+
+
 
 export async function fetchSectorEnclosures({signal, sectorId}){
     let url = `${BASE_URL_API}/sector/${sectorId}/enclosures`;
