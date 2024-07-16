@@ -61,7 +61,8 @@ export default function SectorInfo({ singleSectorPending, memberForm, deleteData
                 url: "enclosures",
                 plural: "recintos",
                 singularUrl: "sectors",
-                data: !enclosureDataPending && enclosureData.hasOwnProperty("data") ? enclosureData.data.map((subInfo)=>{return {name: subInfo.name, address: subInfo.address}}) : [],
+                isLoading: enclosureDataPending,
+                data: !!enclosureData && enclosureData.hasOwnProperty("data") ? enclosureData.data.map((subInfo)=>{return {name: subInfo.name, address: subInfo.address}}) : [],
                    columns: [
                         {
                             field: 'name',

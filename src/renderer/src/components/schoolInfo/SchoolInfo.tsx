@@ -11,15 +11,16 @@ import { fetchMembers } from "@renderer/util/http/person-http"
 import DynamicLoader from "../dynamicLoader/DynamicLoader"
 import ProfilePicture from "../profilePicture/ProfilePicture"
 import IconButton from "../iconButton/IconButton"
+import InfoTemplate from "../infoTemplate/InfoTemplate"
 
 export default function SchoolInfo({ singleSchoolPending, memberForm, deleteData, currentSchool, clearSchool, openMember, openForm }) {
- 
+ /*
  
     const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false)
     const [isOpen, setIsOpen] = useState(false);
     const queryClient = useQueryClient();
 
-    const [currentMember, setCurrentMember] = useState(null);
+    const [currentMember, setCurrentMember] = useState(null);*/
     const { data: memberData, isPending: memberDataPending, isError: memberIsError, error: memberError } = useQuery({
         queryKey: [`school/${currentSchool?.id}/members`],
         queryFn: ({ signal }) => fetchMembers({ signal, schoolId: currentSchool?.id }),
@@ -28,14 +29,91 @@ export default function SchoolInfo({ singleSchoolPending, memberForm, deleteData
         enabled: !!currentSchool?.id
 
     });
-    function deleteModal() {
-        setDeleteModalOpen(true);
+
+
+    const infoDisplay = {
+        isLoading: singleSchoolPending,
+        slug: "school",
+        plural: "escuelas",
+        label: "Escuela",
+        url: "schools",
+        singularUrl: "schools",
+        id: currentSchool?.id,
+        close: () => alert("Closing"),
+        deleteFunction: deleteData,
+        dataDisplay: [
+            {
+                label: "Nombre",
+                value: currentSchool?.name
+            },
+          
+
+        ],
+        actions: [
+            {
+                icon: "Edit",
+                label: "Editar",
+                action: openForm
+            },
+            {
+                icon: "Download",
+                label: "Descargar",
+                action: () => alert("Descargar")
+            },
+        ],
+        relations:
+            [{
+                slug: "member",
+                label: "Miembro",
+                url: "members",
+                plural: "members",
+                singularUrl: "member",
+                isLoading: memberDataPending,
+                data:  !!memberData && memberData.hasOwnProperty("data") ? memberData.data.map((subInfo) => { return {id: subInfo.id, name: `${subInfo.name} ${subInfo.last_name}` } }) : [],
+                columns: [
+                    {
+                        field: 'name',
+                        header: "Nombre"
+                    },
+               
+                ],
+                rowActions: [
+                    {
+                        name: "Ver",
+                        icon: "Visibility",
+                     action: openMember
+                    }
+                ],
+                actions: [
+
+                    {
+                        icon: "Download",
+                        label: "Descargar",
+                        action: () => alert("Sub data Descargar")
+                    },
+                ]
+            },
+            ],
+
     }
 
+    
     return (
 
         <>
-            {<Modal title="Borrar recinto?" isOpen={deleteModalOpen} setIsOpen={setDeleteModalOpen} onSubmit={() => deleteData(currentSchool.id)}>
+           <InfoTemplate infoDisplay={infoDisplay} clearInfo={clearSchool} /> 
+        </>
+    )
+    /*
+    function deleteModal() {
+        setDeleteModalOpen(true);
+    }
+    */
+/*
+    return (
+
+        <>
+            {<Modal title="Borrar escuela?" isOpen={deleteModalOpen} setIsOpen={setDeleteModalOpen} onSubmit={() => deleteData(currentSchool.id)}>
                 <p>Deseas borrar el Colegio? esta accion no es reversible</p>
             </Modal>}
 
@@ -121,5 +199,5 @@ export default function SchoolInfo({ singleSchoolPending, memberForm, deleteData
             }
             </div>
         </>
-    )
+    )*/
 }

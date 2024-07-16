@@ -9,12 +9,14 @@ import Modal from '../modal/Modal';
 
 
 export default function InfoTemplate({ infoDisplay, clearInfo }) {
-    console.log(infoDisplay.relations[0])
-
+     
     const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false)
     const [isOpen, setIsOpen] = useState(false);
     function triggerModal() {
         setDeleteModalOpen(true);
+    }
+    if(infoDisplay.isLoading){
+       return <DynamicLoader />
     }
     return (
 
@@ -23,10 +25,10 @@ export default function InfoTemplate({ infoDisplay, clearInfo }) {
             <Modal title={`Borrar ${infoDisplay.label}?`} isOpen={deleteModalOpen} setIsOpen={setDeleteModalOpen} onSubmit={() => infoDisplay.deleteFunction(infoDisplay.id)}>
                 <p>{`Desea borrar el ${infoDisplay.label} y todos sus datos asociados? esta accion no es reversible`}</p>
             </Modal>
-            {infoDisplay?.loading &&
-                <DynamicLoader />
-            }
-
+            
+            {!!infoDisplay?.isLoading ?
+                <DynamicLoader />:
+           
 
             <div>
 
@@ -62,7 +64,7 @@ export default function InfoTemplate({ infoDisplay, clearInfo }) {
                 <Button title={"Borrar"} iconName="Delete" onClick={triggerModal} className={classes["sidebar-button"]} />
                 {
                     !!infoDisplay && infoDisplay.relations.map((relation) =>
-
+                        relation.isLoading ? <DynamicLoader/>: 
                         <>
                             <h3>{`${relation.label} (${relation.data.length})`}</h3>
 
@@ -112,6 +114,8 @@ export default function InfoTemplate({ infoDisplay, clearInfo }) {
 
 
             </div>
+             }
+
 
         </>
     )
