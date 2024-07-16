@@ -196,6 +196,8 @@ export default function SimpleMap({ enclosures, sectors, actionState, onMarkerCl
     openFormSector(allCoordinates);
   }
 
+ 
+
 
   return (
     <div className={classes["map"]}>
@@ -215,9 +217,9 @@ export default function SimpleMap({ enclosures, sectors, actionState, onMarkerCl
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        {(actionState == "sectorCreateForm" || actionState == "sectorEditForm" || actionState == "drawPolygon") && <FeatureGroup ref={featureGroupRef}>
+        {(actionState == "sectorCreateForm" || actionState == "sectorEditForm" || actionState == "drawPolygon") && 
+        <FeatureGroup ref={featureGroupRef}>
           {actionState == "drawPolygon" && <EditControl position="topright"
-
             draw={{
               polyline: false,
               rectangle: false,
@@ -226,6 +228,7 @@ export default function SimpleMap({ enclosures, sectors, actionState, onMarkerCl
               marker: false,
               polygon: true
             }} />}
+ 
         </FeatureGroup>}
         <SetZoomControlPosition position="bottomright" />
         {position && <UpdateMapCenter position={position} />}
