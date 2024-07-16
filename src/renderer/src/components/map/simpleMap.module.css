@@ -1,0 +1,47 @@
+.searchbar {
+    position: absolute;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    width: 100%;
+    z-index: 999;
+    top:  -200px; 
+    transition: .4s ease-in-out
+}
+
+.active{
+    display: flex;
+    top: 0px;
+    transition: .4s ease-in-out
+}
+
+.map{
+    width:100%;
+    height: 100%
+}
+
+
+.confirm-button{
+  position: absolute; 
+  display: flex; 
+  justify-content: center; 
+  align-items: center;
+align-content: center; 
+width: 100%; 
+z-index: 999; 
+bottom:  -30px;
+opacity: 0;
+ transition: .4s ease-in-out
+}
+
+.confirm-active{
+    bottom:  30px;
+    opacity: 1; 
+}
+.button-styling{
+    padding: 5px; 
+    border-radius: 50%; 
+    background-color: purple; 
+    color: white
+}
