@@ -20,9 +20,10 @@ interface SectorCreateFormI {
     closeForm:()=>void,
     drawPolygon:()=>void,
     open?: boolean,
+    isLoading: boolean,
     setOpen: Dispatch<SetStateAction<boolean>>
 }
-export default function SectorCreateForm({ defaultValues, edit, closeForm, submitData, drawPolygon}: SectorCreateFormI): JSX.Element {
+export default function SectorCreateForm({ defaultValues, edit, closeForm, submitData, drawPolygon, isLoading}: SectorCreateFormI): JSX.Element {
 
  
     const queryClient = useQueryClient();
@@ -83,7 +84,7 @@ export default function SectorCreateForm({ defaultValues, edit, closeForm, submi
                         </div>
 
 
-                        <Button type="submit" title="Enviar" iconName="Send" isLoading={false} center />
+                        <Button type="submit" title="Enviar" iconName="Send" isLoading={isLoading} center />
 
 
                     </div>

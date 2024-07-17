@@ -455,7 +455,7 @@ export default function Home(): JSX.Element {
     }
   }
   function toggleSidebar() {
-
+ 
     setOpen(currentVal => !currentVal);
   }
 
@@ -496,10 +496,15 @@ export default function Home(): JSX.Element {
   }
 
   function selectLocation() {
+    if(!currentSector?.id){
+      setCurrentSector(null);
+      setDefaultSectorValues({})
+    }
     setOpen(false);
     setActionState("location")
   }
   function drawPolygon() {
+
     setOpen(false);
     setActionState("drawPolygon")
   }
@@ -566,7 +571,7 @@ export default function Home(): JSX.Element {
   function createForm() {
 
     setOpen(true);
-    resetHistory();
+    closeActionForm();
   }
 
   function memberForm() {

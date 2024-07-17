@@ -206,7 +206,7 @@ export default function SimpleMap({ enclosures, sectors, actionState, onMarkerCl
     },[area])*/
     const _onCreated = (e) => {
       const { layerType, layer } = e;
-      polygon = layer.getLatLngs()[0];
+      
       if (layerType === 'polygon') {
         // Do something with the polygon layer
        polygon = layer.getLatLngs()[0];
@@ -216,19 +216,29 @@ export default function SimpleMap({ enclosures, sectors, actionState, onMarkerCl
  
  
     const _onEditVertex = (e) => {
-     console.log(e)
-    
-        //polygon = layer.getLatLngs()[0];
+      console.log(e.layers)
+      const { layerType, layer } = e;
+       
+      if (layerType === 'polygon') {
+        polygon = layer._layers.getLatLngs()[0];
+       
+      }
       
     };
 
-    
-    const handleEditMove = (e) => {
-      console.log('Layer moved:', e.layer);
-      // Handle the moved layer
-    };
  
+    const _onEditStart = (e) => {
+      console.log(e)
   
+      const { layerType, layer } = e;
+       
+      if (layerType === 'polygon') {
+        polygon = layer._layers.getLatLngs()[0];
+       
+      }
+      
+      
+    };
   return (
     <div className={classes["map"]}>
       {<div className={`${classes["searchbar"]} ${actionState == "location" && classes["active"]}`}>
@@ -250,10 +260,7 @@ export default function SimpleMap({ enclosures, sectors, actionState, onMarkerCl
         {(actionState == "sectorCreateForm" || actionState == "sectorEditForm" || actionState == "drawPolygon") && 
         <FeatureGroup ref={featureGroupRef}>
           {actionState == "drawPolygon" && <EditControl position="topright"
-       
-           onCreated={_onCreated}
-          
-           onEditVertex={_onEditVertex}
+      
             draw={{
               polyline: false,
               rectangle: false,

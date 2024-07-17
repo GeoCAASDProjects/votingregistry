@@ -28,7 +28,7 @@ export default function Sidebar({ isOpen, toggleSidebar, children, actionState, 
 
         }}>
 
-            <button className={classes["sidebar-toggle"]} onClick={!(actionState=="location" || actionState =="drawPolygon") ? toggleSidebar : createForm}>
+            <button className={classes["sidebar-toggle"]} onClick={!(actionState == "location" || actionState == "drawPolygon") ? toggleSidebar : createForm}>
                 {sideBarButton}
             </button>
             <div style={{ position: "relative" }}>
@@ -38,10 +38,10 @@ export default function Sidebar({ isOpen, toggleSidebar, children, actionState, 
                 >
 
                     <div style={{ padding: 10 }}>
-                        
-                    <h2>Contenedor</h2>
-                    {children}
-                
+
+                        <h2>Contenedor</h2>
+                        {children}
+
 
 
                     </div>
