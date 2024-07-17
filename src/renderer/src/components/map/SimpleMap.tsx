@@ -11,7 +11,7 @@ import "leaflet-draw/dist/leaflet.draw.css"
 import { getAddress, searchAddress } from '@renderer/util/http/map_token';
 
 type Position = [number, number];
-export default function SimpleMap({ enclosures, sectors, actionState, onMarkerClick, currentEnclosure, currentSector, openForm, openFormSector, onPolygonClick, edit }): JSX.Element {
+export default function SimpleMap({ enclosures, sectors, actionState, onMarkerClick, currentEnclosure, currentSector, openForm, openFormSector, onPolygonClick, area, edit }): JSX.Element {
 
   const { BaseLayer, Overlay } = LayersControl;
   const mapRef = useRef(null)
@@ -198,24 +198,43 @@ export default function SimpleMap({ enclosures, sectors, actionState, onMarkerCl
 
  
  
-    const [polygon, setPolygon] = useState([[18.114375680371,-67.931728363037],[18.115027622577,-67.925033569336],[18.118291577313,-67.916278839111],[18.119596667755,-67.906150817871],[18.114537183551,-67.89945602417],[18.114864366518,-67.895336151123],[18.111926608115,-67.887439727783],[18.11453836963,-67.87353515625],[18.118781232314,-67.869071960449],[18.11992296463,-67.863750457764],[18.121554800845,-67.861347198486],[18.117311334982,-67.857055664063],[18.113231900696,-67.8537940979],[18.11160045105,-67.849502563477],[18.101481545027,-67.845554351807],[18.094791117766,-67.843837738037],[18.08940575051,-67.842979431152],[18.083367025664,-67.844696044922],[18.081735659137,-67.847270965576],[18.081735917028,-67.84984588623],[18.070798803839,-67.86169052124],[18.058614738926,-67.870593702365],[18.058288224816,-67.873855268527],[18.056165868313,-67.879005109835],[18.055431200475,-67.88381162839],[18.054533268946,-67.888789808322],[18.053553702048,-67.897115385104],[18.060165672664,-67.903896009494],[18.060165672664,-67.906642591525],[18.062451234274,-67.915568983126],[18.065634645537,-67.924152051974],[18.07363373201,-67.930761014987],[18.077959616743,-67.935138380099],[18.080244946772,-67.945180570651],[18.08497875002,-67.944751417208],[18.088569825911,-67.938228284884],[18.098689735132,-67.936082517672],[18.108737177921,-67.935848236084]]);
-  
+    let polygon= area ?? [];
+/*
+    useEffect(()=>{
+      setPolygon(area);
+     alert("Area change")
+    },[area])*/
     const _onCreated = (e) => {
       const { layerType, layer } = e;
       if (layerType === 'polygon') {
         // Do something with the polygon layer
-        setPolygon(layer.getLatLngs()[0]);
+       polygon = layer.getLatLngs()[0];
       }
     };
   
     const _onEdited = (e) => {
+      alert("Editing")
       const { layers } = e;
       layers.eachLayer((layer) => {
         // Do something with the edited layer
-        setPolygon(layer.getLatLngs()[0]);
+        polygon = layer.getLatLngs()[0];
       });
     };
  
+    const _onEditVertex = (e) => {
+     console.log(e)
+    
+        //polygon = layer.getLatLngs()[0];
+      
+    };
+
+    
+    const handleEditMove = (e) => {
+      console.log('Layer moved:', e.layer);
+      // Handle the moved layer
+    };
+ 
+  
   return (
     <div className={classes["map"]}>
       {<div className={`${classes["searchbar"]} ${actionState == "location" && classes["active"]}`}>
@@ -240,6 +259,7 @@ export default function SimpleMap({ enclosures, sectors, actionState, onMarkerCl
        
            onCreated={_onCreated}
            onEdited={_onEdited}
+           onEditVertex={_onEditVertex}
             draw={{
               polyline: false,
               rectangle: false,
@@ -248,7 +268,7 @@ export default function SimpleMap({ enclosures, sectors, actionState, onMarkerCl
               marker: false,
               polygon: true
             }} />}
-    <Polygon positions={polygon} />
+ {polygon.length>0 && currentSector &&   <Polygon positions={polygon} />}
         </FeatureGroup>}
         <SetZoomControlPosition position="bottomright" />
         {position && <UpdateMapCenter position={position} />}

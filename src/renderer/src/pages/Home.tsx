@@ -774,6 +774,7 @@ export default function Home(): JSX.Element {
           enclosures={(!enclosurePending && enclosureData) ?? null}
           sectors={(!sectorPending && sectorData) ?? null}
           edit={false}
+          area={!!defaultSectorValues?.area && JSON.parse(defaultSectorValues?.area)}
         />
       </div>
 
