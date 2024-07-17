@@ -206,20 +206,14 @@ export default function SimpleMap({ enclosures, sectors, actionState, onMarkerCl
     },[area])*/
     const _onCreated = (e) => {
       const { layerType, layer } = e;
+      polygon = layer.getLatLngs()[0];
       if (layerType === 'polygon') {
         // Do something with the polygon layer
        polygon = layer.getLatLngs()[0];
       }
     };
   
-    const _onEdited = (e) => {
-      alert("Editing")
-      const { layers } = e;
-      layers.eachLayer((layer) => {
-        // Do something with the edited layer
-        polygon = layer.getLatLngs()[0];
-      });
-    };
+ 
  
     const _onEditVertex = (e) => {
      console.log(e)
@@ -258,7 +252,7 @@ export default function SimpleMap({ enclosures, sectors, actionState, onMarkerCl
           {actionState == "drawPolygon" && <EditControl position="topright"
        
            onCreated={_onCreated}
-           onEdited={_onEdited}
+          
            onEditVertex={_onEditVertex}
             draw={{
               polyline: false,
