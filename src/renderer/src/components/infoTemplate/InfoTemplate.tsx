@@ -43,7 +43,7 @@ export default function InfoTemplate({ infoDisplay, clearInfo }) {
                         </thead>
                         <tbody>
                             {
-                                infoDisplay.dataDisplay.map((data) =>
+                               !infoDisplay?.isLoading && infoDisplay.dataDisplay.map((data) =>
                                     <tr>
 
                                         <td>   <span style={{ fontWeight: "bold" }}>{data.label}</span></td>

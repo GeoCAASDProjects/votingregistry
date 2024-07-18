@@ -25,7 +25,7 @@ export default function EnclosureInfo({ singleEnclosurePending, currentEnclosure
 
 
     const queryClient = useQueryClient();
-
+ 
     // const [currentSchool, setCurrentSchool] = useState(null);
     const { data: schoolData, isPending: schoolDataPending, isError: schoolIsError, error: schoolError } = useQuery({
         queryKey: [`enclosure/${currentEnclosure?.id}/schools`],

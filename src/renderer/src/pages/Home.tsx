@@ -468,10 +468,10 @@ export default function Home(): JSX.Element {
     try {
       const response = await schoolMutations.createMutation.mutateAsync(data);
 
-      queryClient.refetchQueries({ queryKey: ["enclosures"] });
-  
-      queryClient.refetchQueries({ queryKey: [`enclosure/${response?.data.enclosure_id}/schools`] });
-      queryClient.refetchQueries({queryKey: ["enclosure", response?.data.enclosure_id]});
+    //  queryClient.refetchQueries({ queryKey: ["enclosures"] });
+   
+    queryClient.refetchQueries({ queryKey: [`enclosure/${response?.data.enclosure_id}/schools`] });
+    //queryClient.refetchQueries({queryKey: ["enclosure", response?.data.enclosure_id]});
      
       console.log("Answer")
       console.log(response);
