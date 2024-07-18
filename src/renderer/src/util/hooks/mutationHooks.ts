@@ -1,8 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-const useEntityMutations = () => {
+const useEntityMutations = (entity, queryKey, mutationFns) => {
     const queryClient = useQueryClient();
 
+    const {createFn, updateFn, deleteFn} = mutationFns;
     const createMutation = (createFn, queryKey, onSuccess) =>
         useMutation(createFn, {
             onSuccess: (data, variables, context) => {
@@ -35,7 +36,7 @@ const useEntityMutations = () => {
         })
  
     
-      
+      return { createMutation, updateMutation, deleteMutation}
 }
 
 export default useEntityMutations;

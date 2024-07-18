@@ -19,6 +19,7 @@ import { fetchPerson } from "@renderer/util/http/person-http";
 import SectorCreateForm from "@renderer/components/sectorForm/SectorForm";
 import { createSector, deleteSector, fetchSector, fetchSectors, updateSector } from "@renderer/util/http/sector-http";
 import SectorInfo from "@renderer/components/sectorInfo/SectorInfo";
+import useEntityMutations from "@renderer/util/hooks/mutationHooks";
 
 export default function Home(): JSX.Element {
   const queryClient = useQueryClient();
@@ -93,6 +94,28 @@ export default function Home(): JSX.Element {
     gcTime: 30000,
   });
 
+const enclosureMutations = useEntityMutations('enclosure', 'enclosures',{
+  createFn: createEnclosure,
+  updateFn: updateEnclosure,
+  deleteFn: deleteEnclosure
+});
+
+
+const sectorMutations = useEntityMutations('sector', 'sectors',{
+  createFn: createSector,
+  updateFn: updateSector,
+  deleteFn: deleteSector
+});
+
+
+const schoolMutations = useEntityMutations('school', 'schools',{
+  createFn: createSchool,
+  updateFn: updateSchool,
+  deleteFn: deleteSchool
+});
+
+
+  /*
 
   const {
     mutate: singleEnclosureMutate,
@@ -384,7 +407,49 @@ export default function Home(): JSX.Element {
 
     }
   });
-  async function submitSchoolData(data) {
+  */
+
+
+  async function handleCreateEnclosure(data) {
+    console.log(data)
+    try {
+    //  const response = await singleEnclosureCreateMutate(data);
+      const response = await  enclosureMutations.createMutation.mutate(data)
+    } catch (e) {
+      console.error(e)
+      alert(e);
+    }
+  }
+
+  async function handleUpdateEnclosure(data) {
+
+    try {
+     // const response = singleEnclosureUpdateMutate(data);
+
+     const response = await  enclosureMutations.updateMutation.mutate(data)
+      console.log("Answer")
+      console.log(response);
+
+    } catch (e) {
+      console.error(e)
+      alert(e);
+    }
+  }
+
+  async function handleDeleteEnclosure(id) {
+
+    try {
+      const response = singleEnclosureDeleteMutate(id);
+
+
+    } catch (e) {
+      console.error(e)
+
+    }
+  }
+
+
+  async function handleCreateSchool(data) {
 
     try {
       const response = singleSchoolCreateMutate(data);
@@ -396,32 +461,8 @@ export default function Home(): JSX.Element {
       alert(e);
     }
   }
-
-  async function submitEnclosureData(data) {
-    console.log(data)
-    try {
-      const response = await singleEnclosureCreateMutate(data);
-
-    } catch (e) {
-      console.error(e)
-      alert(e);
-    }
-  }
-
-  async function updateEnclosureData(data) {
-
-    try {
-      const response = singleEnclosureUpdateMutate(data);
-      console.log("Answer")
-      console.log(response);
-
-    } catch (e) {
-      console.error(e)
-      alert(e);
-    }
-  }
-
-  async function updateSchoolData(data) {
+  
+  async function handleUpdateSchool(data) {
 
     try {
       const response = singleSchoolUpdateMutate(data);
@@ -434,7 +475,7 @@ export default function Home(): JSX.Element {
     }
   }
 
-  async function submitSectorData(data) {
+  async function handleCreateSector(data) {
     console.log(data)
     try {
       const response = await singleSectorCreateMutate(data);
@@ -444,7 +485,7 @@ export default function Home(): JSX.Element {
       alert(e);
     }
   }
-  async function updateSectorData(data) {
+  async function handleUpdateSector(data) {
     console.log(data)
     try {
       const response = await singleSectorUpdateMutate(data);
@@ -584,17 +625,6 @@ export default function Home(): JSX.Element {
     }
   }
 
-  async function deleteData(id) {
-
-    try {
-      const response = singleEnclosureDeleteMutate(id);
-
-
-    } catch (e) {
-      console.error(e)
-
-    }
-  }
 
   async function deleteSchoolData(id) {
 
@@ -679,7 +709,7 @@ export default function Home(): JSX.Element {
       clearEnclosure={clearEnclosure}
       openSchool={openSchool}
       openForm={openEditForm}
-      deleteData={deleteData}
+      deleteData={handleDeleteEnclosure}
       openSchoolForm={openCreateSchoolForm}
 
 
@@ -717,7 +747,7 @@ export default function Home(): JSX.Element {
         edit={!!currentEnclosure?.id}
         closeForm={closeActionForm}
         //   loadEnclosure={loadEnclosure}
-        submitData={!!currentEnclosure?.id ? updateEnclosureData : submitEnclosureData}
+        submitData={!!currentEnclosure?.id ? handleUpdateEnclosure : handleCreateEnclosure}
         isLoading={singleEnclosureCreatePending}
       />
     }
@@ -729,7 +759,7 @@ export default function Home(): JSX.Element {
         edit={!!currentSchool?.id}
         closeForm={closeActionForm}
         currentEnclosure={currentEnclosure?.id}
-        submitData={!!currentSchool?.id ? updateSchoolData : submitSchoolData}
+        submitData={!!currentSchool?.id ? handleUpdateSchool : handleCreateSchool}
         isLoading={!!currentSchool?.id ? singleSchoolUpdatePending : singleSchoolCreatePending}
       />
     }
@@ -742,7 +772,7 @@ export default function Home(): JSX.Element {
         closeForm={closeActionForm}
         drawPolygon={drawPolygon}
         //   loadEnclosure={loadEnclosure}
-        submitData={!!currentSector?.id ? updateSectorData : submitSectorData}
+        submitData={!!currentSector?.id ? handleUpdateSector : handleCreateSector}
         isLoading={!!currentSector?.id ? singleSectorUpdatePending : singleSectorCreatePending}
       />
     }
