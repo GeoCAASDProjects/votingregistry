@@ -5,11 +5,12 @@ const useEntityMutations = (entity, queryKey, mutationFns) => {
 
     const {createFn, updateFn, deleteFn} = mutationFns;
     const createMutation = useMutation({
-        mutationFn: createFn,
+        mutationFn:  createFn,
         onSuccess: async (e) => {
-            alert("Success")
+         
             queryClient.refetchQueries(queryKey);
-              
+           
+            return e.data;
         },
         onError: (e) => {
     
@@ -24,8 +25,8 @@ const useEntityMutations = (entity, queryKey, mutationFns) => {
             mutationFn: updateFn,
             onSuccess: async (e) => {
                 alert("Success")
-                queryClient.refetchQueries(queryKey);
-                if (onSuccess) onSuccess(e)
+                queryClient.refetchQueries({queryKey: [entity, e?.data?.id]});
+                
             },
             onError: (e) => {
         
@@ -37,14 +38,15 @@ const useEntityMutations = (entity, queryKey, mutationFns) => {
 
     const deleteMutation =  useMutation(
         {
-            mutationFn: updateFn,
+            mutationFn: deleteFn,
             onSuccess: async (e) => {
                 alert("Success")
                 queryClient.refetchQueries(queryKey);
-                 
+                return e.data;
+                
             },
             onError: (e) => {
-        
+                console.log(e)
               alert("Error")
             }
         }
@@ -54,18 +56,21 @@ const useEntityMutations = (entity, queryKey, mutationFns) => {
       return {
         createMutation:{
             mutate: createMutation.mutate,
+            mutateAsync: createMutation.mutateAsync,
             isPending: createMutation.isPending,
             isError: createMutation.isError,
             error: createMutation.error
         }, 
         updateMutation:{
             mutate: updateMutation.mutate,
+            mutateAsync: updateMutation.mutateAsync,
             isPending: updateMutation.isPending,
             isError: updateMutation.isError,
             error: updateMutation.error
         }, 
         deleteMutation:{
             mutate: deleteMutation.mutate,
+            mutateAsync: deleteMutation.mutateAsync,
             isPending: deleteMutation.isPending,
             isError: deleteMutation.isError,
             error: deleteMutation.error

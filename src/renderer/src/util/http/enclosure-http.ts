@@ -103,7 +103,7 @@ export async function updateEnclosure(data){
 }
 
 export async function deleteEnclosure(id){
-    
+ 
     let url = `${BASE_URL_API}/enclosure/${id}`;
     const config: AxiosRequestConfig ={
      

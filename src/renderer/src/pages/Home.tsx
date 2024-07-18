@@ -96,17 +96,17 @@ export default function Home(): JSX.Element {
   });
 
 
-  const { data: singleEnclosureData, isPending: singleEnclosurePending} = useEntity('enclosure', fetchEnclosure, currentEnclosure?.id)
+  const { data: singleEnclosureData, isPending: singleEnclosurePending } = useEntity('enclosure', fetchEnclosure, currentEnclosure?.id)
 
   const { data: singleSchoolData, isPending: singleSchoolPending } = useEntity('school', fetchSchool, currentSchool?.id)
 
   const { data: singleSectorData, isPending: singleSectorPending } = useEntity('sector', fetchSector, currentSector?.id)
 
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log(singleEnclosureData)
   }, [singleEnclosureData]);
- 
+
   const enclosureMutations = useEntityMutations('enclosure', 'enclosures', {
     createFn: createEnclosure,
     updateFn: updateEnclosure,
@@ -427,7 +427,9 @@ export default function Home(): JSX.Element {
     console.log(data)
     try {
       //  const response = await singleEnclosureCreateMutate(data);
-      const response = await enclosureMutations.createMutation.mutate(data)
+      const response = await enclosureMutations.createMutation.mutateAsync(data);
+ 
+      sendDataToSidebar(response.data.id);
     } catch (e) {
       console.error(e)
       alert(e);
@@ -439,9 +441,8 @@ export default function Home(): JSX.Element {
     try {
       // const response = singleEnclosureUpdateMutate(data);
 
-      const response = await enclosureMutations.updateMutation.mutate(data)
-      console.log("Answer")
-      console.log(response);
+     const response = await enclosureMutations.updateMutation.mutateAsync(data)
+      closeActionForm()
 
     } catch (e) {
       console.error(e)
@@ -450,11 +451,11 @@ export default function Home(): JSX.Element {
   }
 
   async function handleDeleteEnclosure(id) {
-
+  
     try {
-      const response = await enclosureMutations.deleteMutation.mutate(id)
-
-
+    const response = await enclosureMutations.deleteMutation.mutateAsync(id);
+      setCurrentEnclosure(null)
+     closeActionForm();
     } catch (e) {
       console.error(e)
 
@@ -465,9 +466,17 @@ export default function Home(): JSX.Element {
   async function handleCreateSchool(data) {
 
     try {
-      const response = await schoolMutations.createMutation.mutate(data);
+      const response = await schoolMutations.createMutation.mutateAsync(data);
+
+      queryClient.refetchQueries({ queryKey: ["enclosures"] });
+  
+      queryClient.refetchQueries({ queryKey: [`enclosure/${response?.data.enclosure_id}/schools`] });
+      queryClient.refetchQueries({queryKey: ["enclosure", response?.data.enclosure_id]});
+     
       console.log("Answer")
       console.log(response);
+ 
+      closeActionForm();
 
     } catch (e) {
       console.error(e)
@@ -489,12 +498,15 @@ export default function Home(): JSX.Element {
   }
 
   async function handleDeleteSchool(id) {
-
+ 
     try {
-      const response = schoolMutations.deleteMutation.mutate(data)
-
-
+      const response = await schoolMutations.deleteMutation.mutateAsync(id)
+       queryClient.refetchQueries({queryKey: ["enclosure", response?.data?.enclosure_id]});
+       queryClient.refetchQueries({queryKey: [`enclosure/${response?.data?.enclosure_id}/schools`]});
+        setCurrentSchool(null)
+        closeActionForm();
     } catch (e) {
+      
       console.error(e)
 
     }
@@ -554,8 +566,8 @@ export default function Home(): JSX.Element {
 
   async function loadEnclosure(id: number) {
     clearEnclosure();
-  const response = await singleEnclosureMutate(id);
- 
+    const response = await singleEnclosureMutate(id);
+
   }
 
   async function loadSector(id: number) {
@@ -596,9 +608,9 @@ export default function Home(): JSX.Element {
     if (currentEnclosure?.id == id) {
       return;
     }
-    setCurrentEnclosure((prev)=>{return {...prev, id}});
-    setActionState("enclosure");
-   // const response = await singleEnclosureMutate(id);
+    setCurrentEnclosure((prev) => { return { ...prev, id } });
+    openAction("enclosure");
+    // const response = await singleEnclosureMutate(id);
 
 
   }
@@ -620,7 +632,9 @@ export default function Home(): JSX.Element {
       setOpen(true);
     }
 
-    const response = await singleSchoolMutate(id);
+    setCurrentSchool((prev) => { return { ...prev, id } });
+    openAction("school");
+    //const response = await singleSchoolMutate(id);
 
 
   }
@@ -696,7 +710,7 @@ export default function Home(): JSX.Element {
 
 
   function openEditForm() {
-    setDefaultFormValues({ ...currentEnclosure })
+    setDefaultFormValues({ ...singleEnclosureData?.data })
 
     openAction("enclosureEditForm")
   }
@@ -722,7 +736,7 @@ export default function Home(): JSX.Element {
       <Button title="Subir Archivos" iconName="Upload" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
 
     </>}
-    {actionState == "enclosure"  && <EnclosureInfo
+    {actionState == "enclosure" && <EnclosureInfo
 
       singleEnclosurePending={singleEnclosurePending}
       currentEnclosure={singleEnclosureData?.data}
@@ -737,9 +751,9 @@ export default function Home(): JSX.Element {
     {
       actionState == "school" && <SchoolInfo
         singleSchoolPending={singleSchoolPending}
-        currentSchool={currentSchool}
-        openForm={openEditSchoolForm}
+        currentSchool={singleSchoolData?.data}
         clearSchool={clearSchool}
+        openForm={openEditSchoolForm}
         memberForm={memberForm}
         deleteData={handleDeleteSchool}
         openMember={openMember}
@@ -768,19 +782,19 @@ export default function Home(): JSX.Element {
         closeForm={closeActionForm}
         //   loadEnclosure={loadEnclosure}
         submitData={!!currentEnclosure?.id ? handleUpdateEnclosure : handleCreateEnclosure}
-        isLoading={!!currentEnclosure?.id ? enclosureMutations.updateMutation.isPending :  enclosureMutations.createMutation.isPending}
+        isLoading={!!currentEnclosure?.id ? enclosureMutations.updateMutation.isPending : enclosureMutations.createMutation.isPending}
       />
     }
     {
       (actionState == "schoolCreateForm" || actionState == "schoolEditForm") && <SchoolCreateForm
 
-        defaultValues={currentSchool}
+        defaultValues={singleSchoolData}
 
         edit={!!currentSchool?.id}
         closeForm={closeActionForm}
         currentEnclosure={currentEnclosure?.id}
         submitData={!!currentSchool?.id ? handleUpdateSchool : handleCreateSchool}
-        isLoading={!!currentSchool?.id ? singleSchoolUpdatePending : singleSchoolCreatePending}
+        isLoading={!!currentSchool?.id ? schoolMutations.updateMutation.isPending : schoolMutations.createMutation.isPending}
       />
     }
     {
