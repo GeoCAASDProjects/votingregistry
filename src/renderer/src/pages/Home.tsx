@@ -20,6 +20,7 @@ import SectorCreateForm from "@renderer/components/sectorForm/SectorForm";
 import { createSector, deleteSector, fetchSector, fetchSectors, updateSector } from "@renderer/util/http/sector-http";
 import SectorInfo from "@renderer/components/sectorInfo/SectorInfo";
 import useEntityMutations from "@renderer/util/hooks/mutationHooks";
+import useEntity from "@renderer/util/hooks/entityHooks";
 
 export default function Home(): JSX.Element {
   const queryClient = useQueryClient();
@@ -94,25 +95,37 @@ export default function Home(): JSX.Element {
     gcTime: 30000,
   });
 
-const enclosureMutations = useEntityMutations('enclosure', 'enclosures',{
-  createFn: createEnclosure,
-  updateFn: updateEnclosure,
-  deleteFn: deleteEnclosure
-});
+
+  const { data: singleEnclosureData, isPending: singleEnclosurePending} = useEntity('enclosure', fetchEnclosure, currentEnclosure?.id)
+
+  const { data: singleSchoolData, isPending: singleSchoolPending } = useEntity('school', fetchSchool, currentSchool?.id)
+
+  const { data: singleSectorData, isPending: singleSectorPending } = useEntity('sector', fetchSector, currentSector?.id)
 
 
-const sectorMutations = useEntityMutations('sector', 'sectors',{
-  createFn: createSector,
-  updateFn: updateSector,
-  deleteFn: deleteSector
-});
+  useEffect(()=>{
+    console.log(singleEnclosureData)
+  }, [singleEnclosureData]);
+ 
+  const enclosureMutations = useEntityMutations('enclosure', 'enclosures', {
+    createFn: createEnclosure,
+    updateFn: updateEnclosure,
+    deleteFn: deleteEnclosure
+  });
 
 
-const schoolMutations = useEntityMutations('school', 'schools',{
-  createFn: createSchool,
-  updateFn: updateSchool,
-  deleteFn: deleteSchool
-});
+  const sectorMutations = useEntityMutations('sector', 'sectors', {
+    createFn: createSector,
+    updateFn: updateSector,
+    deleteFn: deleteSector
+  });
+
+
+  const schoolMutations = useEntityMutations('school', 'schools', {
+    createFn: createSchool,
+    updateFn: updateSchool,
+    deleteFn: deleteSchool
+  });
 
 
   /*
@@ -413,8 +426,8 @@ const schoolMutations = useEntityMutations('school', 'schools',{
   async function handleCreateEnclosure(data) {
     console.log(data)
     try {
-    //  const response = await singleEnclosureCreateMutate(data);
-      const response = await  enclosureMutations.createMutation.mutate(data)
+      //  const response = await singleEnclosureCreateMutate(data);
+      const response = await enclosureMutations.createMutation.mutate(data)
     } catch (e) {
       console.error(e)
       alert(e);
@@ -424,9 +437,9 @@ const schoolMutations = useEntityMutations('school', 'schools',{
   async function handleUpdateEnclosure(data) {
 
     try {
-     // const response = singleEnclosureUpdateMutate(data);
+      // const response = singleEnclosureUpdateMutate(data);
 
-     const response = await  enclosureMutations.updateMutation.mutate(data)
+      const response = await enclosureMutations.updateMutation.mutate(data)
       console.log("Answer")
       console.log(response);
 
@@ -439,7 +452,7 @@ const schoolMutations = useEntityMutations('school', 'schools',{
   async function handleDeleteEnclosure(id) {
 
     try {
-      const response = singleEnclosureDeleteMutate(id);
+      const response = await enclosureMutations.deleteMutation.mutate(id)
 
 
     } catch (e) {
@@ -452,7 +465,7 @@ const schoolMutations = useEntityMutations('school', 'schools',{
   async function handleCreateSchool(data) {
 
     try {
-      const response = singleSchoolCreateMutate(data);
+      const response = await schoolMutations.createMutation.mutate(data);
       console.log("Answer")
       console.log(response);
 
@@ -461,24 +474,37 @@ const schoolMutations = useEntityMutations('school', 'schools',{
       alert(e);
     }
   }
-  
+
   async function handleUpdateSchool(data) {
 
     try {
-      const response = singleSchoolUpdateMutate(data);
+      const response = await schoolMutations.updateMutation.mutate(data)
       console.log("Answer")
       console.log(response);
 
     } catch (e) {
       console.error(e)
       alert(e);
+    }
+  }
+
+  async function handleDeleteSchool(id) {
+
+    try {
+      const response = schoolMutations.deleteMutation.mutate(data)
+
+
+    } catch (e) {
+      console.error(e)
+
     }
   }
 
   async function handleCreateSector(data) {
     console.log(data)
     try {
-      const response = await singleSectorCreateMutate(data);
+      const response = await sectorMutations.createMutation.mutate(data)
+
 
     } catch (e) {
       console.error(e)
@@ -488,15 +514,28 @@ const schoolMutations = useEntityMutations('school', 'schools',{
   async function handleUpdateSector(data) {
     console.log(data)
     try {
-      const response = await singleSectorUpdateMutate(data);
+      const response = await sectorMutations.updateMutation.mutate(data)
 
     } catch (e) {
       console.error(e)
       alert(e);
     }
   }
+
+  async function handleDeleteSector(id) {
+
+    try {
+      const response = await sectorMutations.deleteMutation.mutate(data)
+
+
+    } catch (e) {
+      console.error(e)
+
+    }
+  }
+
   function toggleSidebar() {
- 
+
     setOpen(currentVal => !currentVal);
   }
 
@@ -515,8 +554,8 @@ const schoolMutations = useEntityMutations('school', 'schools',{
 
   async function loadEnclosure(id: number) {
     clearEnclosure();
-    const response = await singleEnclosureMutate(id);
-
+  const response = await singleEnclosureMutate(id);
+ 
   }
 
   async function loadSector(id: number) {
@@ -537,7 +576,7 @@ const schoolMutations = useEntityMutations('school', 'schools',{
   }
 
   function selectLocation() {
-    if(!currentSector?.id){
+    if (!currentSector?.id) {
       setCurrentSector(null);
       setDefaultSectorValues({})
     }
@@ -557,7 +596,9 @@ const schoolMutations = useEntityMutations('school', 'schools',{
     if (currentEnclosure?.id == id) {
       return;
     }
-    const response = await singleEnclosureMutate(id);
+    setCurrentEnclosure((prev)=>{return {...prev, id}});
+    setActionState("enclosure");
+   // const response = await singleEnclosureMutate(id);
 
 
   }
@@ -626,28 +667,7 @@ const schoolMutations = useEntityMutations('school', 'schools',{
   }
 
 
-  async function deleteSchoolData(id) {
 
-    try {
-      const response = singleSchoolDeleteMutate(id);
-
-
-    } catch (e) {
-      console.error(e)
-
-    }
-  }
-  async function deleteSectorData(id) {
-
-    try {
-      const response = singleSectorDeleteMutate(id);
-
-
-    } catch (e) {
-      console.error(e)
-
-    }
-  }
 
 
 
@@ -702,10 +722,10 @@ const schoolMutations = useEntityMutations('school', 'schools',{
       <Button title="Subir Archivos" iconName="Upload" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
 
     </>}
-    {actionState == "enclosure" && <EnclosureInfo
+    {actionState == "enclosure"  && <EnclosureInfo
 
       singleEnclosurePending={singleEnclosurePending}
-      currentEnclosure={currentEnclosure}
+      currentEnclosure={singleEnclosureData?.data}
       clearEnclosure={clearEnclosure}
       openSchool={openSchool}
       openForm={openEditForm}
@@ -721,7 +741,7 @@ const schoolMutations = useEntityMutations('school', 'schools',{
         openForm={openEditSchoolForm}
         clearSchool={clearSchool}
         memberForm={memberForm}
-        deleteData={deleteSchoolData}
+        deleteData={handleDeleteSchool}
         openMember={openMember}
       />
     }
@@ -732,7 +752,7 @@ const schoolMutations = useEntityMutations('school', 'schools',{
         openForm={openEditSectorForm}
         clearSector={clearSector}
         openEnclosure={sendDataToSidebar}
-        deleteData={deleteSectorData}
+        deleteData={handleDeleteSector}
       />
     }
     {
@@ -748,7 +768,7 @@ const schoolMutations = useEntityMutations('school', 'schools',{
         closeForm={closeActionForm}
         //   loadEnclosure={loadEnclosure}
         submitData={!!currentEnclosure?.id ? handleUpdateEnclosure : handleCreateEnclosure}
-        isLoading={singleEnclosureCreatePending}
+        isLoading={!!currentEnclosure?.id ? enclosureMutations.updateMutation.isPending :  enclosureMutations.createMutation.isPending}
       />
     }
     {
@@ -767,7 +787,7 @@ const schoolMutations = useEntityMutations('school', 'schools',{
       (actionState == "sectorCreateForm" || actionState == "sectorEditForm") && <SectorCreateForm
 
         defaultValues={defaultSectorValues}
-      
+
         edit={!!currentSector?.id}
         closeForm={closeActionForm}
         drawPolygon={drawPolygon}
