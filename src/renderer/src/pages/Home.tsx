@@ -487,9 +487,10 @@ export default function Home(): JSX.Element {
   async function handleUpdateSchool(data) {
 
     try {
-      const response = await schoolMutations.updateMutation.mutate(data)
-      console.log("Answer")
-      console.log(response);
+      const response = await schoolMutations.updateMutation.mutateAsync(data)
+      queryClient.refetchQueries({queryKey: ["school", response?.data?.id]});
+     // queryClient.refetchQueries({queryKey: [`enclosure/${response?.data?.enclosure_id}/schools`]});
+      closeActionForm();
 
     } catch (e) {
       console.error(e)
@@ -715,7 +716,8 @@ export default function Home(): JSX.Element {
     openAction("enclosureEditForm")
   }
   function openEditSchoolForm() {
-    setDefaultSchoolValues({ ...currentSchool })
+    //alert(JSON.stringify(singleSchoolData?.data))
+    setDefaultSchoolValues({ ...singleSchoolData?.data })
     openAction("schoolEditForm")
   }
   function openCreateSchoolForm() {
@@ -788,7 +790,7 @@ export default function Home(): JSX.Element {
     {
       (actionState == "schoolCreateForm" || actionState == "schoolEditForm") && <SchoolCreateForm
 
-        defaultValues={singleSchoolData}
+        defaultValues={singleSchoolData?.data}
 
         edit={!!currentSchool?.id}
         closeForm={closeActionForm}

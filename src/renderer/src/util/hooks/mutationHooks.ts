@@ -26,7 +26,7 @@ const useEntityMutations = (entity, queryKey, mutationFns) => {
             onSuccess: async (e) => {
                 alert("Success")
                 queryClient.refetchQueries({queryKey: [entity, e?.data?.id]});
-                
+                return e.data
             },
             onError: (e) => {
         
