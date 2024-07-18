@@ -3,8 +3,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 const useEntityMutations = () => {
     const queryClient = useQueryClient();
 
-    const createMutation = (mutationFn, queryKey, onSuccess) =>
-        useMutation(mutationFn, {
+    const createMutation = (createFn, queryKey, onSuccess) =>
+        useMutation(createFn, {
             onSuccess: (data, variables, context) => {
                 queryClient.refetchQueries(queryKey);
                 if (onSuccess) onSuccess(data, variables), context
@@ -13,7 +13,7 @@ const useEntityMutations = () => {
                 alert("Error")
             }
         })
-    const updateMutation = (mutationFn, queryKey, onSuccess) => useMutation(mutationFn, {
+    const updateMutation = (updateFn, queryKey, onSuccess) => useMutation(updateFn, {
         onSuccess: (data, variables, context) => {
             queryClient.refetchQueries(queryKey);
             if (onSuccess) onSuccess(data, variables, context)
@@ -23,15 +23,19 @@ const useEntityMutations = () => {
             alert("Error")
         }
     })
-    const deleteMutation = (mutationFn, queryKey, onSuccess)=>
-        useMutation(mutationFn, {
+    const deleteMutation = (deleteFn, queryKey, onSuccess)=> useMutation(deleteFn, {
             onSuccess: (data, variables, context)=>{
                 queryClient.refetchQueries(queryKey);
                 if (onSuccess) onSuccess(data, variables, context)
+            },
+            onError: (error) => {
+                console.error(error);
+                alert("Error")
             }
-        }),
-        onError: (error) => {
-            console.error(error);
-            alert("Error")
-        }
+        })
+ 
+    
+      
 }
+
+export default useEntityMutations;
