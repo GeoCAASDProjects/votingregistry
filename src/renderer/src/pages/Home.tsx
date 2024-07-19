@@ -623,9 +623,9 @@ export default function Home(): JSX.Element {
     if (currentSector?.id == id) {
       return;
     }
-    const response = await singleSectorMutate(id);
+    //const response = await singleSectorMutate(id);
 
-
+    setCurrentSector((prev) => { return { ...prev, id } });
   }
 
   async function openSchool(id: number) {
