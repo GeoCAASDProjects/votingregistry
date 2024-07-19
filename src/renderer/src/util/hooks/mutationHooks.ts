@@ -24,7 +24,7 @@ const useEntityMutations = (entity, queryKey, mutationFns) => {
         {
             mutationFn: updateFn,
             onSuccess: async (e) => {
-                alert("Success")
+           
                 queryClient.refetchQueries({queryKey: [entity, e?.data?.id]});
                 return e.data
             },
@@ -40,7 +40,7 @@ const useEntityMutations = (entity, queryKey, mutationFns) => {
         {
             mutationFn: deleteFn,
             onSuccess: async (e) => {
-                alert("Success")
+              
                 queryClient.refetchQueries(queryKey);
                 return e.data;
                 

@@ -31,7 +31,7 @@ export default function Home(): JSX.Element {
   const [defaultSchoolValues, setDefaultSchoolValues] = useState({});
   const [currentEnclosure, setCurrentEnclosure] = useState<Enclosure | null>(null);
   const [currentSchool, setCurrentSchool] = useState<{} | null>(null);
-  const [currentMember, setCurrentMember] = useState(null);
+  const [currentMember, setCurrentMember] = useState<{} | null>(null);
   const [currentSector, setCurrentSector] = useState<{} | null>(null);
 
   const [historyStack, setHistoryStack] = useState<string[]>([]);
@@ -102,6 +102,8 @@ export default function Home(): JSX.Element {
 
   const { data: singleSectorData, isPending: singleSectorPending } = useEntity('sector', fetchSector, currentSector?.id)
 
+  const { data: singleMemberData, isPending: singleMemberPending } = useEntity('member', fetchSector, currentMember?.id)
+
 
   useEffect(() => {
     console.log(singleEnclosureData)
@@ -128,307 +130,14 @@ export default function Home(): JSX.Element {
   });
 
 
-  /*
-
-  const {
-    mutate: singleEnclosureMutate,
-    data: singleEnclosureData,
-    isPending: singleEnclosurePending,
-    isError: singleEnclosureIsError,
-    error: singleEnclosureError
-  } = useMutation({
-    mutationFn: fetchEnclosure,
-    onSuccess: async (e) => {
-
-      setCurrentEnclosure(e.data);
-      openAction("enclosure");
-    },
-    onError: (e) => {
-
-      alert("Error")
-    }
-  });
-
-  const {
-    mutate: singleSectorMutate,
-    data: singleSectorData,
-    isPending: singleSectorPending,
-    isError: singleSectorIsError,
-    error: singleSectorError
-  } = useMutation({
-    mutationFn: fetchSector,
-    onSuccess: async (e) => {
-
-      setCurrentSector(e.data);
-      openAction("sector");
-    },
-    onError: (e) => {
-
-      alert("Error")
-    }
-  });
-
-  const {
-    mutate: singleSchoolMutate,
-    data: singleSchoolData,
-    isPending: singleSchoolPending,
-    isError: singleSchoolIsError,
-    error: singleSchoolError
-  } = useMutation({
-    mutationFn: fetchSchool,
-    onSuccess: async (e) => {
-      setCurrentSchool(e.data);
-      openAction("school");
-    },
-    onError: (e) => {
-
-      alert("Error")
-    }
-  });
-
-
-  const {
-    mutate: singleMemberMutate,
-    data: singleMemberData,
-    isPending: singleMemberPending,
-    isError: singleMemberIsError,
-    error: singleMemberError
-  } = useMutation({
-    mutationFn: fetchPerson,
-    onSuccess: async (e) => {
-      setCurrentMember(e.data);
-      openAction("member");
-    },
-    onError: (e) => {
-
-      alert("Error")
-    }
-  });
-
-
-
-
-  const {
-    mutate: singleEnclosureDeleteMutate,
-    data: singleEnclosureDeleteData,
-    isPending: singleEnclosureDeletePending,
-    isError: singleEnclosureDeleteIsError,
-    error: singleEnclosureDeleteError
-  } = useMutation({
-    mutationFn: deleteEnclosure,
-    onSuccess: async (e) => {
-
-      queryClient.refetchQueries({ queryKey: ["enclosures"] });
-
-      //  openAction("")
-      setCurrentEnclosure(null)
-      closeActionForm();
-    },
-    onError: (e) => {
-      console.log("The error inside the mutation")
-
-    }
-  });
-
-
-
-
-  const {
-    mutate: singleSchoolDeleteMutate,
-    data: singleSchoolDeleteData,
-    isPending: singleSchoolDeletePending,
-    isError: singleSchoolDeleteIsError,
-    error: singleSchoolDeleteError
-  } = useMutation({
-    mutationFn: deleteSchool,
-    onSuccess: async (e) => {
-
-      queryClient.refetchQueries({ queryKey: ["enclosures"] });
-      setCurrentSchool(null)
-      openAction("enclosure")
-
-
-    },
-    onError: (e) => {
-      console.log("The error inside the mutation")
-
-    }
-  });
-
-  const {
-    mutate: singleEnclosureCreateMutate,
-    data: singleEnclosureCreateData,
-    isPending: singleEnclosureCreatePending,
-    isError: singleEnclosureCreateIsError,
-    error: singleEnclosureCreateError
-  } = useMutation({
-    mutationFn: createEnclosure,
-    onSuccess: async (e) => {
-
-      queryClient.refetchQueries({ queryKey: ["enclosures"] });
-
-      //  setActionState("enclosures");
-
-      if (actionState == "enclosureCreateForm") {
-        closeActionForm();
-
-      }
-      loadEnclosure(e.data.id);
-
-    },
-    onError: (e) => {
-
-      alert("Error")
-    }
-  });
-
-  const {
-    mutate: singleEnclosureUpdateMutate,
-    data: singleEnclosureUpdateData,
-    isPending: singleEnclosureUpdatePending,
-    isError: singleEnclosureUpdateIsError,
-    error: singleEnclosureUpdateError
-  } = useMutation({
-    mutationFn: updateEnclosure,
-    onSuccess: async (e) => {
-
-      queryClient.refetchQueries({ queryKey: ["enclosures"] });
-      if (actionState == "enclosureUpdateForm") {
-        closeActionForm();
-      }
-      loadEnclosure(e.data.id);
-
-    },
-    onError: (e) => {
-
-      alert("Error")
-    }
-  });
-
-  const {
-    mutate: singleSchoolUpdateMutate,
-    data: singleSchoolUpdateData,
-    isPending: singleSchoolUpdatePending,
-    isError: singleSchoolUpdateIsError,
-    error: singleSchoolUpdateError
-  } = useMutation({
-    mutationFn: updateSchool,
-    onSuccess: async (e) => {
-
-      queryClient.refetchQueries({ queryKey: ["enclosures"] });
-      //   setActionState("enclosures");
-      closeActionForm();
-      setCurrentSchool(e.data);
-
-    },
-    onError: (e) => {
-
-      alert("Error")
-    }
-  });
-
-  const {
-    mutate: singleSchoolCreateMutate,
-    data: singleSchoolCreateData,
-    isPending: singleSchoolCreatePending,
-    isError: singleSchoolCreateIsError,
-    error: singleSchoolCreateError
-  } = useMutation({
-    mutationFn: createSchool,
-    onSuccess: async (e) => {
-
-      queryClient.refetchQueries({ queryKey: ["enclosures"] });
-      console.log(e.data)
-      queryClient.refetchQueries({ queryKey: [`enclosure/${e?.data?.enclosure_id}/schools`] });
-      closeActionForm();
-      // loadEnclosure(e?.data?.enclosure_id)
-
-    },
-    onError: (e) => {
-
-      alert("Error")
-    }
-  });
-
-  const {
-    mutate: singleSectorCreateMutate,
-    data: singleSectorCreateData,
-    isPending: singleSectorCreatePending,
-    isError: singleSectorCreateIsError,
-    error: singleSectorCreateError
-  } = useMutation({
-    mutationFn: createSector,
-    onSuccess: async (e) => {
-
-
-      queryClient.refetchQueries({ queryKey: [`sectors`] });
-      closeActionForm();
-
-      loadSector(e.data.id)
-      // loadEnclosure(e?.data?.enclosure_id)
-
-    },
-    onError: (e) => {
-
-      alert("Error")
-    }
-  });
-
-
-  const {
-    mutate: singleSectorUpdateMutate,
-    data: singleSectorUpdateData,
-    isPending: singleSectorUpdatePending,
-    isError: singleSectorUpdateIsError,
-    error: singleSectorUpdateError
-  } = useMutation({
-    mutationFn: updateSector,
-    onSuccess: async (e) => {
-      alert(JSON.stringify(e));
-      queryClient.refetchQueries({ queryKey: [`sectors`] });
-      closeActionForm();
-      loadSector(e.data.id)
-      //   loadSector(e.data.id)
-      // loadEnclosure(e?.data?.enclosure_id)
-
-    },
-    onError: (e) => {
-
-      alert("Error")
-    }
-  });
-
-
-  const {
-    mutate: singleSectorDeleteMutate,
-    data: singleSectorDeleteData,
-    isPending: singleSectorDeletePending,
-    isError: singleSectorDeleteIsError,
-    error: singleSectorDeleteError
-  } = useMutation({
-    mutationFn: deleteSector,
-    onSuccess: async (e) => {
-      //  openAction("")
-      setCurrentSector(null)
-      queryClient.refetchQueries({ queryKey: ["sectors"] });
-
-
-      closeActionForm();
-    },
-    onError: (e) => {
-      console.log("The error inside the mutation")
-
-    }
-  });
-  */
-
+  
 
   async function handleCreateEnclosure(data) {
     console.log(data)
     try {
       //  const response = await singleEnclosureCreateMutate(data);
       const response = await enclosureMutations.createMutation.mutateAsync(data);
- 
+
       sendDataToSidebar(response.data.id);
     } catch (e) {
       console.error(e)
@@ -441,7 +150,7 @@ export default function Home(): JSX.Element {
     try {
       // const response = singleEnclosureUpdateMutate(data);
 
-     const response = await enclosureMutations.updateMutation.mutateAsync(data)
+      const response = await enclosureMutations.updateMutation.mutateAsync(data)
       closeActionForm()
 
     } catch (e) {
@@ -451,11 +160,11 @@ export default function Home(): JSX.Element {
   }
 
   async function handleDeleteEnclosure(id) {
-  
+
     try {
-    const response = await enclosureMutations.deleteMutation.mutateAsync(id);
+      const response = await enclosureMutations.deleteMutation.mutateAsync(id);
       setCurrentEnclosure(null)
-     closeActionForm();
+      closeActionForm();
     } catch (e) {
       console.error(e)
 
@@ -468,14 +177,14 @@ export default function Home(): JSX.Element {
     try {
       const response = await schoolMutations.createMutation.mutateAsync(data);
 
-    //  queryClient.refetchQueries({ queryKey: ["enclosures"] });
-   
-    queryClient.refetchQueries({ queryKey: [`enclosure/${response?.data.enclosure_id}/schools`] });
-    //queryClient.refetchQueries({queryKey: ["enclosure", response?.data.enclosure_id]});
-     
+      //  queryClient.refetchQueries({ queryKey: ["enclosures"] });
+
+      queryClient.refetchQueries({ queryKey: [`enclosure/${response?.data.enclosure_id}/schools`] });
+      //queryClient.refetchQueries({queryKey: ["enclosure", response?.data.enclosure_id]});
+
       console.log("Answer")
       console.log(response);
- 
+
       closeActionForm();
 
     } catch (e) {
@@ -488,8 +197,8 @@ export default function Home(): JSX.Element {
 
     try {
       const response = await schoolMutations.updateMutation.mutateAsync(data)
-      queryClient.refetchQueries({queryKey: ["school", response?.data?.id]});
-     // queryClient.refetchQueries({queryKey: [`enclosure/${response?.data?.enclosure_id}/schools`]});
+      queryClient.refetchQueries({ queryKey: ["school", response?.data?.id] });
+      // queryClient.refetchQueries({queryKey: [`enclosure/${response?.data?.enclosure_id}/schools`]});
       closeActionForm();
 
     } catch (e) {
@@ -499,15 +208,15 @@ export default function Home(): JSX.Element {
   }
 
   async function handleDeleteSchool(id) {
- 
+
     try {
       const response = await schoolMutations.deleteMutation.mutateAsync(id)
-       queryClient.refetchQueries({queryKey: ["enclosure", response?.data?.enclosure_id]});
-       queryClient.refetchQueries({queryKey: [`enclosure/${response?.data?.enclosure_id}/schools`]});
-        setCurrentSchool(null)
-        closeActionForm();
+      queryClient.refetchQueries({ queryKey: ["enclosure", response?.data?.enclosure_id] });
+      queryClient.refetchQueries({ queryKey: [`enclosure/${response?.data?.enclosure_id}/schools`] });
+      setCurrentSchool(null)
+      closeActionForm();
     } catch (e) {
-      
+
       console.error(e)
 
     }
@@ -516,9 +225,11 @@ export default function Home(): JSX.Element {
   async function handleCreateSector(data) {
     console.log(data)
     try {
-      const response = await sectorMutations.createMutation.mutate(data)
-
-
+      const response = await sectorMutations.createMutation.mutateAsync(data);
+      queryClient.refetchQueries({ queryKey: ["sectors"] });
+      queryClient.refetchQueries({ queryKey: ["sector", response?.data?.id] });
+      closeActionForm();
+      sendSectorToSidebar(response?.data?.id)
     } catch (e) {
       console.error(e)
       alert(e);
@@ -527,8 +238,11 @@ export default function Home(): JSX.Element {
   async function handleUpdateSector(data) {
     console.log(data)
     try {
-      const response = await sectorMutations.updateMutation.mutate(data)
-
+      const response = await sectorMutations.updateMutation.mutateAsync(data)
+      queryClient.refetchQueries({ queryKey: ["sectors"] });
+      console.log(response?.data?.id)
+      queryClient.refetchQueries({ queryKey: ["sector", response?.data?.id] });
+      closeActionForm();
     } catch (e) {
       console.error(e)
       alert(e);
@@ -538,8 +252,10 @@ export default function Home(): JSX.Element {
   async function handleDeleteSector(id) {
 
     try {
-      const response = await sectorMutations.deleteMutation.mutate(data)
-
+      const response = await sectorMutations.deleteMutation.mutateAsync(id)
+      queryClient.refetchQueries({ queryKey: ["sectors"] });
+      // queryClient.refetchQueries({queryKey: ["sector", response?.data?.id]});
+      closeActionForm();
 
     } catch (e) {
       console.error(e)
@@ -617,6 +333,7 @@ export default function Home(): JSX.Element {
   }
 
   async function sendSectorToSidebar(id: number) {
+
     if (!open) {
       toggleSidebar();
     }
@@ -626,6 +343,7 @@ export default function Home(): JSX.Element {
     //const response = await singleSectorMutate(id);
 
     setCurrentSector((prev) => { return { ...prev, id } });
+    openAction("sector");
   }
 
   async function openSchool(id: number) {
@@ -639,14 +357,16 @@ export default function Home(): JSX.Element {
 
 
   }
-  async function openMember(id) {
+  async function openMember(id: number) {
     if (!open) {
       setOpen(true);
     }
 
-    const response = await singleMemberMutate(id);
+    setCurrentMember((prevMember) => { return { ...prevMember, id } });
+    openAction("member");
   }
   function openForm(data) {
+    setDefaultFormValues((prevValue)=>{return {...prevValue, id: null, name: null}})
     setDefaultFormValues((prevFormValues) => { return { ...prevFormValues, longitude: data.lng.toFixed(2), latitude: data.lat.toFixed(2), address: data.address } })
     if (!open) {
       setOpen(true);
@@ -655,8 +375,11 @@ export default function Home(): JSX.Element {
 
   }
   const [defaultSectorValues, setDefaultSectorValues] = useState({});
+
   function openFormSector(data) {
-    setOpen(true);
+    if (!open) {
+      setOpen(true);
+    }
 
     setDefaultSectorValues((prevValue) => { return { ...prevValue, area: JSON.stringify(data[0]) } });
     setActionState("sectorCreateForm")
@@ -667,13 +390,17 @@ export default function Home(): JSX.Element {
 
   function createForm() {
 
-    setOpen(true);
+    if (!open) {
+      setOpen(true);
+    }
     closeActionForm();
   }
 
   function memberForm() {
 
-    setOpen(true);
+    if (!open) {
+      setOpen(true);
+    }
 
     if (actionState != "memberForm") {
       openAction("memberForm");
@@ -725,7 +452,7 @@ export default function Home(): JSX.Element {
   }
 
   function openEditSectorForm() {
-    setDefaultSectorValues({ ...currentSector, area: JSON.stringify(currentSector?.nodes?.map((node) => [node.latitude, node.longitude])) })
+    setDefaultSectorValues({ ...singleSectorData?.data, area: JSON.stringify(singleSectorData?.data.nodes?.map((node) => [node.latitude, node.longitude])) })
     openAction("sectorEditForm")
   }
 
@@ -764,15 +491,15 @@ export default function Home(): JSX.Element {
     {
       actionState == "sector" && <SectorInfo
         singleSectorPending={singleSectorPending}
-        currentSector={currentSector}
-        openForm={openEditSectorForm}
+        currentSector={singleSectorData?.data}
         clearSector={clearSector}
         openEnclosure={sendDataToSidebar}
         deleteData={handleDeleteSector}
+        openForm={openEditSectorForm}
       />
     }
     {
-      actionState == "member" && <MemberInfo currentMember={currentMember} openSchool={openSchool} clearMember={clearMember} />
+      actionState == "member" && <MemberInfo currentMember={singleMemberData?.data} openSchool={openSchool} clearMember={clearMember} />
 
     }
     {
@@ -807,9 +534,8 @@ export default function Home(): JSX.Element {
         edit={!!currentSector?.id}
         closeForm={closeActionForm}
         drawPolygon={drawPolygon}
-        //   loadEnclosure={loadEnclosure}
         submitData={!!currentSector?.id ? handleUpdateSector : handleCreateSector}
-        isLoading={!!currentSector?.id ? singleSectorUpdatePending : singleSectorCreatePending}
+        isLoading={!!currentSector?.id ? sectorMutations.updateMutation.isPending : sectorMutations.createMutation.isPending}
       />
     }
     {
