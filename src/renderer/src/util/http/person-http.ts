@@ -51,7 +51,7 @@ export async function fetchMembers({signal, schoolId}){
 }
 
 export async function createPerson(data){
-    alert(JSON.stringify(data))
+   
     let url = `${BASE_URL_API}/person`;
     const config: AxiosRequestConfig ={
      
@@ -65,7 +65,7 @@ export async function createPerson(data){
         const response = await axios.post(url, data, config);
       
         console.log(response);
-        alert(response)
+         
         return response.data;
         } catch(error){
             alert(error)

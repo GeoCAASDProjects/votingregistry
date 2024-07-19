@@ -75,7 +75,7 @@ export async function createEnclosure(data){
 }
 
 export async function updateEnclosure(data){
-    alert("UPDATING!");
+    
     console.log("THE DATA")
     console.log("----------------------------------------------------------------------")
     console.log({...data})

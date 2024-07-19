@@ -65,7 +65,7 @@ export async function createSector(data){
         const response = await axios.post(url, data, config);
       
         console.log(response);
-        alert(response)
+        
         return response.data;
         } catch(error){
             alert(error)
@@ -91,7 +91,7 @@ export async function updateSector(data){
         const response = await axios.patch(url, data, config);
       
         console.log(response);
-        alert(response)
+        
         return response.data;
         } catch(error){
             alert(error)

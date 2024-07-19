@@ -28,7 +28,7 @@ export async function fetchSchools({signal, enclosureId}){
 
 
 export async function updateSchool(data){
-    alert("UPDATING!");
+ 
     console.log("THE DATA")
     console.log("----------------------------------------------------------------------")
     console.log({...data})

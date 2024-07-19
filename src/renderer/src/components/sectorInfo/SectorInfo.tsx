@@ -97,7 +97,7 @@ export default function SectorInfo({ singleSectorPending, memberForm, deleteData
 return (
 
     <>
-    {!enclosureDataPending ?    <InfoTemplate infoDisplay={infoDisplay} clearInfo={clearSector}/> : <p>Loading</p>}
+      <InfoTemplate infoDisplay={infoDisplay} clearInfo={clearSector}/>
     </>
 )
 }

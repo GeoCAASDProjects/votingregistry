@@ -264,7 +264,7 @@ export default function Home(): JSX.Element {
   }
 
   function toggleSidebar() {
-
+ 
     setOpen(currentVal => !currentVal);
   }
 
@@ -281,17 +281,7 @@ export default function Home(): JSX.Element {
     closeActionForm();
   }
 
-  async function loadEnclosure(id: number) {
-    clearEnclosure();
-    const response = await singleEnclosureMutate(id);
-
-  }
-
-  async function loadSector(id: number) {
-    clearSector();
-    const response = await singleSectorMutate(id);
-
-  }
+ 
 
   function clearSchool() {
     closeActionForm();
@@ -369,7 +359,8 @@ export default function Home(): JSX.Element {
     setDefaultFormValues((prevValue)=>{return {...prevValue, id: null, name: null}})
     setDefaultFormValues((prevFormValues) => { return { ...prevFormValues, longitude: data.lng.toFixed(2), latitude: data.lat.toFixed(2), address: data.address } })
     if (!open) {
-      setOpen(true);
+      //setOpen(true);
+      toggleSidebar();
     }
     setActionState("enclosureCreateForm")
 
@@ -391,7 +382,8 @@ export default function Home(): JSX.Element {
   function createForm() {
 
     if (!open) {
-      setOpen(true);
+      //setOpen(true);
+      toggleSidebar();
     }
     closeActionForm();
   }
