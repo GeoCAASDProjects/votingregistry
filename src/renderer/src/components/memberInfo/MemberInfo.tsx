@@ -8,18 +8,18 @@ import IconButton from "../iconButton/IconButton"
 import DynamicLoader from "../dynamicLoader/DynamicLoader"
 import { getNamedDate } from "@renderer/util/time/timeFunction"
 import { formatDocument } from "@renderer/util/miscFunctions"
-export default function MemberInfo({currentMember, openSchool, clearMember}) {
+export default function MemberInfo({ currentMember, openSchool, clearMember, singleMemberPending }) {
 
-    
-    
+
+    console.log(currentMember)
     return (
-        <div style={{ width: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignContent: "center", alignItems: "center", gap: "20px"}}>
+        <div style={{ width: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignContent: "center", alignItems: "center", gap: "20px" }}>
 
-            <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
-            <IconButton iconName="Close" onClick={() => clearMember(currentMember?.school?.id)}/>
-            </div>
-          
-            <div >
+        {currentMember && !singleMemberPending &&    <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
+                <IconButton iconName="Close" onClick={() => clearMember(currentMember?.school?.id)} />
+            </div>}
+
+            {currentMember && !singleMemberPending && <div >
                 <div className={classes["image-container"]}>
                     <ProfilePicture size={90} />
 
@@ -35,27 +35,17 @@ export default function MemberInfo({currentMember, openSchool, clearMember}) {
 
                 </div>
             </div>
-
+            }
             <Button title="Ver perfil" />
 
 
-            <table className={classes['table']}>
+            {currentMember && !singleMemberPending && <table className={classes['table']}>
                 <thead>
 
 
                 </thead>
                 <tbody>
-                    {/*
-                    <tr>
-                        <td>   <span style={{ fontWeight: "bold" }}>Sector</span></td>
-                        <td>Robelto</td>
 
-                    </tr>
-                    <tr>
-                        <td>   <span style={{ fontWeight: "bold" }}>Recinto</span></td>
-                        <td>Ramirez</td>
-
-                    </tr>*/}
                     <tr>
 
                         <td ><span style={{ fontWeight: "bold" }}>Colegio</span></td>
@@ -63,10 +53,10 @@ export default function MemberInfo({currentMember, openSchool, clearMember}) {
 
                     </tr>
 
-               
+
 
                 </tbody>
-            </table>
+            </table>}
 
 
         </div>

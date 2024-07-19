@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import classes from './home.module.css'
 import Button from "@renderer/components/button/Button";
 import MemberInfo from "@renderer/components/memberInfo/MemberInfo";
-import { fetchPerson } from "@renderer/util/http/person-http";
+import { fetchMembers, fetchPerson } from "@renderer/util/http/person-http";
 import SectorCreateForm from "@renderer/components/sectorForm/SectorForm";
 import { createSector, deleteSector, fetchSector, fetchSectors, updateSector } from "@renderer/util/http/sector-http";
 import SectorInfo from "@renderer/components/sectorInfo/SectorInfo";
@@ -102,7 +102,7 @@ export default function Home(): JSX.Element {
 
   const { data: singleSectorData, isPending: singleSectorPending } = useEntity('sector', fetchSector, currentSector?.id)
 
-  const { data: singleMemberData, isPending: singleMemberPending } = useEntity('member', fetchSector, currentMember?.id)
+  const { data: singleMemberData, isPending: singleMemberPending } = useEntity('member', fetchPerson, currentMember?.id)
 
 
   useEffect(() => {
@@ -491,7 +491,7 @@ export default function Home(): JSX.Element {
       />
     }
     {
-      actionState == "member" && <MemberInfo currentMember={singleMemberData?.data} openSchool={openSchool} clearMember={clearMember} />
+      actionState == "member" && <MemberInfo singleMemberPending={singleMemberPending} currentMember={singleMemberData?.data} openSchool={openSchool} clearMember={clearMember} />
 
     }
     {

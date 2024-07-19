@@ -27,6 +27,7 @@ export default function SectorInfo({ singleSectorPending, memberForm, deleteData
 
 
     const infoDisplay = {
+        isLoading: singleSectorPending,
         slug: "sector",
         plural: "sectores",
         label: "Sector",
