@@ -34,11 +34,12 @@ export default function SchoolInfo({ singleSchoolPending, memberForm, deleteData
     const infoDisplay = {
         isLoading: singleSchoolPending,
         slug: "school",
-        plural: "escuelas",
-        label: "Escuela",
+        plural: "colegios",
+        label: "Colegio",
         url: "schools",
         singularUrl: "schools",
         id: currentSchool?.id,
+        title: currentSchool?.name,
         close: () => alert("Closing"),
         deleteFunction: deleteData,
         dataDisplay: [
@@ -109,100 +110,5 @@ export default function SchoolInfo({ singleSchoolPending, memberForm, deleteData
            <InfoTemplate infoDisplay={infoDisplay} clearInfo={clearSchool} /> 
         </>
     )
-    /*
-    function deleteModal() {
-        setDeleteModalOpen(true);
-    }
-    */
-/*
-    return (
-
-        <>
-            {<Modal title="Borrar escuela?" isOpen={deleteModalOpen} setIsOpen={setDeleteModalOpen} onSubmit={() => deleteData(currentSchool.id)}>
-                <p>Deseas borrar el Colegio? esta accion no es reversible</p>
-            </Modal>}
-
-            {singleSchoolPending  &&
-                <DynamicLoader />
-            }
-    <div>
-    <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
-                    <IconButton iconName="Close" onClick={clearSchool}/>
-                    </div>
-            {(!singleSchoolPending && !!currentSchool) &&
-
-                <div>
-               
-
-
-
-
-                    <table className={classes['table']}>
-                        <thead>
-
-
-                        </thead>
-                        <tbody>
-                            <tr>
-
-                                <td>   <span style={{ fontWeight: "bold" }}>Nombre</span></td>
-                                <td>{currentSchool.name}</td>
-
-                            </tr>
-
-                        </tbody>
-                    </table>
-
-
-                    <Button title="Editar" iconName="Edit" onClick={openForm} style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
-                    <Button title="Descargar" iconName="Download" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
-                    <Button title="Borrar" onClick={deleteModal} iconName="Delete" style={{ background: "#22224F", width: "100%", color: "#FFFFFF", margin: "5px 0px" }} />
-
-                    <h3>Miembros</h3>
-                    {(memberDataPending && !memberError) && <DynamicLoader />}
-                    {!memberDataPending && memberData?.data.length > 0 ?
-                        <div>
-
-                            <table className={classes['table']}>
-                                <thead>
-                                    <th>   <span style={{ fontWeight: "bold" }}>Nombre</span></th>
-                                    <th>   <span style={{ fontWeight: "bold" }}>Acciones</span></th>
-
-                                </thead>
-                                <tbody>
-                                    {memberData?.data.length > 0 && memberData?.data.map((member) => (
-                                        <tr key={member.id}>
-                                            <td>{`${member.name} ${member.last_name}`}</td>
-                                            <td>
-                                                <div className={classes["actions"]} onClick={() => openMember(member.id)}>
-
-                                                    <Visibility />
-
-
-
-                                                </div>
-
-                                            </td>
-                                        </tr>
-                                    ))}
-
-                                </tbody>
-                            </table>
-                            <Button title="Descargar" iconName="Download" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
-                        </div> :
-                        <div style={{ margin: "5px 0px" }}>
-                            <p>Este colegio no cuenta con miembros actualmente</p>
-                        </div>
-
-                    }
-                    <Button onClick={memberForm} title="Añadir miembro" iconName="Add" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
-                    <Button title="Subir Colegios" iconName="Upload" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
-                </div>
-
-
-
-            }
-            </div>
-        </>
-    )*/
+ 
 }

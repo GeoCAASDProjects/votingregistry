@@ -18,7 +18,9 @@
     border-radius: 4px;
 }
 
-.table td {}
+.table td {
+    padding: 5px
+}
 
 .actions {
     display: flex;

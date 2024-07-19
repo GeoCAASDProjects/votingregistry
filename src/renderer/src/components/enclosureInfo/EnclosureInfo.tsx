@@ -72,10 +72,7 @@ export default function EnclosureInfo({ singleEnclosurePending, currentEnclosure
         close: () => alert("Closing"),
         deleteFunction: deleteData,
         dataDisplay: [
-            {
-                label: "Nombre",
-                value: currentEnclosure?.name
-            },
+ 
             {
                 label: "Dirección",
                 value: `${currentEnclosure?.address} (${currentEnclosure?.longitude}, ${currentEnclosure?.latitude})`
@@ -121,17 +118,17 @@ export default function EnclosureInfo({ singleEnclosurePending, currentEnclosure
                     }
                 ],
                 actions: [
-
-                    {
-                        icon: "Download",
-                        label: "Descargar",
-                        action: () => alert("Sub data Descargar")
-                    },
                     {
                         icon: "Add",
                         label: "Añadir Colegio",
                         action: openSchoolForm
                     },
+                    {
+                        icon: "Download",
+                        label: "Descargar",
+                        action: () => alert("Sub data Descargar")
+                    },
+           
                 ]
             },
             ],

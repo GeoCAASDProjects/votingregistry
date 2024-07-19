@@ -35,7 +35,7 @@ export default function InfoTemplate({ infoDisplay, clearInfo }) {
                     <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
                         <IconButton iconName="Close" onClick={clearInfo} />
                     </div>
-                    <span style={{display:"flex", width: "100%", justifyContent:"center", alignContent:"center", alignItems:"center", fontWeight:"bold"}}><h3>{`${infoDisplay.label} ${infoDisplay.title}`}</h3></span>
+                    <span style={{display:"flex", width: "100%", justifyContent:"center", alignContent:"center", alignItems:"center", fontWeight:"bold"}}><h2>{`${infoDisplay.label} ${infoDisplay.title}`}</h2></span>
                     <table className={classes['table']}>
                         <thead>
 
@@ -69,7 +69,7 @@ export default function InfoTemplate({ infoDisplay, clearInfo }) {
                         !!infoDisplay && infoDisplay.relations.map((relation) =>
                             relation.isLoading ? <DynamicLoader /> :
                                 <div className={classes["sub-container"]}>
-                                    <h3>{`${relation.label} (${relation.data.length})`}</h3>
+                                      <span style={{display:"flex", width: "100%", justifyContent:"center", alignContent:"center", alignItems:"center", fontWeight:"bold"}}><h3>{`${relation.label} (${relation.data.length})`}</h3></span>  
 
                                     {relation.data.length > 0 ? <div>
 
