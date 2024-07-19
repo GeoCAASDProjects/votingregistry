@@ -66,6 +66,7 @@ export default function EnclosureInfo({ singleEnclosurePending, currentEnclosure
         plural: "recintos",
         label: "Recinto",
         url: "enclosures",
+        title: currentEnclosure?.name,
         singularUrl: "enclosures",
         id: currentEnclosure?.id,
         close: () => alert("Closing"),

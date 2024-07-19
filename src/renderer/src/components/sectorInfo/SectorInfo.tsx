@@ -34,6 +34,7 @@ export default function SectorInfo({ singleSectorPending, memberForm, deleteData
         url: "sectors",
         singularUrl: "sectors",
         id: currentSector?.id,
+        title: currentSector?.name,
         deleteFunction: deleteData,
         close: () => alert("Closing"),
 

@@ -35,7 +35,7 @@ export default function InfoTemplate({ infoDisplay, clearInfo }) {
                     <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
                         <IconButton iconName="Close" onClick={clearInfo} />
                     </div>
-
+                    <span style={{display:"flex", width: "100%", justifyContent:"center", alignContent:"center", alignItems:"center", fontWeight:"bold"}}><h3>{`${infoDisplay.label} ${infoDisplay.title}`}</h3></span>
                     <table className={classes['table']}>
                         <thead>
 
@@ -43,7 +43,7 @@ export default function InfoTemplate({ infoDisplay, clearInfo }) {
                         </thead>
                         <tbody>
                             {
-                               !infoDisplay?.isLoading && infoDisplay.dataDisplay.map((data) =>
+                                !infoDisplay?.isLoading && infoDisplay.dataDisplay.map((data) =>
                                     <tr>
 
                                         <td>   <span style={{ fontWeight: "bold" }}>{data.label}</span></td>
@@ -56,16 +56,19 @@ export default function InfoTemplate({ infoDisplay, clearInfo }) {
 
                         </tbody>
                     </table>
+                    <div className={classes["buttons"]}>
+                        {
 
-                    {
+                            infoDisplay.actions.map((button) => <Button title={button.label} iconName={button.icon} onClick={button.action} className={classes["sidebar-button"]} />)
+                        }
+                        <Button title={"Borrar"} iconName="Delete" onClick={triggerModal} className={classes["sidebar-button"]} />
+                    </div>
 
-                        infoDisplay.actions.map((button) => <Button title={button.label} iconName={button.icon} onClick={button.action} className={classes["sidebar-button"]} />)
-                    }
-                    <Button title={"Borrar"} iconName="Delete" onClick={triggerModal} className={classes["sidebar-button"]} />
+
                     {
                         !!infoDisplay && infoDisplay.relations.map((relation) =>
                             relation.isLoading ? <DynamicLoader /> :
-                                <>
+                                <div className={classes["sub-container"]}>
                                     <h3>{`${relation.label} (${relation.data.length})`}</h3>
 
                                     {relation.data.length > 0 ? <div>
@@ -106,11 +109,13 @@ export default function InfoTemplate({ infoDisplay, clearInfo }) {
                                         </div>
 
                                     }
-                                    {
+                                    <div className={classes["buttons"]}>
+                                        {
 
-                                        relation.actions.map((button) => <Button title={button.label} iconName={button.icon} onClick={button.action} className={classes["sidebar-button"]} />)
-                                    }
-                                </>
+                                            relation.actions.map((button) => <Button title={button.label} iconName={button.icon} onClick={button.action} className={classes["sidebar-button"]} />)
+                                        }
+                                    </div>
+                                </div>
                         )
                     }
 

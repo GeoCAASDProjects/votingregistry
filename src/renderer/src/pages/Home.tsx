@@ -371,7 +371,7 @@ export default function Home(): JSX.Element {
     if (!open) {
       setOpen(true);
     }
-
+    setDefaultSectorValues((prevValue)=>{return {...prevValue, id: null, name: null}})
     setDefaultSectorValues((prevValue) => { return { ...prevValue, area: JSON.stringify(data[0]) } });
     setActionState("sectorCreateForm")
   }
