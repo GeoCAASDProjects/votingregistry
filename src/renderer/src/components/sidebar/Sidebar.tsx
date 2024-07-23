@@ -39,7 +39,7 @@ export default function Sidebar({ isOpen, toggleSidebar, children, actionState, 
 
                     <div style={{ padding: 10 }}>
 
-                        <h2>Contenedor</h2>
+                      
                         {children}
 
 

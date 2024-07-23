@@ -130,7 +130,7 @@ export default function Home(): JSX.Element {
   });
 
 
-  
+
 
   async function handleCreateEnclosure(data) {
     console.log(data)
@@ -264,7 +264,7 @@ export default function Home(): JSX.Element {
   }
 
   function toggleSidebar() {
- 
+
     setOpen(currentVal => !currentVal);
   }
 
@@ -281,7 +281,7 @@ export default function Home(): JSX.Element {
     closeActionForm();
   }
 
- 
+
 
   function clearSchool() {
     closeActionForm();
@@ -356,7 +356,7 @@ export default function Home(): JSX.Element {
     openAction("member");
   }
   function openForm(data) {
-    setDefaultFormValues((prevValue)=>{return {...prevValue, id: null, name: null}})
+    setDefaultFormValues((prevValue) => { return { ...prevValue, id: null, name: null } })
     setDefaultFormValues((prevFormValues) => { return { ...prevFormValues, longitude: data.lng.toFixed(2), latitude: data.lat.toFixed(2), address: data.address } })
     if (!open) {
       //setOpen(true);
@@ -371,7 +371,7 @@ export default function Home(): JSX.Element {
     if (!open) {
       setOpen(true);
     }
-    setDefaultSectorValues((prevValue)=>{return {...prevValue, id: null, name: null}})
+    // setDefaultSectorValues((prevValue)=>{return {...prevValue, id: null, name: null}})
     setDefaultSectorValues((prevValue) => { return { ...prevValue, area: JSON.stringify(data[0]) } });
     setActionState("sectorCreateForm")
   }
@@ -455,7 +455,11 @@ export default function Home(): JSX.Element {
       <Button title="Añadir recintos" iconName="Add" onClick={selectLocation} style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
       <Button title="Añadir sector" iconName="Polyline" onClick={drawPolygon} style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
       <Button title="Subir Archivos" iconName="Upload" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
-
+      <Button title="Miembros" iconName="Person" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
+      <div style={{marginLeft:"20px"}}>
+      <Button title="Añadir Miembros" iconName="Add" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
+      <Button title="Ver Miembros" iconName="VisibilityOutlined" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
+      </div>
     </>}
     {actionState == "enclosure" && <EnclosureInfo
 
