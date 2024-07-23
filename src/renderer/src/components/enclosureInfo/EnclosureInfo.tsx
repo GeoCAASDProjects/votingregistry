@@ -55,11 +55,23 @@ export default function EnclosureInfo({ singleEnclosurePending, currentEnclosure
     function deleteModal() {
         setDeleteModalOpen(true);
     }
+/*
 
-
- 
-
-
+ <InfoTemplate 
+ isLoading={isLoading} 
+ id={currentEnclosure?.id} 
+ name={currentEnclosur?.name} 
+ slug="enclosure" 
+ plural="recintos" 
+ label="Recinto" 
+ title={currentEnclosure?.name} 
+ singularUrl="enclosures"
+ close={ ()=>alert("Closing")}
+ deleteFunction= {deleteData}
+ actions={actions}
+ />
+ <HorizontalTable dataDisplay={dataDisplay}/>
+ <VerticalTable data={data} columns={columns}/>*/
     const infoDisplay = {
         isLoading: singleEnclosurePending,
         slug: "enclosure",

@@ -44,7 +44,7 @@ export default function MemberCreateForm({currentSchool, closeMemberForm}) {
         occupation: Yup.string().required('Requerido'),
         place_of_birth: Yup.string().required('Requerido'),
         nationality: Yup.string().required('Requerido'),
-        document: Yup.string().required('Requerido').min(10, "La cedula debe tener 10 cáracteres").max(10, "La cédula debe tener 10 cáracteres"),
+        document: Yup.string().required('Requerido').min(11, "La cedula debe 11 cáracteres").max(11, "La cédula debe tener 11 cáracteres"),
         address: Yup.string().required('Requerido'),
         sector: Yup.string().required('Requerido'),
         phone: Yup.string().required('Requerido'),
