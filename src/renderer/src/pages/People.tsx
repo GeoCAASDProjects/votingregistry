@@ -1,8 +1,15 @@
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import classes from './people.module.css'
 import useEntity from "@renderer/util/hooks/entityHooks";
-import { fetchPeople } from "@renderer/util/http/person-http";
+import { createPerson, deletePerson, fetchPeople, updatePerson } from "@renderer/util/http/person-http";
 import { useQuery } from "@tanstack/react-query";
+import Button from "@renderer/components/button/Button";
+import IconButton from "@renderer/components/iconButton/IconButton";
+import { Box } from "@mui/material";
+import Modal from "@renderer/components/modal/Modal";
+import { useState } from "react";
+import MemberCreateForm from "@renderer/components/memberForm/MemberForm";
+import useEntityMutations from "@renderer/util/hooks/mutationHooks";
 export default function People() {
 
 
@@ -14,33 +21,80 @@ export default function People() {
   });
   
 
+  
+ 
+  const personMutations = useEntityMutations('person', 'people', {
+    createFn: createPerson,
+    updateFn: updatePerson,
+    deleteFn: deletePerson
+  });
+
+
   const actionColumn: GridColDef = {
     field: "action",
     headerName: "Action",
     width: 200,
-
-    /*   renderCell: (params) => {
-         return (
-           <div className="action">
-             <Link to={`/${props.slug}/${params.row.id}`} state={{id: params.row.id}}>
-               <img src="/view.svg" alt="" />
-             </Link>
-             <div className="delete" onClick={() => handleDelete(params.row)}>
-               <img src="/delete.svg" alt="" />
-             </div>
-           </div>
-         );
-       },*/
+    renderCell: (params) => {
+      return (
+        <div style={{display:"flex", height:"100%", gap:"4px", alignContent:"center", alignItems:"center"}}>
+  <IconButton iconName="Delete" onClick={openDeleteModal}/>
+  <IconButton iconName="VisibilityOutlined" onClick={()=>alert("Viewing")}/>
+        </div>
+      
+      );
+    },
   };
 
+  const columns: GridColDef[] = [
+    { field: "name", headerName: "Nombre", width: 150 }, 
+    { field: "last_name", headerName: "Apellido", width: 150, }, 
+    { field: "sex", headerName: "Sexo", width: 150, }, 
+    { field: "document", headerName: "Cédula", width: 150, }, 
+    { field: "nationality", headerName: "Nacionalidad", width: 150, }, 
+    { field: "place_of_birth", headerName: "Lugar de Nacimiento", width: 150, }, 
+    { field: "occupation", headerName: "Ocupación", width: 150, }, 
+    { field: "school", 
+      headerName: "Colegio", 
+ 
+      width: 150, 
+      editable: true,
+      valueGetter: (params)=>`${params?.name ?? "-"}`
+    }, 
+    { field: "address", headerName: "Dirección", width: 150, }, actionColumn
+  ]
+
+  const [openModal, setOpenModal] = useState(false);
+  const [openModalDelete, setOpenModalDelete] = useState(false);
+
+  function openCreateModal(){
+    setOpenModal(true);
+  }
+
+  function openDeleteModal(){
+    setOpenModalDelete(true);
+  }
+
   return (
-    <div style={{ margin: "30px" }}>
-      <div style={{ margin: "20px 0" }}>
+    <div style={{  position:"relative", width:"100%", height: "100%",overflowY:"scroll"}}>
+     <div style={{margin:"0px 30px"}}>
+     <div style={{ margin: "20px 0" }}>
         <h1>Personas</h1>
       </div>
-      <div style={{ backgroundColor: "white", flexGrow: 1, display: "flex", alignItems:"center" }}>
+      <Modal isOpen={openModal} setIsOpen={setOpenModal}>
+      <MemberCreateForm currentSchool={null} />
+      </Modal>
+
+      <Modal isOpen={openModalDelete} setIsOpen={setOpenModalDelete} onSubmit={()=>alert("Deleting")} title="Borrar Miembro?">
+      <p>Desea borrar el Miembro y todos sus datos asociados? esta accion no es reversible</p>
+      </Modal>
+      <div style={{margin: "20px 0", display:"flex", width:"100%", justifyContent:"flex-end"}}>
+      <Button title="Create new" onClick={openCreateModal}></Button>
+      </div>
+    
+      <div style={{ backgroundColor: "white", flexGrow: 1, display: "flex", alignItems:"center"}}>
+   
      {!peoplePending && !!peopleData &&   <DataGrid
-      
+     style={{height: "450px"}}
           pageSizeOptions={[5]}
           checkboxSelection
           disableRowSelectionOnClick
@@ -50,20 +104,13 @@ export default function People() {
 
           className={classes["dataTable"]}
           rows={peopleData?.data}
-          columns={[
-            { field: "name", headerName: "Nombre", width: 150 }, 
-            { field: "last_name", headerName: "Apellido", width: 150, }, 
-            { field: "sex", headerName: "Sexo", width: 150, }, 
-            { field: "document", headerName: "Cédula", width: 150, }, 
-            { field: "nationality", headerName: "Nacionalidad", width: 150, }, 
-            { field: "place_of_birth", headerName: "Lugar de Nacimiento", width: 150, }, 
-            { field: "school.name", headerName: "Colegio", width: 150, }, 
-            { field: "address", headerName: "Dirección", width: 150, }, actionColumn
-          ]}
+          columns={columns}
             
         />
      }
       </div>
+     </div>
+     
 
     </div>
 

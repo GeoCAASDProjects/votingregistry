@@ -75,6 +75,56 @@ export async function createPerson(data){
         }
 }
 
+
+
+
+export async function updatePerson(data){
+ 
+    console.log("THE DATA")
+    console.log("----------------------------------------------------------------------")
+    console.log({...data})
+  
+    let url = `${BASE_URL_API}/person/${data.id}`;
+    const config: AxiosRequestConfig ={
+     
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+        },
+     
+    }
+
+    try{
+        const response = await axios.patch(url, data, config);
+      
+        console.log(response);
+      
+        return response.data;
+        } catch(error){
+            console.log(error);
+            
+          throw new Error('Request failed');
+        }
+}
+
+export async function deletePerson(id){
+    let url = `${BASE_URL_API}/person/${id}`;
+    const config: AxiosRequestConfig ={
+     
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+        },
+     
+    }
+    try{
+        const response = await axios.delete(url, config);
+        return response.data;
+    
+    }catch(error){
+        throw new Error('Request failed.')
+    }
+}
+
+
 export async function fetchPerson(id){
     let url = `${BASE_URL_API}/person/${id}`;
 

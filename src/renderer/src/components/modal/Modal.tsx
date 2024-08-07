@@ -4,6 +4,7 @@ import style from './modal.module.css';
 import { CloseOutlined, CloseRounded, Login } from '@mui/icons-material';
 import Button from "../button/Button";
 import { createPortal } from "react-dom";
+import IconButton from "../iconButton/IconButton";
  
 interface ModalProps {
     isOpen: boolean;
@@ -24,15 +25,19 @@ const Modal: FC<ModalProps> = ({ isOpen, setIsOpen, title, children, onSubmit}) 
         <div>
         <div className={style.overlay}></div>
         <div className={style.container}>
-            <button onClick={close} title="Submitting" className={style.closeButton}><CloseOutlined fontSize='inherit' /></button>
+            <div style={{width: "100%", display:"flex", justifyContent:"flex-end"}}>
+            <IconButton iconName="CloseOutlined" onClick={close}/>
+            </div>
+         
+       { /* <button onClick={close} title="Submitting" className={style.closeButton}><CloseOutlined fontSize='inherit' /></button>*/}
             <h3>{title ?? ''}</h3>
             {children}
 
-            <div style={{display:"flex", width: "100%", justifyContent:"space-between"}}>
+      { !!onSubmit &&    <div style={{display:"flex", width: "100%", justifyContent:"space-between"}}>
                 
                 <Button onClick={close} title="Cancelar"/>
                 <Button onClick={onSubmit} title="Borrar" style={{backgroundColor: "#0F0F40", color:"white"}}/>
-            </div>
+            </div>}
 
         </div>
     </div>, modalDiv);

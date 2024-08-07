@@ -90,7 +90,7 @@ function App(): JSX.Element {
     return(
       <div className={classes["main-container"]}>
         <Navbar/>
-        <div style={{position:"relative", flex:1,     alignItems: "center", alignContent: "center"}}>
+        <div style={{position:"relative", flex:1, alignItems: "center", alignContent: "center", height:"100%"}}>
         <QueryClientProvider client={queryClient}>
           <Outlet/>
         </QueryClientProvider>

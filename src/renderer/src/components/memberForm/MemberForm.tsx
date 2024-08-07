@@ -64,9 +64,9 @@ export default function MemberCreateForm({currentSchool, closeMemberForm}) {
         document: "",
         address: "",
         sector: "",
-        school_id: currentSchool,
-        phone: ""
-        /*    school_id: ""*/
+        school_id: currentSchool ?? null,
+        phone: "",
+      
     }
     
 
@@ -91,10 +91,10 @@ export default function MemberCreateForm({currentSchool, closeMemberForm}) {
             {({ isSubmitting }) => (
                 <Form>
                     <div className={classes['member-form']}>
-                    <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
+                  {closeMemberForm &&  <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
                        
                         <IconButton iconName="Close" onClick={closeMemberForm}/>
-                    </div>
+                    </div>}
                         <h3>Nuevo Miembro</h3>
                         <div style={{ margin: "10px 0" }}>
 

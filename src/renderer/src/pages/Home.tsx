@@ -455,11 +455,11 @@ export default function Home(): JSX.Element {
       <Button title="Añadir recintos" iconName="Add" onClick={selectLocation} style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
       <Button title="Añadir sector" iconName="Polyline" onClick={drawPolygon} style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
       <Button title="Subir Archivos" iconName="Upload" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
-      <Button title="Miembros" iconName="Person" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
+      {/*<Button title="Miembros" iconName="Person" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
       <div style={{marginLeft:"20px"}}>
       <Button title="Añadir Miembros" iconName="Add" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
       <Button title="Ver Miembros" iconName="VisibilityOutlined" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
-      </div>
+      </div>*/}
     </>}
     {actionState == "enclosure" && <EnclosureInfo
 
