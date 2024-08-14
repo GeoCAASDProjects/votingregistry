@@ -13,29 +13,9 @@ interface MemberCreateFormI {
     isLoading?: boolean;
     edit?: boolean;
 }
-export default function MemberCreateForm({currentSchool, closeMemberForm}) {
+export default function MemberCreateForm({currentSchool, closeMemberForm, submitData, isLoading}) {
 
-
-    const {
-        mutate: singleMemberCreateMutate,
-        data: singleMemberCreateData,
-        isPending: singleMemberCreatePending,
-        isError: singleMemberCreateIsError,
-        error: singleMemberCreateError
-    } = useMutation({
-        mutationFn: createPerson,
-        onSuccess: async (e) => {
-            console.log("The data")
-            console.log(e.data);
-            closeMemberForm();
-
-        },
-        onError: (e) => {
-
-            alert("Error")
-        }
-    });
-
+ 
     const MemberSchema = Yup.object().shape({
         name: Yup.string().required('Requerido'),
         last_name: Yup.string().required('Requerido'),
@@ -69,7 +49,7 @@ export default function MemberCreateForm({currentSchool, closeMemberForm}) {
       
     }
     
-
+/*
     async function submitData(e) {
         try{
             const response = await singleMemberCreateMutate(e);
@@ -80,7 +60,7 @@ export default function MemberCreateForm({currentSchool, closeMemberForm}) {
             console.log(error)
         }
         
-    }
+    }*/
     return (
 
         <Formik
@@ -182,7 +162,7 @@ export default function MemberCreateForm({currentSchool, closeMemberForm}) {
                         </div>
 
 
-                        <Button type="submit" title="Enviar" iconName="Send" isLoading={singleMemberCreatePending} center />
+                        <Button type="submit" title="Enviar" iconName="Send" isLoading={isLoading} center />
 
                         {/*  <Button onClick={resetValues} title="ResetValues" iconName="RestartAlt" isLoading={isLoading} center/>*/}
                     </div>

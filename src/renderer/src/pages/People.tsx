@@ -74,6 +74,17 @@ export default function People() {
     setOpenModalDelete(true);
   }
 
+  async function handleCreatePerson(data) {
+    console.log(data)
+    try {
+      const response = await personMutations.createMutation.mutateAsync(data);
+
+      setOpenModal(false);
+    } catch (e) {
+      console.error(e)
+      alert(e);
+    }
+  }
   return (
     <div style={{  position:"relative", width:"100%", height: "100%",overflowY:"scroll"}}>
      <div style={{margin:"0px 30px"}}>
@@ -81,7 +92,7 @@ export default function People() {
         <h1>Personas</h1>
       </div>
       <Modal isOpen={openModal} setIsOpen={setOpenModal}>
-      <MemberCreateForm currentSchool={null} />
+      <MemberCreateForm  submitData={handleCreatePerson} currentSchool={null}  isLoading={personMutations.createMutation.isPending}/>
       </Modal>
 
       <Modal isOpen={openModalDelete} setIsOpen={setOpenModalDelete} onSubmit={()=>alert("Deleting")} title="Borrar Miembro?">

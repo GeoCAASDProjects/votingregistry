@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import classes from './home.module.css'
 import Button from "@renderer/components/button/Button";
 import MemberInfo from "@renderer/components/memberInfo/MemberInfo";
-import { fetchMembers, fetchPerson } from "@renderer/util/http/person-http";
+import { createPerson, deletePerson, fetchMembers, fetchPerson, updatePerson } from "@renderer/util/http/person-http";
 import SectorCreateForm from "@renderer/components/sectorForm/SectorForm";
 import { createSector, deleteSector, fetchSector, fetchSectors, updateSector } from "@renderer/util/http/sector-http";
 import SectorInfo from "@renderer/components/sectorInfo/SectorInfo";
@@ -129,6 +129,13 @@ export default function Home(): JSX.Element {
     deleteFn: deleteSchool
   });
 
+
+   
+  const personMutations = useEntityMutations('person', 'people', {
+    createFn: createPerson,
+    updateFn: updatePerson,
+    deleteFn: deletePerson
+  });
 
 
 
@@ -260,6 +267,19 @@ export default function Home(): JSX.Element {
     } catch (e) {
       console.error(e)
 
+    }
+  }
+
+  async function handleCreatePerson(data) {
+    console.log(data)
+    try {
+      const response = await personMutations.createMutation.mutateAsync(data);
+    
+      closeActionForm();
+ 
+    } catch (e) {
+      console.error(e)
+      alert(e);
     }
   }
 
@@ -535,7 +555,7 @@ export default function Home(): JSX.Element {
       />
     }
     {
-      actionState == "memberForm" && <MemberCreateForm closeMemberForm={closeActionForm} currentSchool={currentSchool?.id} />
+      actionState == "memberForm" && <MemberCreateForm submitData={handleCreatePerson} closeMemberForm={closeActionForm} currentSchool={currentSchool?.id}  isLoading={!!currentMember?.id ? personMutations.updateMutation.isPending : personMutations.createMutation.isPending}/>
 
 
     }
