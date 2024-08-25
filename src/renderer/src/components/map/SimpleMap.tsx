@@ -31,10 +31,10 @@ export default function SimpleMap({ enclosures, sectors, actionState, onMarkerCl
 
         });
       } catch (error) {
-        alert(error);
+        console.log(error);
       }
     } else {
-      alert("Geolocation is not supported by this browser.")
+      console.log("Geolocation is not supported by this browser.")
     }
 
   }, []);
@@ -202,7 +202,7 @@ export default function SimpleMap({ enclosures, sectors, actionState, onMarkerCl
 /*
     useEffect(()=>{
       setPolygon(area);
-     alert("Area change")
+     console.log("Area change")
     },[area])*/
     const _onCreated = (e) => {
       const { layerType, layer } = e;

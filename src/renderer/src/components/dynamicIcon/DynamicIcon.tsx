@@ -4,7 +4,6 @@ import * as Icons from '@mui/icons-material';
 
 interface IconI{
 iconName: string|null,
- 
 }
 function DynamicIcon({ iconName, ...props }:IconI): JSX.Element|null {
   const IconComponent = Icons[iconName ?? " "];

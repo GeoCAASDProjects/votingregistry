@@ -7,6 +7,8 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { createPerson } from '@renderer/util/http/person-http';
 import { Close } from '@mui/icons-material';
 import IconButton from '../iconButton/IconButton';
+import ProfilePicture from '../profilePicture/ProfilePicture';
+import { useState } from 'react';
 
 interface MemberCreateFormI {
     submitData?: (data: object) => void;
@@ -28,7 +30,7 @@ export default function MemberCreateForm({currentSchool, closeMemberForm, submit
         address: Yup.string().required('Requerido'),
         sector: Yup.string().required('Requerido'),
         phone: Yup.string().required('Requerido'),
-
+        image: Yup.string()
         /* school_id: Yup.string().required("Requerido")*/
     });
 
@@ -46,6 +48,7 @@ export default function MemberCreateForm({currentSchool, closeMemberForm, submit
         sector: "",
         school_id: currentSchool ?? null,
         phone: "",
+        image: null
       
     }
     
@@ -61,6 +64,13 @@ export default function MemberCreateForm({currentSchool, closeMemberForm, submit
         }
         
     }*/
+   const [currentImage, setCurrentImage] = useState<string|null>(null);
+   function changeProfilePic(file, setFieldValue){
+    console.log(file);
+    setFieldValue('image', file);
+    const imageUrl = URL.createObjectURL(file);
+    setCurrentImage(imageUrl)
+   }
     return (
 
         <Formik
@@ -68,7 +78,7 @@ export default function MemberCreateForm({currentSchool, closeMemberForm, submit
             validationSchema={MemberSchema}
             onSubmit={submitData}
         >
-            {({ isSubmitting }) => (
+            {({ isSubmitting, setFieldValue}) => (
                 <Form>
                     <div className={classes['member-form']}>
                   {closeMemberForm &&  <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
@@ -77,7 +87,9 @@ export default function MemberCreateForm({currentSchool, closeMemberForm, submit
                     </div>}
                         <h3>Nuevo Miembro</h3>
                         <div style={{ margin: "10px 0" }}>
-
+                              <div className={classes["image-container"]}>
+                            <ProfilePicture size ={90} image={currentImage} onChange={(imageUrl) => changeProfilePic(imageUrl, setFieldValue)}/>
+                            </div>
                             <div className={classes['input']}>
                                 <label>Nombre</label>
                                 <Field name="name" placeholder="Nombre" />

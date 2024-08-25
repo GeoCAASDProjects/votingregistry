@@ -148,7 +148,7 @@ export default function Home(): JSX.Element {
       sendDataToSidebar(response.data.id);
     } catch (e) {
       console.error(e)
-      alert(e);
+      
     }
   }
 
@@ -162,7 +162,7 @@ export default function Home(): JSX.Element {
 
     } catch (e) {
       console.error(e)
-      alert(e);
+      
     }
   }
 
@@ -196,7 +196,7 @@ export default function Home(): JSX.Element {
 
     } catch (e) {
       console.error(e)
-      alert(e);
+      
     }
   }
 
@@ -210,7 +210,7 @@ export default function Home(): JSX.Element {
 
     } catch (e) {
       console.error(e)
-      alert(e);
+      
     }
   }
 
@@ -239,7 +239,7 @@ export default function Home(): JSX.Element {
       sendSectorToSidebar(response?.data?.id)
     } catch (e) {
       console.error(e)
-      alert(e);
+      
     }
   }
   async function handleUpdateSector(data) {
@@ -252,7 +252,7 @@ export default function Home(): JSX.Element {
       closeActionForm();
     } catch (e) {
       console.error(e)
-      alert(e);
+      
     }
   }
 
@@ -279,7 +279,7 @@ export default function Home(): JSX.Element {
  
     } catch (e) {
       console.error(e)
-      alert(e);
+      
     }
   }
 
