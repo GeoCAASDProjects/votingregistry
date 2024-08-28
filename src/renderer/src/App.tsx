@@ -13,6 +13,7 @@ import { useAuth } from './util/context/AuthContext';
 import People from './pages/People';
 import Schools from './pages/Schools';
 import Users from './pages/Users';
+import Person from './pages/Person';
 function App(): JSX.Element {
   const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
   const queryClient = new QueryClient();
@@ -48,6 +49,10 @@ function App(): JSX.Element {
           path: "/people",
           element: <People/>
         
+        },
+        {
+          path: "/people/:id",  // Dynamic route for a specific person
+          element: <Person/>// Component to display the details of a person
         },
         {
           path: "/schools",

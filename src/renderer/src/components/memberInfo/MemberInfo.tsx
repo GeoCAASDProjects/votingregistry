@@ -23,7 +23,7 @@ export default function MemberInfo({ currentMember, openSchool, clearMember, sin
 
             {currentMember && !singleMemberPending && <div >
                 <div className={classes["image-container"]}>
-                    <ProfilePicture size={90} image={`${BASE_URL}storage/${currentMember?.image}`}/>
+                    <ProfilePicture size={90} image={currentMember?.image ? `${BASE_URL}storage/${currentMember?.image}`: null} />
 
                 </div>
                 <div style={{ width: "100%", display: "flex", flexDirection: "column", gap: "5px", justifyContent: "center", alignContent: "center", alignItems: "center" }}>

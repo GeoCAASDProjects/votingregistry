@@ -42,7 +42,7 @@ export default function ProfilePicture({ size, onChange, image = null}) {
                 </div>
 
             </div>
-            <img alt="profile" src={image} />
+            <img alt="profile" src={image ?? "./src/assets/user/user.jpg"} />
         </div>
     )
 }

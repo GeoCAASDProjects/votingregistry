@@ -10,6 +10,9 @@ import Modal from "@renderer/components/modal/Modal";
 import { useState } from "react";
 import MemberCreateForm from "@renderer/components/memberForm/MemberForm";
 import useEntityMutations from "@renderer/util/hooks/mutationHooks";
+import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "@renderer/config";
+import ProfilePicture from "@renderer/components/profilePicture/ProfilePicture";
 export default function People() {
 
 
@@ -29,6 +32,13 @@ export default function People() {
     deleteFn: deletePerson
   });
 
+  const navigate = useNavigate();
+
+  const goToPersonDetail = (id) => {
+    // Programmatically navigate to /people/id
+    navigate(`/people/${id}`);
+  };
+  
 
   const actionColumn: GridColDef = {
     field: "action",
@@ -38,7 +48,7 @@ export default function People() {
       return (
         <div style={{ display: "flex", height: "100%", gap: "4px", alignContent: "center", alignItems: "center" }}>
           <IconButton iconName="Delete" onClick={openDeleteModal} />
-          <IconButton iconName="VisibilityOutlined" onClick={() => alert("Viewing")} />
+          <IconButton iconName="VisibilityOutlined" onClick={(params) => console.log(params.row)} />
         </div>
 
       );
@@ -46,6 +56,11 @@ export default function People() {
   };
 
   const columns: GridColDef[] = [
+    {field:"avatar", headerName:"Avatar", width:100,
+      renderCell:(params)=>{
+        
+        return  <ProfilePicture size={40} image={params.row.image ? `${BASE_URL}storage/${params.row.image}`: null} />
+      }},
     { field: "name", headerName: "Nombre", width: 150 },
     { field: "last_name", headerName: "Apellido", width: 150, },
     { field: "sex", headerName: "Sexo", width: 150, },
@@ -61,7 +76,7 @@ export default function People() {
       editable: true,
       valueGetter: (params) => `${params?.name ?? "-"}`
     },
-    { field: "address", headerName: "Dirección", width: 150, }, actionColumn
+    { field: "address", headerName: "Dirección", width: 150, }
   ]
 
   const [openModal, setOpenModal] = useState(false);
@@ -94,7 +109,7 @@ export default function People() {
     }
   }
 
-  
+
   return (
     <div style={{ position: "relative", width: "100%", height: "100%", overflowY: "scroll" }}>
       <div style={{ margin: "0px 30px" }}>
@@ -125,7 +140,7 @@ export default function People() {
 
             className={classes["dataTable"]}
             rows={peopleData?.data}
-            columns={columns}
+            columns={[...columns, actionColumn]}
 
           />
           }
