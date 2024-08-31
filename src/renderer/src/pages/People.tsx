@@ -104,8 +104,8 @@ export default function People() {
       <div className={classes["info"]}>
         <h1>People</h1>
         <div style={{ margin: "20px 0", display: "flex", width: "100%", justifyContent: "flex-end" }}>
-          <Button title="Create new" onClick={openCreateModal}></Button>
-        </div>
+                    <Button title="Create new" onClick={openCreateModal}></Button>
+                </div>
 
       </div>
       <Modal isOpen={openModal} setIsOpen={setOpenModal}>
