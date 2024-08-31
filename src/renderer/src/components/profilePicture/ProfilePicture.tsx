@@ -32,7 +32,7 @@ export default function ProfilePicture({ size, onChange, image = null}) {
                 type="file"
                 ref={fileInputRef}
                 accept="image/*"
-                onChange={handleFileChange}
+                onChange={onChange && handleFileChange}
                 className={classes.fileInput}
 
             />

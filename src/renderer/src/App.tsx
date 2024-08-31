@@ -1,7 +1,7 @@
 
 
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
-import {createBrowserRouter, Outlet, RouterProvider} from "react-router-dom";
+import {createBrowserRouter, Link, Outlet, RouterProvider} from "react-router-dom";
 
 import Login from './pages/Login';
 import Navbar from './components/navbar/Navbar';
@@ -35,6 +35,7 @@ function App(): JSX.Element {
     }
   ]);
 */
+
   const router = createBrowserRouter([
     {  
       path: "/",

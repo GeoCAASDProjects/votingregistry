@@ -9,6 +9,7 @@ import DynamicLoader from "../dynamicLoader/DynamicLoader"
 import { getNamedDate } from "@renderer/util/time/timeFunction"
 import { formatDocument } from "@renderer/util/miscFunctions"
 import { BASE_URL } from "@renderer/config"
+import { Link } from "react-router-dom"
 export default function MemberInfo({ currentMember, openSchool, clearMember, singleMemberPending }) {
     console.log("AAAAAAAAHH")
 
@@ -38,7 +39,10 @@ export default function MemberInfo({ currentMember, openSchool, clearMember, sin
                 </div>
             </div>
             }
-            <Button title="Ver perfil" />
+    
+            <Link  to={`./people/${currentMember?.id}`}>
+            <Button title="Ver perfil"/>
+            </Link>
 
 
             {currentMember && !singleMemberPending && <table className={classes['table']}>
