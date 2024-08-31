@@ -1,9 +1,10 @@
 
-import "./dataTable.scss"
+import "./dataTable.css"
 import { Link } from "react-router-dom";
 import {DataGrid, GridRowsProp, GridColDef, GridToolbar} from '@mui/x-data-grid';
 import DeleteModal from "../modals/dialogs/DeleteModal";
 import { useState, useEffect } from "react";
+import IconButton from "../iconButton/IconButton";
 function DataTable(props){
 
   const [openDeleteModal, setDeleteOpenModal] = useState(false);
@@ -35,23 +36,23 @@ function DataTable(props){
       setDeleteOpenModal(true)
      }
  
-  const actionColumn: GridColDef = {
-    field: "action",
-    headerName: "Action",
-    width: 200,
-    renderCell: (params) => {
-      return (
-        <div className="action">
-          <Link to={`/${props.slug}/${params.row.id}`} state={{id: params.row.id}}>
-            <img src="/view.svg" alt="" />
-          </Link>
-          <div className="delete" onClick={() => handleDelete(params.row)}>
-            <img src="/delete.svg" alt="" />
+     const actionColumn: GridColDef = {
+      field: "action",
+      headerName: "Action",
+      width: 200,
+      renderCell: (params) => {
+        return (
+          <div className="action">
+            <IconButton iconName="Delete" onClick={openDeleteModal} />
+          
+            <Link to={`/${props.slug}/${params.row.id}`} state={{id: params.row.id}}>
+            <IconButton iconName="VisibilityOutlined" onClick={() => console.log(params.row)} />
+              </Link>
           </div>
-        </div>
-      );
-    },
-  };
+        );
+      },
+    };
+
 
   function handlePageChange(page){
    // alert(page)
@@ -69,47 +70,47 @@ return(
   
     <div className="dataTable" >
       <DataGrid 
-      onRowSelectionModelChange={(newRowSelectionModel) => {
-       if(props.hasOwnProperty("getArrayElement")  ){
-      props.getArrayElement(newRowSelectionModel)
-       }
-      
-      }}
-      className="dataGrid"
-   
-      rows={props.rows} 
-
-      columns={[...props.columns, actionColumn]}
-     
-      initialState={{
-        pagination:{
-            paginationModel:{
-                pageSize: 10
+           onRowSelectionModelChange={(newRowSelectionModel) => {
+            if(props.hasOwnProperty("getArrayElement")  ){
+           props.getArrayElement(newRowSelectionModel)
             }
-        }
-      }}
-      slots={{toolbar:GridToolbar}}
-      slotProps={{
-        toolbar:{
-          showQuickFilter:true,
-          quickFilterProps: {debounceMs: 500}
-        }
-      }}
-      pageSizeOptions={[5]}
-      checkboxSelection
-      disableRowSelectionOnClick
-      disableColumnFilter
-      disableDensitySelector
-      disableColumnSelector
-
-     paginationMode= {props.serverSidePagination ? "server": "client"}
-      rowCount={props.serverSidePagination && !!props.paginationData && props.paginationData.total}
-      //onPaginationModelChange={setPaginationModel}
-    //  paginationModel={paginationModel}
-     // onPageChange={setPaginationModel}
-      //onPageSizeChange={setPaginationModel}
-      onPaginationModelChange={props.serverSidePagination && handleUpdatePagination}
-      onSortModelChange={props.serverSidePagination && handleSortChange}
+           
+           }}
+           className="dataGrid"
+        
+           rows={props.rows} 
+     
+           columns={[...props.columns, actionColumn]}
+          
+           initialState={{
+             pagination:{
+                 paginationModel:{
+                     pageSize: 10
+                 }
+             }
+           }}
+           slots={{toolbar:GridToolbar}}
+           slotProps={{
+             toolbar:{
+               showQuickFilter:true,
+               quickFilterProps: {debounceMs: 500}
+             }
+           }}
+           pageSizeOptions={[5]}
+           checkboxSelection
+           disableRowSelectionOnClick
+           disableColumnFilter
+           disableDensitySelector
+           disableColumnSelector
+     
+          paginationMode= {props.serverSidePagination ? "server": "client"}
+           rowCount={props.serverSidePagination && !!props.paginationData && props.paginationData.total}
+           //onPaginationModelChange={setPaginationModel}
+         //  paginationModel={paginationModel}
+          // onPageChange={setPaginationModel}
+           //onPageSizeChange={setPaginationModel}
+           onPaginationModelChange={props.serverSidePagination && handleUpdatePagination}
+           onSortModelChange={props.serverSidePagination && handleSortChange}
       loading= {props.isLoading}
       />
    { /*  <DeleteModal modalData={modalData} deleteElement={deleteElement} handleCloseModal={handleCloseModal} handleOpenModal={handleCloseModal} open={openDeleteModal}/>*/}

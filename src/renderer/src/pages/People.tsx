@@ -13,6 +13,7 @@ import useEntityMutations from "@renderer/util/hooks/mutationHooks";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "@renderer/config";
 import ProfilePicture from "@renderer/components/profilePicture/ProfilePicture";
+import DataTable from "@renderer/components/dataTable/DataTable";
 export default function People() {
 
 
@@ -38,29 +39,16 @@ export default function People() {
     // Programmatically navigate to /people/id
     navigate(`/people/${id}`);
   };
-  
 
-  const actionColumn: GridColDef = {
-    field: "action",
-    headerName: "Action",
-    width: 200,
-    renderCell: (params) => {
-      return (
-        <div style={{ display: "flex", height: "100%", gap: "4px", alignContent: "center", alignItems: "center" }}>
-          <IconButton iconName="Delete" onClick={openDeleteModal} />
-          <IconButton iconName="VisibilityOutlined" onClick={(params) => console.log(params.row)} />
-        </div>
-
-      );
-    },
-  };
 
   const columns: GridColDef[] = [
-    {field:"avatar", headerName:"Avatar", width:100,
-      renderCell:(params)=>{
-        
-        return  <ProfilePicture size={40} image={params.row.image ? `${BASE_URL}storage/${params.row.image}`: null} />
-      }},
+    {
+      field: "avatar", headerName: "Avatar", width: 100,
+      renderCell: (params) => {
+
+        return <ProfilePicture size={40} image={params.row.image ? `${BASE_URL}storage/${params.row.image}` : null} />
+      }
+    },
     { field: "name", headerName: "Nombre", width: 150 },
     { field: "last_name", headerName: "Apellido", width: 150, },
     { field: "sex", headerName: "Sexo", width: 150, },
@@ -109,47 +97,72 @@ export default function People() {
     }
   }
 
-
   return (
-    <div style={{ position: "relative", width: "100%", height: "100%", overflowY: "scroll" }}>
-      <div style={{ margin: "0px 30px" }}>
-        <div style={{ margin: "20px 0" }}>
-          <h1>Personas</h1>
-        </div>
-        <Modal isOpen={openModal} setIsOpen={setOpenModal}>
-          <MemberCreateForm submitData={handleCreatePerson} currentSchool={null} isLoading={personMutations.createMutation.isPending} />
-        </Modal>
-
-        <Modal isOpen={openModalDelete} setIsOpen={setOpenModalDelete} onSubmit={() => alert("Deleting")} title="Borrar Miembro?">
-          <p>Desea borrar el Miembro y todos sus datos asociados? esta accion no es reversible</p>
-        </Modal>
+    <div style={{ height:"100%", width: "100%", position:"relative" , overflowY: "scroll"}}>
+       <div style={{ margin: "0px 30px", position:"relative" }}>
+    <div className={classes["people"]}>
+      <div className={classes["info"]}>
+        <h1>People</h1>
         <div style={{ margin: "20px 0", display: "flex", width: "100%", justifyContent: "flex-end" }}>
           <Button title="Create new" onClick={openCreateModal}></Button>
         </div>
 
-        <div style={{ backgroundColor: "white", flexGrow: 1, display: "flex", alignItems: "center" }}>
-
-          {!peoplePending && !!peopleData && <DataGrid
-            style={{ height: "450px" }}
-            pageSizeOptions={[5]}
-            checkboxSelection
-            disableRowSelectionOnClick
-            disableColumnFilter
-            disableDensitySelector
-            disableColumnSelector
-
-            className={classes["dataTable"]}
-            rows={peopleData?.data}
-            columns={[...columns, actionColumn]}
-
-          />
-          }
-        </div>
       </div>
+      <Modal isOpen={openModal} setIsOpen={setOpenModal}>
+        <MemberCreateForm submitData={handleCreatePerson} currentSchool={null} isLoading={personMutations.createMutation.isPending} />
+      </Modal>
+      <Modal isOpen={openModalDelete} setIsOpen={setOpenModalDelete} onSubmit={() => alert("Deleting")} title="Borrar Miembro?">
+        <p>Desea borrar el Miembro y todos sus datos asociados? esta accion no es reversible</p>
+      </Modal>
+      {peoplePending ? "Loading" : <DataTable slug="people" columns={columns} rows={peopleData.data} />}
 
-
+      </div>
     </div>
-
-
+    </div>
   )
+
+  /*
+    return (
+      <div style={{ position: "relative", width: "100%", height: "100%", overflowY: "scroll" }}>
+        <div style={{ margin: "0px 30px" }}>
+          <div style={{ margin: "20px 0" }}>
+            <h1>Personas</h1>
+          </div>
+          <Modal isOpen={openModal} setIsOpen={setOpenModal}>
+            <MemberCreateForm submitData={handleCreatePerson} currentSchool={null} isLoading={personMutations.createMutation.isPending} />
+          </Modal>
+  
+          <Modal isOpen={openModalDelete} setIsOpen={setOpenModalDelete} onSubmit={() => alert("Deleting")} title="Borrar Miembro?">
+            <p>Desea borrar el Miembro y todos sus datos asociados? esta accion no es reversible</p>
+          </Modal>
+          <div style={{ margin: "20px 0", display: "flex", width: "100%", justifyContent: "flex-end" }}>
+            <Button title="Create new" onClick={openCreateModal}></Button>
+          </div>
+  
+          <div style={{ backgroundColor: "white", flexGrow: 1, display: "flex", alignItems: "center" }}>
+  
+            {!peoplePending && !!peopleData && <DataGrid
+              style={{ height: "450px" }}
+              pageSizeOptions={[5]}
+              checkboxSelection
+              disableRowSelectionOnClick
+              disableColumnFilter
+              disableDensitySelector
+              disableColumnSelector
+  
+              className={classes["dataTable"]}
+              rows={peopleData?.data}
+              columns={[...columns, actionColumn]}
+  
+            />
+            }
+          </div>
+        </div>
+  
+  
+      </div>
+  
+  
+    )*/
 }
+

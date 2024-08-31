@@ -562,7 +562,9 @@ export default function Home(): JSX.Element {
   </>
 
   return (
-    <>
+    <>    
+    <div style={{position:"relative", flex:1, alignItems: "center", alignContent: "center", height:"100%"}}>
+
       <div className={classes["home-container"]}>
 
 
@@ -590,7 +592,7 @@ export default function Home(): JSX.Element {
           area={!!defaultSectorValues?.area && JSON.parse(defaultSectorValues?.area)}
         />
       </div>
-
+      </div>
     </>
 
   )
