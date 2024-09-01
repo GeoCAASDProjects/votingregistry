@@ -79,14 +79,7 @@ export default function People() {
   }
 
   async function handleCreatePerson(data) {
-    console.log(data)
-    /*const formData = new FormData();
-    Object.keys(data).forEach(key=>{
-    
-      formData.append(`${key}`, data[key]);
-    })
-    console.log("The form data");
-    console.log(formData)*/
+ 
     try {
       const response = await personMutations.createMutation.mutateAsync(data);
 

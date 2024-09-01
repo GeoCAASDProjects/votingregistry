@@ -8,14 +8,16 @@ import { createPerson } from '@renderer/util/http/person-http';
 import { Close } from '@mui/icons-material';
 import IconButton from '../iconButton/IconButton';
 import ProfilePicture from '../profilePicture/ProfilePicture';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { formatDate } from '@renderer/util/time/timeFunction';
+import { BASE_URL } from '@renderer/config';
 
 interface MemberCreateFormI {
     submitData?: (data: object) => void;
     isLoading?: boolean;
     edit?: boolean;
 }
-export default function MemberCreateForm({currentSchool, closeMemberForm, submitData, isLoading}) {
+export default function MemberCreateForm({currentSchool, closeMemberForm, submitData, isLoading, defaultValues}) {
 
  
     const MemberSchema = Yup.object().shape({
@@ -36,19 +38,21 @@ export default function MemberCreateForm({currentSchool, closeMemberForm, submit
 
 
     const initialValues = {
-        name: "",
-        last_name: "",
-        birth_date: "",
-        sex: "",
-        occupation: "",
-        place_of_birth: "",
-        nationality: "",
-        document: "",
-        address: "",
-        sector: "",
+        id: defaultValues?.id ?? null,
+        name: defaultValues?.name ?? "",
+        last_name: defaultValues?.last_name ?? "",
+        birth_date: formatDate(defaultValues?.birth_date) ?? "",
+        sex: defaultValues?.sex ?? "",
+        occupation: defaultValues?.occupation ?? "",
+        place_of_birth: defaultValues?.place_of_birth ?? "",
+        nationality: defaultValues?.nationality ?? "",
+        document: defaultValues?.document ?? "",
+        address: defaultValues?.address ?? "",
+        sector: defaultValues?.sector ?? "",
         school_id: currentSchool ?? null,
-        phone: "",
-        image: null
+        phone: defaultValues?.phone ?? "",
+        image:  null
+    
       
     }
     
@@ -71,6 +75,14 @@ export default function MemberCreateForm({currentSchool, closeMemberForm, submit
     const imageUrl = URL.createObjectURL(file);
     setCurrentImage(imageUrl)
    }
+   /*
+   useEffect(()=>{
+    if(defaultValues?.image){
+       setCurrentImage(`${BASE_URL}storage/${defaultValues?.image}`)
+      
+    }
+   }, [defaultValues]);*/
+
     return (
 
         <Formik

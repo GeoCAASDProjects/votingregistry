@@ -22,3 +22,12 @@
   
     return output;
   }
+
+
+  export function formatDate(date) {
+    const currDate = new Date(date);
+    const year = currDate.getFullYear();
+    const month = String(currDate.getMonth() + 1).padStart(2, '0');
+    const day = String(currDate.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}

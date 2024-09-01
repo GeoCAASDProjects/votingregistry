@@ -121,7 +121,8 @@ export async function updatePerson(data){
     const config: AxiosRequestConfig ={
      
         headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+           'Content-Type': 'application/json',
         },
      
     }
