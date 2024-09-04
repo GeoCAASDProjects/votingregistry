@@ -111,24 +111,25 @@ export async function createPerson(formData){
 }
 
 
-export async function updatePerson(data){
+export async function updatePerson(formData){
  
     console.log("THE DATA")
     console.log("----------------------------------------------------------------------")
-    console.log({...data})
+    console.log({...formData})
   
-    let url = `${BASE_URL_API}/person/${data.id}`;
+    let url = `${BASE_URL_API}/person/${formData.id}`;
     const config: AxiosRequestConfig ={
      
         headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
-           'Content-Type': 'application/json',
+            'Content-Type': 'multipart/form-data',
+            'X-HTTP-Method-Override': 'PATCH',
         },
      
     }
 
     try{
-        const response = await axios.patch(url, data, config);
+        const response = await axios.post(url, formData, config);
       
         console.log(response);
       
