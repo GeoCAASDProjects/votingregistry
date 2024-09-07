@@ -88,11 +88,12 @@ export default function MemberCreateForm({currentSchool, closeMemberForm, submit
    }
 
    useEffect(()=>{
+   
     if(defaultValues?.image){
-       setCurrentImage(`${BASE_URL}storage/${defaultValues?.image}`)
+       setCurrentImage(`${BASE_URL}storage/${defaultValues?.image}`);
       
     }
-   }, [defaultValues]);
+   }, [defaultValues?.image]);
 
     return (
 
