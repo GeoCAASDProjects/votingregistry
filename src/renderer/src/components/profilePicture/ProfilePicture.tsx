@@ -2,24 +2,25 @@
 import { useRef, useState } from 'react';
 import DynamicIcon from '../dynamicIcon/DynamicIcon'
 import classes from './profilePicture.module.css'
-export default function ProfilePicture({ size, onChange, image = null}) {
+import userImage from "../../assets/user/user.jpg"
+export default function ProfilePicture({ size, onChange, image = null }) {
 
     const fileInputRef = useRef<null>(null)
-  //  const [image, setImage] = useState<null | string>(null);
+    //  const [image, setImage] = useState<null | string>(null);
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file) {
-         /*   const name = file.name;
-            const imageUrl = URL.createObjectURL(file);
-            setImage(imageUrl);
-            console.log("Archivo");
-            console.log(file);*/
+            /*   const name = file.name;
+               const imageUrl = URL.createObjectURL(file);
+               setImage(imageUrl);
+               console.log("Archivo");
+               console.log(file);*/
             onChange(file);
 
 
+        }
     }
-    }
- 
+
 
     function selectFiles() {
         fileInputRef?.current?.click();
@@ -36,13 +37,13 @@ export default function ProfilePicture({ size, onChange, image = null}) {
                 className={classes.fileInput}
 
             />
-            <div className={classes.iconWrapper} onClick={selectFiles}>
+            {onChange && <div className={classes.iconWrapper} onClick={selectFiles}>
                 <div className={classes.icon}>
                     <DynamicIcon iconName="PhotoCamera" />
                 </div>
-
             </div>
-            <img alt="profile" src={image ?? "./src/assets/user/user.jpg"} />
+            }
+            <img alt="user" src={image ?? userImage} />
         </div>
     )
 }

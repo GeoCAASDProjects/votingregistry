@@ -11,6 +11,8 @@ import ProfilePicture from '../profilePicture/ProfilePicture';
 import { useEffect, useState } from 'react';
 import { formatDate } from '@renderer/util/time/timeFunction';
 import { BASE_URL } from '@renderer/config';
+import { fetchAllSchools, fetchSchools } from '@renderer/util/http/school-http';
+import useEntity from '@renderer/util/hooks/entityHooks';
 
 interface MemberCreateFormI {
     submitData?: (data: object) => void;
@@ -20,6 +22,14 @@ interface MemberCreateFormI {
 export default function MemberCreateForm({currentSchool, closeMemberForm, submitData, isLoading, defaultValues}) {
 
  
+
+    const { data: schoolsData, isPending: schoolsPending, isError: schoolsIsError, error: schoolsError } = useQuery({
+        queryKey: ["schools"],
+        queryFn: ({ signal }, query?) => fetchAllSchools({ signal, query }),
+        staleTime: 5000,
+        gcTime: 30000,
+      });
+
     const MemberSchema = Yup.object().shape({
         name: Yup.string().required('Requerido'),
         last_name: Yup.string().required('Requerido'),
@@ -32,8 +42,8 @@ export default function MemberCreateForm({currentSchool, closeMemberForm, submit
         address: Yup.string().required('Requerido'),
         sector: Yup.string().required('Requerido'),
         phone: Yup.string().required('Requerido'),
-        image: Yup.string()
-        /* school_id: Yup.string().required("Requerido")*/
+        image: Yup.string(),
+        school_id:  Yup.string().required('Requerido'),
     });
 
 
@@ -49,9 +59,10 @@ export default function MemberCreateForm({currentSchool, closeMemberForm, submit
         document: defaultValues?.document ?? "",
         address: defaultValues?.address ?? "",
         sector: defaultValues?.sector ?? "",
-        school_id: currentSchool ?? null,
+        school_id:  !!defaultValues?.school?.id ? defaultValues?.school?.id  : !!currentSchool ? currentSchool : "",
         phone: defaultValues?.phone ?? "",
-        image:  null
+        image:  null,
+   
     
       
     }
@@ -75,13 +86,13 @@ export default function MemberCreateForm({currentSchool, closeMemberForm, submit
     const imageUrl = URL.createObjectURL(file);
     setCurrentImage(imageUrl)
    }
-   /*
+
    useEffect(()=>{
     if(defaultValues?.image){
        setCurrentImage(`${BASE_URL}storage/${defaultValues?.image}`)
       
     }
-   }, [defaultValues]);*/
+   }, [defaultValues]);
 
     return (
 
@@ -90,7 +101,11 @@ export default function MemberCreateForm({currentSchool, closeMemberForm, submit
             validationSchema={MemberSchema}
             onSubmit={submitData}
         >
-            {({ isSubmitting, setFieldValue}) => (
+            {({ isSubmitting, setFieldValue, errors, touched}) => {
+                 console.log("Errors:", errors);  // Will show if there are any validation errors
+                 console.log("Touched fields:", touched);  // Will show which fields were touched
+                return(
+                  
                 <Form>
                     <div className={classes['member-form']}>
                   {closeMemberForm &&  <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
@@ -180,7 +195,25 @@ export default function MemberCreateForm({currentSchool, closeMemberForm, submit
                                 <Field name="sector" placeholder="Sector" />
                                 <span style={{ color: "red" }}> <ErrorMessage name="sector" component="div" /></span>
                             </div>
-
+                            <div className={classes['input']}>
+                                <label>Colegio</label>
+                                {
+                            (!!schoolsData && !schoolsPending) &&  
+                            <Field as="select" name="school_id" >
+                                <option value="">Seleccione uno</option>
+                             {
+                            schoolsData.data.map((data)=>
+                                {
+                                    return <option key={data.id} value={data.id}>
+                                        {data.name}
+                                        </option>})
+                             }
+                               
+                            
+                          </Field>}
+                                <span style={{ color: "red" }}> <ErrorMessage name="school_id" component="div" /></span>
+                            </div>
+             
 
 
                         </div>
@@ -193,7 +226,7 @@ export default function MemberCreateForm({currentSchool, closeMemberForm, submit
 
                 </Form>
 
-            )}
+            )}}
 
         </Formik>
 

@@ -14,7 +14,7 @@ const useEntityMutations = (entity, queryKey, mutationFns) => {
         },
         onError: (e) => {
     
-          alert("Error")
+          console.log("Error")
         }
     })
 
@@ -30,7 +30,7 @@ const useEntityMutations = (entity, queryKey, mutationFns) => {
             },
             onError: (e) => {
         
-              alert("Error")
+              console.log("Error")
             }
         }
 )
@@ -47,7 +47,7 @@ const useEntityMutations = (entity, queryKey, mutationFns) => {
             },
             onError: (e) => {
                 console.log(e)
-              alert("Error")
+              console.log("Error")
             }
         }
     )
