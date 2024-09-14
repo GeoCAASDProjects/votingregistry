@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import classes from './home.module.css'
 import Button from "@renderer/components/button/Button";
 import MemberInfo from "@renderer/components/memberInfo/MemberInfo";
-import { fetchMembers, fetchPerson } from "@renderer/util/http/person-http";
+import { createPerson, deletePerson, fetchMembers, fetchPerson, updatePerson } from "@renderer/util/http/person-http";
 import SectorCreateForm from "@renderer/components/sectorForm/SectorForm";
 import { createSector, deleteSector, fetchSector, fetchSectors, updateSector } from "@renderer/util/http/sector-http";
 import SectorInfo from "@renderer/components/sectorInfo/SectorInfo";
@@ -130,6 +130,13 @@ export default function Home(): JSX.Element {
   });
 
 
+   
+  const personMutations = useEntityMutations('person', 'people', {
+    createFn: createPerson,
+    updateFn: updatePerson,
+    deleteFn: deletePerson
+  });
+
 
 
   async function handleCreateEnclosure(data) {
@@ -141,7 +148,7 @@ export default function Home(): JSX.Element {
       sendDataToSidebar(response.data.id);
     } catch (e) {
       console.error(e)
-      alert(e);
+      
     }
   }
 
@@ -155,7 +162,7 @@ export default function Home(): JSX.Element {
 
     } catch (e) {
       console.error(e)
-      alert(e);
+      
     }
   }
 
@@ -189,7 +196,7 @@ export default function Home(): JSX.Element {
 
     } catch (e) {
       console.error(e)
-      alert(e);
+      
     }
   }
 
@@ -203,7 +210,7 @@ export default function Home(): JSX.Element {
 
     } catch (e) {
       console.error(e)
-      alert(e);
+      
     }
   }
 
@@ -232,7 +239,7 @@ export default function Home(): JSX.Element {
       sendSectorToSidebar(response?.data?.id)
     } catch (e) {
       console.error(e)
-      alert(e);
+      
     }
   }
   async function handleUpdateSector(data) {
@@ -245,7 +252,7 @@ export default function Home(): JSX.Element {
       closeActionForm();
     } catch (e) {
       console.error(e)
-      alert(e);
+      
     }
   }
 
@@ -260,6 +267,19 @@ export default function Home(): JSX.Element {
     } catch (e) {
       console.error(e)
 
+    }
+  }
+
+  async function handleCreatePerson(data) {
+    console.log(data)
+    try {
+      const response = await personMutations.createMutation.mutateAsync(data);
+    
+      closeActionForm();
+ 
+    } catch (e) {
+      console.error(e)
+      
     }
   }
 
@@ -455,11 +475,11 @@ export default function Home(): JSX.Element {
       <Button title="Añadir recintos" iconName="Add" onClick={selectLocation} style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
       <Button title="Añadir sector" iconName="Polyline" onClick={drawPolygon} style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
       <Button title="Subir Archivos" iconName="Upload" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
-      <Button title="Miembros" iconName="Person" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
+      {/*<Button title="Miembros" iconName="Person" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
       <div style={{marginLeft:"20px"}}>
       <Button title="Añadir Miembros" iconName="Add" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
       <Button title="Ver Miembros" iconName="VisibilityOutlined" style={{ width: "100%", background: "#22224F", color: "#FFFFFF", margin: "5px 0px" }} />
-      </div>
+      </div>*/}
     </>}
     {actionState == "enclosure" && <EnclosureInfo
 
@@ -535,14 +555,16 @@ export default function Home(): JSX.Element {
       />
     }
     {
-      actionState == "memberForm" && <MemberCreateForm closeMemberForm={closeActionForm} currentSchool={currentSchool?.id} />
+      actionState == "memberForm" && <MemberCreateForm submitData={handleCreatePerson} closeMemberForm={closeActionForm} currentSchool={currentSchool?.id}  isLoading={!!currentMember?.id ? personMutations.updateMutation.isPending : personMutations.createMutation.isPending}/>
 
 
     }
   </>
 
   return (
-    <>
+    <>    
+    <div style={{position:"relative", flex:1, alignItems: "center", alignContent: "center", height:"100%"}}>
+
       <div className={classes["home-container"]}>
 
 
@@ -570,7 +592,7 @@ export default function Home(): JSX.Element {
           area={!!defaultSectorValues?.area && JSON.parse(defaultSectorValues?.area)}
         />
       </div>
-
+      </div>
     </>
 
   )

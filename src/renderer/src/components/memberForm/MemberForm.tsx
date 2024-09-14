@@ -7,34 +7,28 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { createPerson } from '@renderer/util/http/person-http';
 import { Close } from '@mui/icons-material';
 import IconButton from '../iconButton/IconButton';
+import ProfilePicture from '../profilePicture/ProfilePicture';
+import { useEffect, useState } from 'react';
+import { formatDate } from '@renderer/util/time/timeFunction';
+import { BASE_URL } from '@renderer/config';
+import { fetchAllSchools, fetchSchools } from '@renderer/util/http/school-http';
+import useEntity from '@renderer/util/hooks/entityHooks';
 
 interface MemberCreateFormI {
     submitData?: (data: object) => void;
     isLoading?: boolean;
     edit?: boolean;
 }
-export default function MemberCreateForm({currentSchool, closeMemberForm}) {
+export default function MemberCreateForm({currentSchool, closeMemberForm, submitData, isLoading, defaultValues}) {
 
+ 
 
-    const {
-        mutate: singleMemberCreateMutate,
-        data: singleMemberCreateData,
-        isPending: singleMemberCreatePending,
-        isError: singleMemberCreateIsError,
-        error: singleMemberCreateError
-    } = useMutation({
-        mutationFn: createPerson,
-        onSuccess: async (e) => {
-            console.log("The data")
-            console.log(e.data);
-            closeMemberForm();
-
-        },
-        onError: (e) => {
-
-            alert("Error")
-        }
-    });
+    const { data: schoolsData, isPending: schoolsPending, isError: schoolsIsError, error: schoolsError } = useQuery({
+        queryKey: ["schools"],
+        queryFn: ({ signal }, query?) => fetchAllSchools({ signal, query }),
+        staleTime: 5000,
+        gcTime: 30000,
+      });
 
     const MemberSchema = Yup.object().shape({
         name: Yup.string().required('Requerido'),
@@ -48,28 +42,32 @@ export default function MemberCreateForm({currentSchool, closeMemberForm}) {
         address: Yup.string().required('Requerido'),
         sector: Yup.string().required('Requerido'),
         phone: Yup.string().required('Requerido'),
-
-        /* school_id: Yup.string().required("Requerido")*/
+        image: Yup.string().nullable(),
+        school_id:  Yup.string().required('Requerido'),
     });
 
 
     const initialValues = {
-        name: "",
-        last_name: "",
-        birth_date: "",
-        sex: "",
-        occupation: "",
-        place_of_birth: "",
-        nationality: "",
-        document: "",
-        address: "",
-        sector: "",
-        school_id: currentSchool,
-        phone: ""
-        /*    school_id: ""*/
+        id: defaultValues?.id ?? null,
+        name: defaultValues?.name ?? "",
+        last_name: defaultValues?.last_name ?? "",
+        birth_date: formatDate(defaultValues?.birth_date) ?? "",
+        sex: defaultValues?.sex ?? "",
+        occupation: defaultValues?.occupation ?? "",
+        place_of_birth: defaultValues?.place_of_birth ?? "",
+        nationality: defaultValues?.nationality ?? "",
+        document: defaultValues?.document ?? "",
+        address: defaultValues?.address ?? "",
+        sector: defaultValues?.sector ?? "",
+        school_id:  !!defaultValues?.school?.id ? defaultValues?.school?.id  : !!currentSchool ? currentSchool : "",
+        phone: defaultValues?.phone ?? "",
+        image:  null,
+   
+    
+      
     }
     
-
+/*
     async function submitData(e) {
         try{
             const response = await singleMemberCreateMutate(e);
@@ -80,7 +78,23 @@ export default function MemberCreateForm({currentSchool, closeMemberForm}) {
             console.log(error)
         }
         
+    }*/
+   const [currentImage, setCurrentImage] = useState<string|null>(null);
+   function changeProfilePic(file, setFieldValue){
+    console.log(file);
+    setFieldValue('image', file);
+    const imageUrl = URL.createObjectURL(file);
+    setCurrentImage(imageUrl)
+   }
+
+   useEffect(()=>{
+   
+    if(defaultValues?.image){
+       setCurrentImage(`${BASE_URL}storage/${defaultValues?.image}`);
+      
     }
+   }, [defaultValues?.image]);
+
     return (
 
         <Formik
@@ -88,16 +102,22 @@ export default function MemberCreateForm({currentSchool, closeMemberForm}) {
             validationSchema={MemberSchema}
             onSubmit={submitData}
         >
-            {({ isSubmitting }) => (
+            {({ isSubmitting, setFieldValue, errors, touched}) => {
+                 console.log("Errors:", errors);  // Will show if there are any validation errors
+                 console.log("Touched fields:", touched);  // Will show which fields were touched
+                return(
+                  
                 <Form>
                     <div className={classes['member-form']}>
-                    <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
+                  {closeMemberForm &&  <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
                        
                         <IconButton iconName="Close" onClick={closeMemberForm}/>
-                    </div>
+                    </div>}
                         <h3>Nuevo Miembro</h3>
                         <div style={{ margin: "10px 0" }}>
-
+                              <div className={classes["image-container"]}>
+                            <ProfilePicture size ={90} image={currentImage} onChange={(imageUrl) => changeProfilePic(imageUrl, setFieldValue)}/>
+                            </div>
                             <div className={classes['input']}>
                                 <label>Nombre</label>
                                 <Field name="name" placeholder="Nombre" />
@@ -176,20 +196,38 @@ export default function MemberCreateForm({currentSchool, closeMemberForm}) {
                                 <Field name="sector" placeholder="Sector" />
                                 <span style={{ color: "red" }}> <ErrorMessage name="sector" component="div" /></span>
                             </div>
-
+                            <div className={classes['input']}>
+                                <label>Colegio</label>
+                                {
+                            (!!schoolsData && !schoolsPending) &&  
+                            <Field as="select" name="school_id" >
+                                <option value="">--Seleccione uno--</option>
+                             {
+                            schoolsData.data.map((data)=>
+                                {
+                                    return <option key={data.id} value={data.id}>
+                                        {data.name}
+                                        </option>})
+                             }
+                               
+                            
+                          </Field>}
+                                <span style={{ color: "red" }}> <ErrorMessage name="school_id" component="div" /></span>
+                            </div>
+             
 
 
                         </div>
 
 
-                        <Button type="submit" title="Enviar" iconName="Send" isLoading={singleMemberCreatePending} center />
+                        <Button type="submit" title="Enviar" iconName="Send" isLoading={isLoading} center />
 
                         {/*  <Button onClick={resetValues} title="ResetValues" iconName="RestartAlt" isLoading={isLoading} center/>*/}
                     </div>
 
                 </Form>
 
-            )}
+            )}}
 
         </Formik>
 

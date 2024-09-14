@@ -1,7 +1,7 @@
 
 
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
-import {createBrowserRouter, Outlet, RouterProvider} from "react-router-dom";
+import {createBrowserRouter, Link, Outlet, RouterProvider} from "react-router-dom";
 
 import Login from './pages/Login';
 import Navbar from './components/navbar/Navbar';
@@ -13,6 +13,7 @@ import { useAuth } from './util/context/AuthContext';
 import People from './pages/People';
 import Schools from './pages/Schools';
 import Users from './pages/Users';
+import Person from './pages/Person';
 function App(): JSX.Element {
   const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
   const queryClient = new QueryClient();
@@ -34,6 +35,7 @@ function App(): JSX.Element {
     }
   ]);
 */
+
   const router = createBrowserRouter([
     {  
       path: "/",
@@ -48,6 +50,10 @@ function App(): JSX.Element {
           path: "/people",
           element: <People/>
         
+        },
+        {
+          path: "/people/:id",  // Dynamic route for a specific person
+          element: <Person/>// Component to display the details of a person
         },
         {
           path: "/schools",
@@ -90,11 +96,11 @@ function App(): JSX.Element {
     return(
       <div className={classes["main-container"]}>
         <Navbar/>
-        <div style={{position:"relative", flex:1,     alignItems: "center", alignContent: "center"}}>
+   
         <QueryClientProvider client={queryClient}>
           <Outlet/>
         </QueryClientProvider>
-        </div>
+       
       </div>
     )
   }

@@ -3,6 +3,27 @@ import axios, { AxiosRequestConfig } from "axios";
 
 
 
+export async function fetchAllSchools({signal, enclosureId}){
+    let url = `${BASE_URL_API}/schools`;
+  
+    const config: AxiosRequestConfig ={
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+        },
+        signal: signal,  
+    }
+    try{
+    const response = await axios.get(url, config);
+  
+    console.log(response);
+    
+    return response.data;
+    } catch(error){
+        console.log(error);
+        
+      throw new Error('Request failed');
+    }
+}
 
 export async function fetchSchools({signal, enclosureId}){
     let url = `${BASE_URL_API}/enclosure/${enclosureId}/schools`;

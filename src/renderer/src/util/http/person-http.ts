@@ -49,10 +49,100 @@ export async function fetchMembers({signal, schoolId}){
       throw new Error('Request failed');
     }
 }
+/*
+export async function createPerson(formData){
+    let url = `${BASE_URL_API}/post/`;
+    console.log("Form data")
+ 
 
-export async function createPerson(data){
+    formData.forEach((value, key) => {
+      console.log(value)
+      });
+    try{
+    const response = await axios.post(url, 
+    formData
+        , {
+      
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            'Content-Type': 'multipart/form-data',
+        }
+    });
+    if(!response.ok){
+        console.log("Not ok")
+    } else{
+        console.log("Ok")
+    }
+    console.log(response.data);
+    return response.data;
+    } catch(error){
+        console.log(error);
+        
+        throw new Error('Request failed');
+    }
+}*/
+
+export async function createPerson(formData){
    
     let url = `${BASE_URL_API}/person`;
+    console.log(formData)
+ 
+    const config: AxiosRequestConfig ={
+     
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            'Content-Type': 'multipart/form-data',
+        },
+     
+    }
+
+    try{
+        const response = await axios.post(url, formData, config);
+      console.log("Success");
+        console.log(response);
+         
+        return response.data;
+        } catch(error){
+          
+            console.error(error);
+            
+          throw new Error('Request failed');
+        }
+}
+
+
+export async function updatePerson(formData){
+ 
+    console.log("THE DATA")
+    console.log("----------------------------------------------------------------------")
+    console.log({...formData})
+  
+    let url = `${BASE_URL_API}/person/${formData.id}`;
+    const config: AxiosRequestConfig ={
+     
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            'Content-Type': 'multipart/form-data',
+            'X-HTTP-Method-Override': 'PATCH',
+        },
+     
+    }
+
+    try{
+        const response = await axios.post(url, formData, config);
+      
+        console.log(response);
+      
+        return response.data;
+        } catch(error){
+            console.log(error);
+            
+          throw new Error('Request failed');
+        }
+}
+
+export async function deletePerson(id){
+    let url = `${BASE_URL_API}/person/${id}`;
     const config: AxiosRequestConfig ={
      
         headers: {
@@ -60,20 +150,15 @@ export async function createPerson(data){
         },
      
     }
-
     try{
-        const response = await axios.post(url, data, config);
-      
-        console.log(response);
-         
+        const response = await axios.delete(url, config);
         return response.data;
-        } catch(error){
-            alert(error)
-            console.log(error);
-            
-          throw new Error('Request failed');
-        }
+    
+    }catch(error){
+        throw new Error('Request failed.')
+    }
 }
+
 
 export async function fetchPerson(id){
     let url = `${BASE_URL_API}/person/${id}`;

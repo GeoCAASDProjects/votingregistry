@@ -8,10 +8,13 @@ import IconButton from "../iconButton/IconButton"
 import DynamicLoader from "../dynamicLoader/DynamicLoader"
 import { getNamedDate } from "@renderer/util/time/timeFunction"
 import { formatDocument } from "@renderer/util/miscFunctions"
+import { BASE_URL } from "@renderer/config"
+import { Link } from "react-router-dom"
 export default function MemberInfo({ currentMember, openSchool, clearMember, singleMemberPending }) {
+    console.log("AAAAAAAAHH")
 
-
-    console.log(currentMember)
+    
+    console.log(`${BASE_URL}storage/${currentMember?.image}`);
     return (
         <div style={{ width: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignContent: "center", alignItems: "center", gap: "20px" }}>
 
@@ -21,7 +24,7 @@ export default function MemberInfo({ currentMember, openSchool, clearMember, sin
 
             {currentMember && !singleMemberPending && <div >
                 <div className={classes["image-container"]}>
-                    <ProfilePicture size={90} />
+                    <ProfilePicture size={90} image={currentMember?.image ? `${BASE_URL}storage/${currentMember?.image}`: null} />
 
                 </div>
                 <div style={{ width: "100%", display: "flex", flexDirection: "column", gap: "5px", justifyContent: "center", alignContent: "center", alignItems: "center" }}>
@@ -36,7 +39,10 @@ export default function MemberInfo({ currentMember, openSchool, clearMember, sin
                 </div>
             </div>
             }
-            <Button title="Ver perfil" />
+    
+            <Link  to={`./people/${currentMember?.id}`}>
+            <Button title="Ver perfil"/>
+            </Link>
 
 
             {currentMember && !singleMemberPending && <table className={classes['table']}>
