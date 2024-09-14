@@ -42,7 +42,7 @@ export default function MemberCreateForm({currentSchool, closeMemberForm, submit
         address: Yup.string().required('Requerido'),
         sector: Yup.string().required('Requerido'),
         phone: Yup.string().required('Requerido'),
-        image: Yup.string(),
+        image: Yup.string().nullable(),
         school_id:  Yup.string().required('Requerido'),
     });
 
@@ -201,7 +201,7 @@ export default function MemberCreateForm({currentSchool, closeMemberForm, submit
                                 {
                             (!!schoolsData && !schoolsPending) &&  
                             <Field as="select" name="school_id" >
-                                <option value="">Seleccione uno</option>
+                                <option value="">--Seleccione uno--</option>
                              {
                             schoolsData.data.map((data)=>
                                 {

@@ -49,7 +49,7 @@ export default function Person() {
         formData.append('id', data.id)
         formData.append('image', data.image)
         try {
-            const response = await personMutations.updateMutation.mutateAsync(formData);
+            const response = await personMutations.updateMutation.mutateAsync(data);
             queryClient.refetchQueries({ queryKey: ['person'] });
             setOpenModal(false);
 
